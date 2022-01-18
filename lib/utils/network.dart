@@ -6,7 +6,7 @@ class NetworkUtils {
       [Map<String, dynamic>? params]) {
     final host = Config().get('host');
     final port = Config().get('port');
-    final url = Uri.http(host + ':' + port, apiName + '/' + urlPart, params);
+    final url = Uri.https(host + ':' + port, apiName + '/' + urlPart, params);
 
     return url;
   }
@@ -17,6 +17,6 @@ class NetworkUtils {
     final host = Config().get('host');
     final port = Config().get('port');
 
-    return 'http://' + host + ':' + port + '/' + filename;
+    return 'https://' + host + ':' + port + '/' + filename;
   }
 }

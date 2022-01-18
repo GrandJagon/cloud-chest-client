@@ -6,8 +6,6 @@ import 'package:cloud_chest/screens/auth/auth_screen.dart';
 import 'package:cloud_chest/screens/auth/connect_screen.dart';
 import 'package:cloud_chest/screens/content/content_viewer.dart';
 import 'package:cloud_chest/screens/home_screen.dart';
-import 'package:cloud_chest/screens/splash_screen.dart';
-import 'package:cloud_chest/widgets/misc/dialog_factory.dart';
 import 'package:cloud_chest/widgets/misc/loading_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
@@ -55,9 +53,9 @@ class CloudChest extends StatelessWidget {
                             Duration.zero,
                             () => showDialog(
                               context: context,
-                              builder: (context) =>
+                              builder: (ctx) =>
                                   AlertDialogFactory.oneButtonDialog(
-                                      context, snapshot.error.toString(), 'OK'),
+                                      ctx, snapshot.error.toString(), 'OK'),
                             ),
                           );
                           return AuthScreen();

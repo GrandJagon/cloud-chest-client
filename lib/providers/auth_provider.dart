@@ -81,6 +81,8 @@ class AuthProvider with ChangeNotifier {
         'password': password
       }).timeout(Duration(seconds: int.parse(dotenv.env['REQUEST_TIMEOUT']!)));
 
+      print(response.body);
+
       if (response.statusCode != 200) {
         throw HttpException(response.body);
       }
@@ -102,6 +104,10 @@ class AuthProvider with ChangeNotifier {
     } on Exception catch (err) {
       print(err);
       return Future.error(HttpException(err.toString()));
+    } catch (e, stack) {
+      print('AUTH ERROR CAUGHT');
+      print(stack);
+      print(e);
     }
   }
 

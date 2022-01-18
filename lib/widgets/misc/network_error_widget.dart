@@ -1,3 +1,4 @@
+import 'package:cloud_chest/screens/auth/connect_screen.dart';
 import 'package:cloud_chest/widgets/misc/widget_factory.dart';
 import 'package:flutter/material.dart';
 
@@ -35,6 +36,14 @@ class NetworkErrorWidget extends StatelessWidget {
             style: TextStyle(color: Colors.red, fontSize: 20),
           ),
           onPressed: () => _retry(),
+        ),
+        TextButton(
+          child: Text(
+            'Change config',
+            style: TextStyle(color: Colors.red, fontSize: 20),
+          ),
+          onPressed: () =>
+              Navigator.of(context).popAndPushNamed(ConnectScreen.routeName),
         )
       ],
     ));
