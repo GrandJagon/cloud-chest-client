@@ -19,7 +19,7 @@ class Config {
     String? configInfo = await SecureStorage().read('cloudchest_config');
 
     if (configInfo != null) {
-      print('foncig found with ' + configInfo.toString());
+      print('config found with ' + configInfo.toString());
       _config['host'] = json.decode(configInfo)['host'];
       _config['port'] = json.decode(configInfo)['port'];
       isSetup = true;

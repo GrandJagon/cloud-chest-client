@@ -3,20 +3,22 @@ import 'package:cloud_chest/widgets/misc/loading_widget.dart';
 import 'package:cloud_chest/widgets/misc/network_error_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'content_item.dart';
 
-class FilesGrid extends StatefulWidget {
+class ContentGrid extends StatefulWidget {
   final String _albumId;
 
-  FilesGrid(this._albumId);
+  ContentGrid(this._albumId);
 
   @override
-  State<StatefulWidget> createState() => _FilesGridState();
+  State<StatefulWidget> createState() => _ContentGridState();
 }
 
-class _FilesGridState extends State<FilesGrid> {
+class _ContentGridState extends State<ContentGrid> {
   bool _isLoading = false;
   bool _isError = false;
   bool _isInit = false;
+  List<String> selectedItems = [];
 
   // Request the album list of files from the API
   Future<void> _fetchContent(BuildContext context) async {
@@ -27,7 +29,7 @@ class _FilesGridState extends State<FilesGrid> {
       });
 
       try {
-        await Provider.of<ContentProvider>(context)
+        await Provider.of<ContentProvider>(context, listen: false)
             .fetchAlbumContent(widget._albumId)
             .then((value) {
           setState(() {
@@ -55,10 +57,7 @@ class _FilesGridState extends State<FilesGrid> {
 
   @override
   Widget build(BuildContext context) {
-    final albumContent = Provider.of<ContentProvider>(context).files;
-
-    print(
-        'building grid, size of content is ' + albumContent.length.toString());
+    final albumContent = Provider.of<ContentProvider>(context).contentList;
 
     if (_isLoading) return LoadingWidget();
     if (_isError)
@@ -77,13 +76,12 @@ class _FilesGridState extends State<FilesGrid> {
                   child: GridView.builder(
                     shrinkWrap: true,
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      childAspectRatio: 3 / 2,
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 10,
-                    ),
+                        crossAxisCount: 3,
+                        crossAxisSpacing: 2,
+                        mainAxisSpacing: 2),
                     itemCount: albumContent.length,
-                    itemBuilder: (ctx, i) => Text('test'),
+                    itemBuilder: (ctx, i) =>
+                        ContentItem(albumContent[i], this.selectedItems),
                   ),
                 ));
     else

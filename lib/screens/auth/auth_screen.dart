@@ -6,7 +6,6 @@ class AuthScreen extends StatelessWidget {
   static final routeName = '/authScreen';
 
   Widget build(BuildContext context) {
-    print('building auht screen');
     return Scaffold(
         body: SingleChildScrollView(
       child: Container(

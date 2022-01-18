@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:cloud_chest/models/album.dart';
 import 'package:cloud_chest/utils/network.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_chest/helpers/config_helper.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';

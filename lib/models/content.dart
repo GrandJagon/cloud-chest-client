@@ -1,6 +1,6 @@
 import 'dart:ffi';
 
-class File {
+class Content {
   final String path;
   final int size;
   final String mimetype;
@@ -10,7 +10,7 @@ class File {
   final DateTime? storageDate;
   final String? location;
 
-  File(
+  Content(
       {required this.path,
       required this.size,
       required this.mimetype,

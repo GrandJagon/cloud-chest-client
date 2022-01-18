@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'package:cloud_chest/models/file.dart';
+import 'package:cloud_chest/models/content.dart';
 import 'package:cloud_chest/utils/network.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -10,18 +10,22 @@ import 'package:http/http.dart' as http;
 class ContentProvider extends ChangeNotifier {
   final String accessToken;
   final String userId;
-  late List<File> _files = [];
+  late List<Content> _contentList = [];
 
   ContentProvider(this.accessToken, this.userId);
 
-  List<File> get files => [..._files];
+  List<Content> get contentList => [..._contentList];
+
+  int getContentIndex(Content content) => _contentList.indexOf(content);
 
   // Adds content returned by the API to the current album content list
   Future<void> _addToCurrentContent(List<dynamic> newContent) async {
-    newContent.forEach((file) {
-      _files.add(
-        new File(
-            path: file['path'], size: file['size'], mimetype: file['mimetype']),
+    newContent.forEach((content) {
+      _contentList.add(
+        new Content(
+            path: NetworkUtils.createImagePath(content['path']),
+            size: content['size'],
+            mimetype: content['mimetype']),
       );
     });
   }
@@ -30,7 +34,7 @@ class ContentProvider extends ChangeNotifier {
   Future<void> fetchAlbumContent(String albumId) async {
     final url =
         NetworkUtils.createEndpoint('content', '', {'albumId': albumId});
-    _files.clear();
+    _contentList.clear();
 
     try {
       final response = await http.get(url, headers: {

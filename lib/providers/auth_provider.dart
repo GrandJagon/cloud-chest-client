@@ -5,32 +5,52 @@ import 'package:cloud_chest/utils/network.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'dart:convert';
-import 'package:cloud_chest/helpers/config_helper.dart';
 import 'package:cloud_chest/helpers/token_helper.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class AuthProvider with ChangeNotifier {
+  bool _isAuthData = false;
   String? accessToken;
   String? _refreshToken;
   DateTime? _expiryDate;
   String? userId;
 
-  // Fetch the auth data in the memory
-  Future<void> fetchAuthData() async {
+  // Tries to autoconnect to the API
+  Future<void> tryAutoConnect() async {
     try {
-      print('fetching auth data');
-      var authData = await SecureStorage().read('cloudchest_auth');
+      await fetchAuthData();
 
-      accessToken = json.decode(authData!)['accessToken'];
-      _refreshToken = json.decode(authData)['refreshToken'];
-      _expiryDate = DateTime.parse(json.decode(authData)['expiry']);
-      userId = json.decode(authData)['userId'];
-    } catch (err, stack) {
-      print('Problem fetching auth data');
-      print(stack);
+      if (!isAuth()) await refreshToken();
+
+      return;
+    } on Exception catch (err) {
+      return Future.error(err);
+    } catch (err) {
+      // In this case there is no credentials in memory so it is likely the first use so no need for catching error
       print(err);
     }
   }
+
+  // Fetch the auth data in the memory
+  Future<void> fetchAuthData() async {
+    try {
+      var authData = await SecureStorage().read('cloudchest_auth');
+
+      if (authData == null)
+        return Future.error('There seems to be no auth data in memory');
+
+      accessToken = await json.decode(authData)['accessToken'];
+      _refreshToken = await json.decode(authData)['refreshToken'];
+      _expiryDate = DateTime.parse(await json.decode(authData)['expiry']);
+      userId = await json.decode(authData)['userId'];
+      _isAuthData = true;
+    } on Exception catch (err, stack) {
+      return Future.error('Error while fetching auht data');
+    }
+  }
+
+  // Variable to track is there is auth data in memory in order to display the proper screen
+  bool get isAuthData => _isAuthData;
 
   // Check the expiry date validity
   bool isTokenValid() {
@@ -52,6 +72,7 @@ class AuthProvider with ChangeNotifier {
   // Authenticates to the API, either by logging in or signing up
   Future<void> _authenticate(
       String email, String password, String urlPart) async {
+    print('authenticating');
     Uri url = NetworkUtils.createEndpoint('auth', urlPart);
 
     try {
@@ -80,8 +101,7 @@ class AuthProvider with ChangeNotifier {
           'An error occured while trying to connect to the server. Make sure it it up and running'));
     } on Exception catch (err) {
       print(err);
-      return Future.error(HttpException(
-          'An error occured while trying to authenticate to the server.'));
+      return Future.error(HttpException(err.toString()));
     }
   }
 
@@ -98,7 +118,7 @@ class AuthProvider with ChangeNotifier {
     final authData = json.encode({
       'accessToken': accessToken,
       'refreshToken': _refreshToken,
-      'expiry': _expiryDate!.toIso8601String(),
+      'expiry': _expiryDate!.toString(),
       'userId': userId
     });
 
@@ -108,7 +128,7 @@ class AuthProvider with ChangeNotifier {
   // Clears all connection data in order to logout
   Future<void> logout() async {
     try {
-      await SecureStorage().clear();
+      await SecureStorage().clear('cloudchest_auth');
     } catch (err) {
       print('Logout error');
     }
@@ -130,7 +150,7 @@ class AuthProvider with ChangeNotifier {
           await logout();
           notifyListeners();
         }
-        return Future.error(HttpException(response.body));
+        print(response.body);
       }
 
       accessToken = json.decode(response.body)['accessToken'];
@@ -142,14 +162,9 @@ class AuthProvider with ChangeNotifier {
 
       await storeAuthData();
       _startTimer();
-    } on TimeoutException catch (err) {
-      print(err);
-      return Future.error(HttpException(
-          'An error occured while trying to connect to the server. Make sure it it up and running'));
     } on Exception catch (err) {
-      print(err);
-      return Future.error(
-          HttpException('An error occured while trying to authenticate.'));
+      await logout();
+      throw Exception('Cannot refresh access token');
     }
   }
 

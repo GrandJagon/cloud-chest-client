@@ -19,7 +19,7 @@ class SecureStorage {
     return _storage.read(key: key);
   }
 
-  Future<void> clear() async {
-    return _storage.deleteAll();
+  Future<void> clear(String key) async {
+    return _storage.delete(key: key);
   }
 }
