@@ -11,19 +11,21 @@ class AlertDialogFactory {
       content: Container(
         padding: EdgeInsets.all(15),
         height: MediaQuery.of(context).size.height / 4,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(message),
-            TextButton(
-              child: Text(buttonMessage),
-              onPressed: () {
-                routeName != null
-                    ? Navigator.of(context).pushReplacementNamed(routeName)
-                    : Navigator.of(context).pop();
-              },
-            )
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(message),
+              TextButton(
+                child: Text(buttonMessage),
+                onPressed: () {
+                  routeName != null
+                      ? Navigator.of(context).pushReplacementNamed(routeName)
+                      : Navigator.of(context).pop();
+                },
+              )
+            ],
+          ),
         ),
       ),
     );

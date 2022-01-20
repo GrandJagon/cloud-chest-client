@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:cloud_chest/providers/auth_provider.dart';
 import 'package:cloud_chest/screens/home_screen.dart';
 import 'package:cloud_chest/utils/alert_dialog_factory.dart';
@@ -104,11 +107,14 @@ class _AuthCardState extends State<AuthCard>
             .then((value) =>
                 Navigator.of(context).popAndPushNamed(HomeScreen.routeName));
       }
-    } on Exception catch (err) {
+    } on HttpException catch (err) {
       showDialog(
           context: context,
-          builder: (ctx) =>
-              AlertDialogFactory.oneButtonDialog(ctx, err.toString(), 'OK'));
+          builder: (ctx) => AlertDialogFactory.oneButtonDialog(
+              ctx, err.message.toString(), 'OK'));
+    } catch (err, stack) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(err.toString())));
     } finally {
       setState(() {
         _isLoading = false;

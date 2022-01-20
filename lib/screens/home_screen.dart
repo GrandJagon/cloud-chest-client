@@ -12,14 +12,13 @@ class HomeScreen extends StatelessWidget {
 
   Widget build(BuildContext context) {
     // Checking auth in order to redirect to auth screen if not
-    if (!Provider.of<AuthProvider>(context, listen: false).isAuth())
+    if (!Provider.of<AuthProvider>(context, listen: false).isAuth)
       Navigator.of(context).pushReplacementNamed(AuthScreen.routeName);
     return Scaffold(
-      appBar: HomeBar(),
-      body: Container(
-        padding: EdgeInsets.all(15),
-        child: AlbumList(),
-      ),
-    );
+        appBar: HomeBar(),
+        body: Container(
+          padding: EdgeInsets.all(15),
+          child: AlbumList(),
+        ));
   }
 }

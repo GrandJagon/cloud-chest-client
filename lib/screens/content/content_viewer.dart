@@ -1,11 +1,16 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_chest/models/content.dart';
 import 'package:cloud_chest/providers/content_provider.dart';
 import 'package:cloud_chest/widgets/content/content_viewer_bar.dart';
+import 'package:cloud_chest/widgets/misc/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ContentViewer extends StatefulWidget {
   static final routeName = '/contentViewer';
+  final int currentIndex;
+
+  ContentViewer(this.currentIndex);
 
   @override
   State<StatefulWidget> createState() => _ContentViewerState();
@@ -14,12 +19,17 @@ class ContentViewer extends StatefulWidget {
 class _ContentViewerState extends State<ContentViewer> {
   bool _metadata = false;
   bool _isInit = false;
-  var _currentIndex;
+  late int _currentIndex;
+  late List _albumContent;
   late int _albumSize;
 
   @override
   void didChangeDependencies() {
-    if (!_isInit) _currentIndex = ModalRoute.of(context)!.settings.arguments;
+    if (!_isInit) {
+      _currentIndex = widget.currentIndex;
+      _albumContent =
+          Provider.of<ContentProvider>(context, listen: false).contentList;
+    }
     super.didChangeDependencies();
   }
 
@@ -48,50 +58,54 @@ class _ContentViewerState extends State<ContentViewer> {
 
   @override
   Widget build(BuildContext context) {
-    final _albumContent =
-        Provider.of<ContentProvider>(context, listen: false).contentList;
+    print('Building viewer');
 
     _albumSize = _albumContent.length;
 
     final Size size = MediaQuery.of(context).size;
 
-    return Scaffold(
-      appBar: ContentViewerBar(_toggleMetadata),
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            child: Hero(
-              tag: _currentIndex,
-              child: Image.network(
-                _albumContent[_currentIndex].path,
-                fit: BoxFit.fill,
+    return Dialog(
+      insetPadding: EdgeInsets.all(0),
+      backgroundColor: Colors.black.withOpacity(0.5),
+      child: Container(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            Center(
+              child: Hero(
+                tag: _currentIndex,
+                child: CachedNetworkImage(
+                  placeholder: (ctx, url) => LoadingWidget(),
+                  imageUrl: _albumContent[_currentIndex].path,
+                  fit: BoxFit.fill,
+                ),
               ),
             ),
-          ),
-          Container(
-              width: double.infinity,
-              height: size.height * 0.1,
-              color: Colors.transparent,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  IconButton(
-                    icon: Icon(
-                      Icons.arrow_back_rounded,
-                      size: 25,
+            Container(
+                width: double.infinity,
+                height: size.height * 0.1,
+                color: Colors.transparent,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    IconButton(
+                      icon: Icon(
+                        Icons.arrow_back_rounded,
+                        size: 25,
+                      ),
+                      onPressed: () => _goBack(),
                     ),
-                    onPressed: () => _goBack(),
-                  ),
-                  IconButton(
-                    icon: Icon(
-                      Icons.arrow_forward_rounded,
-                      size: 25,
+                    IconButton(
+                      icon: Icon(
+                        Icons.arrow_forward_rounded,
+                        size: 25,
+                      ),
+                      onPressed: () => _goNext(),
                     ),
-                    onPressed: () => _goNext(),
-                  ),
-                ],
-              ))
-        ],
+                  ],
+                ))
+          ],
+        ),
       ),
     );
   }

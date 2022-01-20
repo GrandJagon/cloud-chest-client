@@ -1,4 +1,5 @@
 import 'package:cloud_chest/providers/content_provider.dart';
+import 'package:cloud_chest/screens/content/content_viewer.dart';
 import 'package:cloud_chest/widgets/misc/loading_widget.dart';
 import 'package:cloud_chest/widgets/misc/network_error_widget.dart';
 import 'package:flutter/material.dart';
@@ -67,23 +68,24 @@ class _ContentGridState extends State<ContentGrid> {
       );
     if (_isInit && !_isError)
       return Container(
-          child: albumContent.length <= 0
-              ? Center(
-                  child: Text('Your album is empty...',
-                      style: TextStyle(fontSize: 20)),
-                )
-              : SingleChildScrollView(
-                  child: GridView.builder(
-                    shrinkWrap: true,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3,
-                        crossAxisSpacing: 2,
-                        mainAxisSpacing: 2),
-                    itemCount: albumContent.length,
-                    itemBuilder: (ctx, i) =>
-                        ContentItem(albumContent[i], this.selectedItems),
-                  ),
-                ));
+        child: albumContent.length <= 0
+            ? Center(
+                child: Text('Your album is empty...',
+                    style: TextStyle(fontSize: 20)),
+              )
+            : SingleChildScrollView(
+                child: GridView.builder(
+                  shrinkWrap: true,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      crossAxisSpacing: 2,
+                      mainAxisSpacing: 2),
+                  itemCount: albumContent.length,
+                  itemBuilder: (ctx, i) =>
+                      ContentItem(albumContent[i], this.selectedItems),
+                ),
+              ),
+      );
     else
       return Container();
   }

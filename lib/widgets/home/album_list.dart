@@ -16,6 +16,7 @@ class _AlbumListState extends State<AlbumList> {
   bool _isLoading = false;
   bool _isInit = false;
   bool _isError = false;
+  late List _albums = [];
 
   @override
   Future<void> didChangeDependencies() async {
@@ -31,7 +32,6 @@ class _AlbumListState extends State<AlbumList> {
       });
 
       try {
-        print('fetching albums');
         await Provider.of<AlbumProvider>(context, listen: false)
             .fetchAndSetAlbums()
             .then((value) {
@@ -54,7 +54,7 @@ class _AlbumListState extends State<AlbumList> {
 
   @override
   Widget build(BuildContext context) {
-    final albums = Provider.of<AlbumProvider>(context).albums;
+    if (_isInit) _albums = Provider.of<AlbumProvider>(context).albums;
 
     if (_isLoading) return LoadingWidget();
     if (_isError)
@@ -64,7 +64,7 @@ class _AlbumListState extends State<AlbumList> {
       );
     if (_isInit && !_isError)
       return Container(
-          child: albums.length <= 0
+          child: _albums.length <= 0
               ? Center(
                   child: Text(
                     'You have no album yet...',
@@ -72,8 +72,8 @@ class _AlbumListState extends State<AlbumList> {
                   ),
                 )
               : ListView.builder(
-                  itemCount: albums.length,
-                  itemBuilder: (ctx, i) => AlbumItem(albums[i].albumId),
+                  itemCount: _albums.length,
+                  itemBuilder: (ctx, i) => AlbumItem(_albums[i].albumId),
                 ));
     else
       return Container();

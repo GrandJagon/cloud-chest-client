@@ -1,5 +1,7 @@
 import 'package:cloud_chest/providers/content_provider.dart';
 import 'package:cloud_chest/screens/content/content_viewer.dart';
+import 'package:cloud_chest/widgets/misc/loading_widget.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_chest/models/content.dart';
 import 'package:provider/provider.dart';
@@ -54,8 +56,10 @@ class _ContentItemState extends State<ContentItem> {
 
   // Display the content viewer, pass the current item index in order for the viewer to be able to go forward or backward in the album
   void _showViewer(BuildContext context) {
-    Navigator.of(context)
-        .pushNamed(ContentViewer.routeName, arguments: itemIndex);
+    showDialog(
+      context: context,
+      builder: (context) => ContentViewer(itemIndex),
+    );
   }
 
   // If no item already selected display the viewer, if there is already items in the selection add to it
@@ -70,6 +74,7 @@ class _ContentItemState extends State<ContentItem> {
 
   @override
   Widget build(BuildContext context) {
+    print('building content item');
     Size size = MediaQuery.of(context).size;
     return GestureDetector(
       onLongPress: () => _longPress(),
@@ -83,9 +88,10 @@ class _ContentItemState extends State<ContentItem> {
         ),
         child: Hero(
           tag: itemIndex,
-          child: Image.network(
-            widget.item.path,
-            fit: BoxFit.cover,
+          child: CachedNetworkImage(
+            placeholder: (ctx, url) => LoadingWidget(),
+            imageUrl: widget.item.path,
+            errorWidget: (context, url, error) => Icon(Icons.error),
           ),
         ),
       ),

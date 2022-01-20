@@ -14,15 +14,25 @@ class AuthProvider with ChangeNotifier {
   String? _refreshToken;
   DateTime? _expiryDate;
   String? userId;
+  Timer? _authTimer;
 
   // Tries to autoconnect to the API
-  Future<void> tryAutoConnect() async {
+  Future<dynamic> tryAutoConnect() async {
+    print('Trying to autoconnect');
     try {
       await fetchAuthData();
 
-      if (!isAuth()) await refreshToken();
+      if (!isAuth) return false;
 
-      return;
+      print('auth data OK');
+
+      if (!isTokenValid) return false;
+
+      print('token validity OK');
+
+      _startTimer();
+
+      return true;
     } on Exception catch (err) {
       return Future.error(err);
     } catch (err) {
@@ -53,18 +63,17 @@ class AuthProvider with ChangeNotifier {
   bool get isAuthData => _isAuthData;
 
   // Check the expiry date validity
-  bool isTokenValid() {
+  bool get isTokenValid {
     if (_expiryDate!.isAfter(DateTime.now())) {
-      _startTimer();
       return true;
     }
     return false;
   }
 
   // Returns true if token is valid and not expired
-  bool isAuth() {
+  bool get isAuth {
     if (accessToken != null && _refreshToken != null && _expiryDate != null) {
-      return isTokenValid();
+      return true;
     }
     return false;
   }
@@ -72,7 +81,6 @@ class AuthProvider with ChangeNotifier {
   // Authenticates to the API, either by logging in or signing up
   Future<void> _authenticate(
       String email, String password, String urlPart) async {
-    print('authenticating');
     Uri url = NetworkUtils.createEndpoint('auth', urlPart);
 
     try {
@@ -80,8 +88,6 @@ class AuthProvider with ChangeNotifier {
         'email': email,
         'password': password
       }).timeout(Duration(seconds: int.parse(dotenv.env['REQUEST_TIMEOUT']!)));
-
-      print(response.body);
 
       if (response.statusCode != 200) {
         throw HttpException(response.body);
@@ -101,13 +107,12 @@ class AuthProvider with ChangeNotifier {
       print(err);
       return Future.error(HttpException(
           'An error occured while trying to connect to the server. Make sure it it up and running'));
-    } on Exception catch (err) {
+    } on SocketException catch (err) {
       print(err);
-      return Future.error(HttpException(err.toString()));
-    } catch (e, stack) {
-      print('AUTH ERROR CAUGHT');
-      print(stack);
-      print(e);
+      return Future.error(
+          'An error occured while trying to connect to the server. Make sure it it up and running');
+    } catch (err) {
+      return Future.error('Error while connecting, please try again later.');
     }
   }
 
@@ -133,6 +138,7 @@ class AuthProvider with ChangeNotifier {
 
   // Clears all connection data in order to logout
   Future<void> logout() async {
+    print('LOGING OUT');
     try {
       await SecureStorage().clear('cloudchest_auth');
     } catch (err) {
@@ -156,7 +162,6 @@ class AuthProvider with ChangeNotifier {
           await logout();
           notifyListeners();
         }
-        print(response.body);
       }
 
       accessToken = json.decode(response.body)['accessToken'];
@@ -169,17 +174,21 @@ class AuthProvider with ChangeNotifier {
       await storeAuthData();
       _startTimer();
     } on Exception catch (err) {
+      print(
+          'problem while refreshing token, now logging out ion order to request a new token pair');
       await logout();
-      throw Exception('Cannot refresh access token');
     }
   }
 
   // Timer that will ask for a new access token once the current one is expired
   void _startTimer() {
     final _timeToExpiry = _expiryDate!.difference(DateTime.now()).inSeconds;
-    final Timer _refreshTimer =
-        new Timer(Duration(seconds: _timeToExpiry), refreshToken);
-    print(
-        'Starting timer with time to expiration ->' + _timeToExpiry.toString());
+    if (_authTimer != null)
+      print('Timer already set with ' +
+          _timeToExpiry.toString() +
+          ' seconds to go');
+    _authTimer = new Timer(Duration(seconds: _timeToExpiry), () {
+      refreshToken();
+    });
   }
 }

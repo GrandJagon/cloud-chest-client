@@ -11,6 +11,7 @@ class ContentProvider extends ChangeNotifier {
   final String accessToken;
   final String userId;
   late List<Content> _contentList = [];
+  late Content currentItem;
 
   ContentProvider(this.accessToken, this.userId);
 
