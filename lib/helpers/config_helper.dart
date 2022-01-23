@@ -15,7 +15,6 @@ class Config {
 
   // Loads config if it exists in local storage
   Future<void> init() async {
-    print('initiating config');
     String? configInfo = await SecureStorage().read('cloudchest_config');
 
     if (configInfo != null) {

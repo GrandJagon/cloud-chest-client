@@ -28,8 +28,6 @@ class AuthProvider with ChangeNotifier {
 
       if (!isTokenValid) return false;
 
-      print('token validity OK');
-
       _startTimer();
 
       return true;

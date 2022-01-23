@@ -11,10 +11,16 @@ class Album {
       required this.rights,
       this.thumbnail = ''});
 
-  Map toJson() => {
+  Map<String, dynamic> toJson() => {
         'albumId': albumId,
         'title': title,
         'thumbnail': thumbnail,
         'rights': rights
       };
+
+  factory Album.fromJson(Map<String, dynamic> json) => Album(
+      albumId: json['albumId'],
+      title: json['title'],
+      thumbnail: json['thumbnail'] ?? null,
+      rights: json['rights']);
 }

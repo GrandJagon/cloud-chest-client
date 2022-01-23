@@ -1,6 +1,6 @@
-import 'package:cloud_chest/providers/album_provider.dart';
-import 'package:cloud_chest/providers/auth_provider.dart';
-import 'package:cloud_chest/providers/content_provider.dart';
+import 'package:cloud_chest/providers/album_provider_old.dart';
+import 'package:cloud_chest/providers/auth_provider_old.dart';
+import 'package:cloud_chest/providers/content_provider_old.dart';
 import 'package:cloud_chest/screens/album_detail/album_detail_screen.dart';
 import 'package:cloud_chest/screens/auth/auth_screen.dart';
 import 'package:cloud_chest/screens/auth/connect_screen.dart';

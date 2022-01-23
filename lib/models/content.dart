@@ -1,33 +1,22 @@
 import 'dart:ffi';
 
-class Content {
-  final String path;
+// Abstract class that holds the different types of content
+abstract class Content {
+  final Uri path;
   final int size;
   final String mimetype;
-  final double? longitude;
-  final double? latitude;
-  final DateTime? creationDate;
-  final DateTime? storageDate;
-  final String? location;
+  final Map<String, dynamic>? metadata;
 
   Content(
       {required this.path,
       required this.size,
       required this.mimetype,
-      this.longitude,
-      this.latitude,
-      this.creationDate,
-      this.storageDate,
-      this.location});
+      this.metadata});
 
-  Map toJson() => {
+  Map<String, dynamic> toJson() => {
         'path': path,
         'size': size,
         'mimetype': mimetype,
-        'longitude': longitude,
-        'latitude': latitude,
-        'creationDate': creationDate,
-        'storageDate': storageDate,
-        'location': location ?? ''
+        'metada': metadata ?? {}
       };
 }

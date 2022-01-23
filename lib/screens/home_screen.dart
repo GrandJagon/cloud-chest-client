@@ -1,4 +1,4 @@
-import 'package:cloud_chest/providers/auth_provider.dart';
+import 'package:cloud_chest/providers/auth_provider_old.dart';
 import 'package:cloud_chest/widgets/home/album_list.dart';
 import 'package:cloud_chest/widgets/home/home_bar.dart';
 import 'package:flutter/material.dart';

@@ -1,4 +1,4 @@
-import 'package:cloud_chest/providers/content_provider.dart';
+import 'package:cloud_chest/providers/content_provider_old.dart';
 import 'package:cloud_chest/screens/content/content_viewer.dart';
 import 'package:cloud_chest/widgets/misc/loading_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';

@@ -1,4 +1,4 @@
-import 'package:cloud_chest/providers/content_provider.dart';
+import 'package:cloud_chest/providers/content_provider_old.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

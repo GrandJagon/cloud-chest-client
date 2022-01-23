@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:ui';
 
-import 'package:cloud_chest/providers/album_provider.dart';
+import 'package:cloud_chest/providers/album_provider_old.dart';
 import 'package:cloud_chest/utils/alert_dialog_factory.dart';
 import 'package:cloud_chest/widgets/misc/loading_widget.dart';
 import 'package:provider/provider.dart';

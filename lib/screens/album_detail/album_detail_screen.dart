@@ -1,5 +1,5 @@
 import 'package:cloud_chest/models/album.dart';
-import 'package:cloud_chest/providers/auth_provider.dart';
+import 'package:cloud_chest/providers/auth_provider_old.dart';
 import 'package:cloud_chest/screens/auth/auth_screen.dart';
 import 'package:cloud_chest/screens/content/content_viewer.dart';
 import 'package:cloud_chest/widgets/album_detail/album_detail_bar.dart';

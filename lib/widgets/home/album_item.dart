@@ -1,4 +1,4 @@
-import 'package:cloud_chest/providers/album_provider.dart';
+import 'package:cloud_chest/providers/album_provider_old.dart';
 import 'package:cloud_chest/screens/album_detail/album_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

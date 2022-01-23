@@ -21,14 +21,14 @@ class ContentProvider extends ChangeNotifier {
 
   // Adds content returned by the API to the current album content list
   Future<void> _addToCurrentContent(List<dynamic> newContent) async {
-    newContent.forEach((content) {
-      _contentList.add(
-        new Content(
-            path: NetworkUtils.createImagePath(content['path']),
-            size: content['size'],
-            mimetype: content['mimetype']),
-      );
-    });
+    // newContent.forEach((content) {
+    //   _contentList.add(
+    //     new Content(
+    //         path: Uri.parse(NetworkUtils.createImagePath(content['path'])),
+    //         size: content['size'],
+    //         mimetype: content['mimetype']),
+    //   );
+    // });
   }
 
   // Fetch the content of an album from the server
