@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_chest/models/content.dart';
-import 'package:cloud_chest/providers/content_provider_old.dart';
 import 'package:cloud_chest/widgets/content/content_viewer_bar.dart';
 import 'package:cloud_chest/widgets/misc/loading_widget.dart';
 import 'package:flutter/material.dart';
@@ -23,15 +22,15 @@ class _ContentViewerState extends State<ContentViewer> {
   late List _albumContent;
   late int _albumSize;
 
-  @override
-  void didChangeDependencies() {
-    if (!_isInit) {
-      _currentIndex = widget.currentIndex;
-      _albumContent =
-          Provider.of<ContentProvider>(context, listen: false).contentList;
-    }
-    super.didChangeDependencies();
-  }
+//   @override
+//   void didChangeDependencies() {
+//     if (!_isInit) {
+//       _currentIndex = widget.currentIndex;
+//       _albumContent =
+//           Provider.of<ContentProvider>(context, listen: false).contentList;
+//     }
+//     super.didChangeDependencies();
+//   }
 
   // Displays a metadata panel on the bottom
   void _toggleMetadata() {

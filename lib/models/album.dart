@@ -21,6 +21,6 @@ class Album {
   factory Album.fromJson(Map<String, dynamic> json) => Album(
       albumId: json['albumId'],
       title: json['title'],
-      thumbnail: json['thumbnail'] ?? null,
+      thumbnail: json['thumbnail'] ?? '',
       rights: json['rights']);
 }

@@ -1,8 +1,6 @@
-import 'dart:ffi';
-
 // Abstract class that holds the different types of content
 abstract class Content {
-  final Uri path;
+  final String path;
   final int size;
   final String mimetype;
   final Map<String, dynamic>? metadata;

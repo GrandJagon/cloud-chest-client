@@ -1,10 +1,9 @@
-import 'package:cloud_chest/providers/content_provider_old.dart';
 import 'package:cloud_chest/screens/content/content_viewer.dart';
 import 'package:cloud_chest/widgets/misc/loading_widget.dart';
 import 'package:cloud_chest/widgets/misc/network_error_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'content_item.dart';
+import '../widgets/content/content_item.dart';
 
 class ContentGrid extends StatefulWidget {
   final String _albumId;

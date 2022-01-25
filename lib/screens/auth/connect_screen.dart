@@ -31,9 +31,6 @@ class _ConnectScreenState extends State<ConnectScreen> {
       Config().update('host', _configValues['host']!);
       Config().update('port', _configValues['port']!);
       await Config().savePreferences();
-      //
-      // SHOULD FIND A WAY TO TRY TO> CONNECT HERE
-      //
 
       Navigator.of(context).pushReplacementNamed(AuthScreen.routeName);
     } catch (err) {

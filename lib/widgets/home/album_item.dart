@@ -1,13 +1,12 @@
-import 'package:cloud_chest/providers/album_provider_old.dart';
+import 'package:cloud_chest/models/album.dart';
 import 'package:cloud_chest/screens/album_detail/album_detail_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'dart:math';
 
 class AlbumItem extends StatelessWidget {
-  final String id;
+  final Album album;
 
-  AlbumItem(this.id);
+  AlbumItem(this.album);
 
   LinearGradient _randomGradient() {
     return LinearGradient(colors: [
@@ -27,8 +26,6 @@ class AlbumItem extends StatelessWidget {
   }
 
   Widget build(BuildContext context) {
-    final album = Provider.of<AlbumProvider>(context, listen: false)
-        .getAlbumById(this.id);
     final size = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: () => Navigator.of(context)

@@ -4,30 +4,51 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class AlbumRepository {
   NetworkService _albumService = NetworkService(apiUrl: 'albums');
-  final String _auth_token_key = dotenv.env['REQUEST_AUTH_TOKEN_KEY']!;
+  final String _authTokenKey = dotenv.env['REQUEST_AUTH_TOKEN_KEY']!;
 
-  Future<List<Album>> getAlbumList(String access_token) async {
+  // Returns user's all albums from the API
+  Future<List<Album>> getAlbumList(String accessToken) async {
     try {
-      final response =
-          await _albumService.get(headers: {_auth_token_key: access_token});
-      final data = response['content'] as List;
+      final response = await _albumService
+          .get(headers: {_authTokenKey: accessToken}) as List;
 
-      List<Album> albums = data.map((album) => Album.fromJson(album)).toList();
+      List<Album> albums =
+          response.map((album) => Album.fromJson(album)).toList();
 
       return albums;
-    } catch (err) {
+    } catch (err, stack) {
+      print(stack);
       throw err;
     }
   }
 
-  Future<String> postNewAlbum(
-      String access_token, String title, String? description) async {
+  // Request new album creation from the API and returns the newly created album
+  Future<dynamic> postNewAlbum(
+      String accessToken, String title, String? description) async {
     try {
       final response = await _albumService.post(
-          headers: {_auth_token_key: access_token},
-          data: {'title': title, 'description': description ?? ''});
+          headers: {_authTokenKey: accessToken},
+          data: {'title': title, 'description': description ?? ''},
+          urlPart: 'create');
 
-      return response.message;
+      if (response is Exception) throw response;
+
+      print(response);
+
+      final newAlbum = Album.fromJson(response);
+
+      return newAlbum;
+    } catch (err, stack) {
+      print(stack);
+      return Future.error(err);
+    }
+  }
+
+  // Requests album deletion from the API and returns the deleted album
+  Future<void> deleteAlbum(String accessToken, String albumId) async {
+    try {
+      await _albumService.delete(
+          headers: {_authTokenKey: accessToken}, params: {'albumId': albumId});
     } catch (err) {
       throw err;
     }

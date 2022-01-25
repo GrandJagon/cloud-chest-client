@@ -1,11 +1,11 @@
-import 'package:cloud_chest/providers/album_provider_old.dart';
-import 'package:cloud_chest/providers/auth_provider_old.dart';
-import 'package:cloud_chest/providers/content_provider_old.dart';
+import 'package:cloud_chest/providers/auth_provider.dart';
 import 'package:cloud_chest/screens/album_detail/album_detail_screen.dart';
 import 'package:cloud_chest/screens/auth/auth_screen.dart';
 import 'package:cloud_chest/screens/auth/connect_screen.dart';
 import 'package:cloud_chest/screens/home_screen.dart';
 import 'package:cloud_chest/screens/splash_screen.dart';
+import 'package:cloud_chest/view_model/album_content_view_model.dart';
+import 'package:cloud_chest/view_model/album_list_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_chest/helpers/config_helper.dart';
@@ -18,27 +18,26 @@ class CloudChest extends StatefulWidget {
 
 class _CloudChestState extends State<CloudChest> {
   // Creates the future builder dynamically in order to avoid call future at each rebuild
-  FutureBuilder _authFutureBuilder(AuthProvider provider, Future future) {
+  FutureBuilder _authFutureBuilder(Auth provider, Future future) {
     return FutureBuilder(
       future: future,
       builder: (ctx, snapshot) {
-        print('Waiting for future trying to autoconnect');
         if (snapshot.connectionState == ConnectionState.waiting)
           return SplashScreen();
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.data == true) {
-            print('Redirecting to home screen');
             return HomeScreen();
           }
-          if (!snapshot.hasError && !provider.isAuthData)
+          if (!snapshot.hasError && !provider.isConnected) {
             return AuthScreen();
-          else {
+          } else {
             Future.delayed(
               Duration.zero,
               () => showDialog(
                 context: ctx,
-                builder: (_) => AlertDialogFactory.oneButtonDialog(
-                    ctx, snapshot.error.toString(), 'OK'),
+                builder: (BuildContext context) =>
+                    AlertDialogFactory.oneButtonDialog(
+                        context, snapshot.error.toString(), 'OK'),
               ),
             );
             return AuthScreen();
@@ -53,16 +52,20 @@ class _CloudChestState extends State<CloudChest> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => AuthProvider()),
-        ChangeNotifierProxyProvider<AuthProvider, AlbumProvider>(
-          create: (_) => (AlbumProvider('', '')),
-          update: (_, auth, previous) =>
-              AlbumProvider(auth.accessToken!, auth.userId!),
+        ChangeNotifierProvider(create: (context) => Auth()),
+        ChangeNotifierProxyProvider<Auth, AlbumListViewModel>(
+          create: (_) => (AlbumListViewModel()),
+          update: (_, auth, previous) {
+            previous!.setToken(auth.accessToken!);
+            return previous;
+          },
         ),
-        ChangeNotifierProxyProvider<AuthProvider, ContentProvider>(
-          create: (_) => (ContentProvider('', '')),
-          update: (_, auth, previous) =>
-              ContentProvider(auth.accessToken!, auth.userId!),
+        ChangeNotifierProxyProvider<Auth, AlbumContentViewModel>(
+          create: (_) => (AlbumContentViewModel()),
+          update: (_, auth, previous) {
+            previous!.setToken(auth.accessToken!);
+            return previous;
+          },
         )
       ],
       child: MaterialApp(
@@ -73,7 +76,7 @@ class _CloudChestState extends State<CloudChest> {
           ),
           home: !Config().isSetup
               ? ConnectScreen()
-              : Consumer<AuthProvider>(
+              : Consumer<Auth>(
                   builder: (ctx, auth, _) => _authFutureBuilder(
                     auth,
                     auth.tryAutoConnect(),

@@ -1,4 +1,3 @@
-import 'package:cloud_chest/providers/content_provider_old.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -15,27 +14,27 @@ class AlbumDetailBar extends StatelessWidget with PreferredSizeWidget {
   @override
   Size get preferredSize => Size.fromHeight(50);
 
-  // Allows user to select images from gallery to upload them on the server
-  Future<void> _uploadFromLGallery(BuildContext context) async {
-    try {
-      final pictures = await _picker.pickMultiImage();
+//   // Allows user to select images from gallery to upload them on the server
+//   Future<void> _uploadFromLGallery(BuildContext context) async {
+//     try {
+//       final pictures = await _picker.pickMultiImage();
 
-      if (pictures == null) return;
+//       if (pictures == null) return;
 
-      final paths = pictures.map((e) => e.path).toList();
+//       final paths = pictures.map((e) => e.path).toList();
 
-      await _uploadFiles(paths, context);
-    } catch (err, stack) {
-      print(stack);
-      print('err' + err.toString());
-    }
-  }
+//       await _uploadFiles(paths, context);
+//     } catch (err, stack) {
+//       print(stack);
+//       print('err' + err.toString());
+//     }
+//   }
 
-  // Sends the files to the provider which makes an API call
-  Future<void> _uploadFiles(List<String> files, BuildContext context) async {
-    await Provider.of<ContentProvider>(context, listen: false)
-        .uploadContent(files, id);
-  }
+//   // Sends the files to the provider which makes an API call
+//   Future<void> _uploadFiles(List<String> files, BuildContext context) async {
+//     await Provider.of<ContentProvider>(context, listen: false)
+//         .uploadContent(files, id);
+//   }
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +51,7 @@ class AlbumDetailBar extends StatelessWidget with PreferredSizeWidget {
         ),
         IconButton(
           icon: Icon(Icons.add),
-          onPressed: () => _uploadFromLGallery(context),
+          onPressed: () => {},
         ),
       ],
     );

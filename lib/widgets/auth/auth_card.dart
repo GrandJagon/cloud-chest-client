@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
-
-import 'package:cloud_chest/providers/auth_provider_old.dart';
+import 'package:cloud_chest/providers/auth_provider.dart';
 import 'package:cloud_chest/screens/home_screen.dart';
 import 'package:cloud_chest/utils/alert_dialog_factory.dart';
 import 'package:provider/provider.dart';
@@ -97,12 +96,12 @@ class _AuthCardState extends State<AuthCard>
     // Try to authenticate and displays an error dialog in case of failure
     try {
       if (_authMode == AuthMode.Signup) {
-        await Provider.of<AuthProvider>(context, listen: false)
-            .signup(_credentials['email']!, _credentials['password']!)
+        await Provider.of<Auth>(context, listen: false)
+            .register(_credentials['email']!, _credentials['password']!)
             .then((value) =>
                 Navigator.of(context).popAndPushNamed(HomeScreen.routeName));
       } else {
-        await Provider.of<AuthProvider>(context, listen: false)
+        await Provider.of<Auth>(context, listen: false)
             .login(_credentials['email']!, _credentials['password']!)
             .then((value) =>
                 Navigator.of(context).popAndPushNamed(HomeScreen.routeName));
