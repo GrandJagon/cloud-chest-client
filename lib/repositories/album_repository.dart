@@ -12,13 +12,14 @@ class AlbumRepository {
       final response = await _albumService
           .get(headers: {_authTokenKey: accessToken}) as List;
 
+      if (response is Exception) throw response;
+
       List<Album> albums =
           response.map((album) => Album.fromJson(album)).toList();
 
       return albums;
     } catch (err, stack) {
-      print(stack);
-      throw err;
+      return Future.error(err);
     }
   }
 
@@ -33,13 +34,10 @@ class AlbumRepository {
 
       if (response is Exception) throw response;
 
-      print(response);
-
       final newAlbum = Album.fromJson(response);
 
       return newAlbum;
     } catch (err, stack) {
-      print(stack);
       return Future.error(err);
     }
   }

@@ -1,7 +1,10 @@
 import 'package:cloud_chest/providers/auth_provider.dart';
-import 'package:cloud_chest/screens/album_detail/album_detail_screen.dart';
+import 'package:cloud_chest/providers/content_viewer_provider.dart';
+import 'package:cloud_chest/providers/user_selection_provider.dart';
+import 'package:cloud_chest/screens/album_detail/album_content_screen.dart';
 import 'package:cloud_chest/screens/auth/auth_screen.dart';
 import 'package:cloud_chest/screens/auth/connect_screen.dart';
+import 'package:cloud_chest/screens/content/content_viewer.dart';
 import 'package:cloud_chest/screens/home_screen.dart';
 import 'package:cloud_chest/screens/splash_screen.dart';
 import 'package:cloud_chest/view_model/album_content_view_model.dart';
@@ -26,7 +29,7 @@ class _CloudChestState extends State<CloudChest> {
           return SplashScreen();
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.data == true) {
-            return HomeScreen();
+            return AlbumListScreen();
           }
           if (!snapshot.hasError && !provider.isConnected) {
             return AuthScreen();
@@ -53,17 +56,26 @@ class _CloudChestState extends State<CloudChest> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => Auth()),
+        ChangeNotifierProvider(create: (context) => UserSelection()),
         ChangeNotifierProxyProvider<Auth, AlbumListViewModel>(
-          create: (_) => (AlbumListViewModel()),
+          create: (_) => AlbumListViewModel(),
           update: (_, auth, previous) {
             previous!.setToken(auth.accessToken!);
             return previous;
           },
         ),
         ChangeNotifierProxyProvider<Auth, AlbumContentViewModel>(
-          create: (_) => (AlbumContentViewModel()),
+          create: (_) => AlbumContentViewModel(),
           update: (_, auth, previous) {
             previous!.setToken(auth.accessToken!);
+            return previous;
+          },
+        ),
+        ChangeNotifierProxyProvider<AlbumContentViewModel,
+            ContentViewerProvider>(
+          create: (_) => ContentViewerProvider(),
+          update: (_, albumContentViewModel, previous) {
+            previous!.setAlbumToView(albumContentViewModel.contentList);
             return previous;
           },
         )
@@ -85,8 +97,9 @@ class _CloudChestState extends State<CloudChest> {
           routes: {
             AuthScreen.routeName: (ctx) => AuthScreen(),
             ConnectScreen.routeName: (ctx) => ConnectScreen(),
-            HomeScreen.routeName: (ctx) => HomeScreen(),
-            AlbumDetailScreen.routeName: (ctx) => AlbumDetailScreen()
+            AlbumListScreen.routeName: (ctx) => AlbumListScreen(),
+            AlbumContentScreen.routeName: (ctx) => AlbumContentScreen(),
+            ContentViewerScreen.routeName: (ctx) => ContentViewerScreen()
           }),
     );
   }

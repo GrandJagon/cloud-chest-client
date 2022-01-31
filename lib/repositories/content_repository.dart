@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:cloud_chest/data/network_service.dart';
 import 'package:cloud_chest/models/content.dart';
 import 'package:cloud_chest/models/factories/content_factory.dart';
@@ -23,25 +26,59 @@ class ContentRepository {
           response.map((json) => ContentFactory.createFromJson(json)).toList();
 
       return albumContent;
-    } catch (err) {
-      throw err;
+    } catch (err, stack) {
+      print(stack);
+      return Future.error(err);
     }
   }
 
   // Upload new content to an album via multipart post request
   Future<List<Content>> postNewContent(
-      List<String> newContent, String albumId) async {
+      List<String> newContent, String albumId, String accessToken) async {
     try {
-      final response =
-          await _contentService.multipart(data: newContent, method: 'POST');
+      final headers = {_auth_token_key: accessToken};
+      final params = {_album_id_key: albumId};
+      final response = await _contentService.multipart(
+          headers: headers, data: newContent, method: 'POST', params: params);
 
       if (response is Exception) throw response;
 
-      List<Content> addedContent =
-          response.map((json) => ContentFactory.createFromJson(json)).toList();
+      List<Content> addedContent = response
+          .map<Content>((json) => ContentFactory.createFromJson(json))
+          .toList();
 
       return addedContent;
-    } catch (err) {
+    } catch (err, stack) {
+      print(err);
+      print(stack);
+      throw err;
+    }
+  }
+
+  // Deletes given content from an album
+  Future<bool> deleteContent(
+      List<Content> contentToDelete, String albumId, String accessToken) async {
+    try {
+      final headers = {
+        _auth_token_key: accessToken,
+        HttpHeaders.contentTypeHeader: 'application/json'
+      };
+      final params = {_album_id_key: albumId};
+
+      var jsonContent =
+          contentToDelete.map((e) => e.toJsonForDeletion()).toList();
+
+      final body = json.encode(jsonContent);
+
+      final response = await _contentService.delete(
+          headers: headers, body: body, params: params);
+
+      if (response is Exception) throw response;
+
+      return true;
+    } catch (err, stack) {
+      print(stack);
+      print(err);
       throw err;
     }
   }

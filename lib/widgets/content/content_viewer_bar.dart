@@ -12,6 +12,7 @@ class ContentViewerBar extends StatelessWidget with PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      backgroundColor: Colors.black,
       leading: IconButton(
         icon: Icon(Icons.cancel_rounded),
         onPressed: () => Navigator.of(context).pop(),

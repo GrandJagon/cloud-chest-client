@@ -10,7 +10,7 @@ class ApiResponse {
 
   ApiResponse.done() : status = ResponseStatus.DONE;
 
-  ApiResponse.error(this.message) : status = ResponseStatus.DONE;
+  ApiResponse.error(this.message) : status = ResponseStatus.ERROR;
 
   @override
   String toString() {

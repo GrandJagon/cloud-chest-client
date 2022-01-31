@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:async';
 import 'dart:io';
-import 'cloud_chest_exceptions.dart';
+import '../exceptions/cloud_chest_exceptions.dart';
 import 'package:cloud_chest/utils/network.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
@@ -31,6 +31,8 @@ class NetworkService {
       return _parseResponse(response);
     } on SocketException {
       throw FetchException('No internet connection');
+    } on TimeoutException {
+      throw FetchException('Make sure the server is running.');
     }
   }
 
@@ -54,6 +56,8 @@ class NetworkService {
       return _parseResponse(response);
     } on SocketException {
       throw FetchException('No internet connection');
+    } on TimeoutException {
+      throw FetchException('Make sure the server is running.');
     }
   }
 
@@ -83,6 +87,9 @@ class NetworkService {
       return _parseResponse(response);
     } on SocketException {
       throw FetchException('No internet connection');
+    } on TimeoutException {
+      throw FetchException(
+          'There seems to be a conection problem, make sure the server is on.');
     }
   }
 
@@ -94,33 +101,44 @@ class NetworkService {
   Future<dynamic> delete(
       {String? urlPart,
       Map<String, String>? headers,
-      Map<String, String>? params}) async {
+      Map<String, String>? params,
+      dynamic body}) async {
     Uri url = NetworkUtils.createEndpoint(apiUrl, urlPart ?? '', params);
 
+    print('body to be sent ===> ' + body.toString());
+
     try {
-      final dynamic response = await http.post(url, headers: headers).timeout(
-            Duration(
-              seconds: int.parse(
-                dotenv.env['REQUEST_TIMEOUT']!,
-              ),
-            ),
-          );
+      final dynamic response =
+          await http.delete(url, headers: headers, body: body).timeout(
+                Duration(
+                  seconds: int.parse(
+                    dotenv.env['REQUEST_TIMEOUT']!,
+                  ),
+                ),
+              );
       return _parseResponse(response);
     } on SocketException {
       throw FetchException('No internet connection');
+    } on TimeoutException {
+      throw FetchException(
+          'There seems to be a conection problem, make sure the server is on.');
     }
   }
 
   // Parses responses and returns it as JSON
   // Throws error according to status code if necessary
   dynamic _parseResponse(http.Response response) {
-    print('PARSING RESPONSE ');
     print('STATUS ' + response.statusCode.toString());
     print(response.body);
     switch (response.statusCode) {
       case 200:
-        final jsonResponse = jsonDecode(response.body);
-        return jsonResponse;
+        // Checks json validity and returns raw body if invalid
+        try {
+          final jsonResponse = jsonDecode(response.body);
+          return jsonResponse;
+        } catch (e) {
+          return response.body;
+        }
       case 400:
         return InvalidException(response.body.toString());
       case 401:

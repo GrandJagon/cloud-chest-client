@@ -43,7 +43,8 @@ class AlbumListViewModel extends ChangeNotifier {
 
   // Set the response as loading and fetches the data from repo before setting it as a response
   Future<void> fetchAlbums() async {
-    if (_response.status != ResponseStatus.LOADING) ApiResponse.loading();
+    if (_response.status != ResponseStatus.LOADING)
+      _response = ApiResponse.loading();
     await _albumRepo
         .getAlbumList(_accessToken)
         .then((response) => _setAlbumList(response))
@@ -64,7 +65,7 @@ class AlbumListViewModel extends ChangeNotifier {
         .postNewAlbum(_accessToken, title, description)
         .then((response) => _addToAlbumList(response))
         .whenComplete(() => notifyListeners())
-        .onError(
+        .catchError(
             // API call no mandatory for album list to be displayed here
             // No need to update the response as we won't rebuild in case of error but just catching the error and show snackbar
             (error, stackTrace) {
@@ -77,7 +78,7 @@ class AlbumListViewModel extends ChangeNotifier {
   Future<void> deleteAlbum(String albumId) async {
     await _albumRepo
         .deleteAlbum(_accessToken, albumId)
-        .onError((error, stackTrace) => throw error!)
+        .catchError((error, stackTrace) => throw error!)
         .whenComplete(
           () => _albumList.removeWhere((album) => album.albumId == albumId),
         );

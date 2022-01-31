@@ -1,5 +1,5 @@
 import 'package:cloud_chest/models/album.dart';
-import 'package:cloud_chest/screens/album_detail/album_detail_screen.dart';
+import 'package:cloud_chest/screens/album_detail/album_content_screen.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 
@@ -29,7 +29,7 @@ class AlbumItem extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: () => Navigator.of(context)
-          .pushNamed(AlbumDetailScreen.routeName, arguments: album),
+          .pushNamed(AlbumContentScreen.routeName, arguments: album),
       child: Card(
         elevation: 8,
         child: Container(

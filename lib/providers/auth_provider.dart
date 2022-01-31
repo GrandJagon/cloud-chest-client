@@ -1,8 +1,8 @@
 import 'dart:async';
-import 'package:cloud_chest/data/cloud_chest_exceptions.dart';
+import 'package:cloud_chest/exceptions/cloud_chest_exceptions.dart';
 import 'package:cloud_chest/services/auth_data_service.dart';
 import 'package:flutter/material.dart';
-import 'auth_errors.dart';
+import '../exceptions/auth_exceptions.dart';
 
 // Holds the auth state
 // Only keeps most essential variable to provider (access token and user ID)
@@ -11,14 +11,9 @@ class Auth extends ChangeNotifier {
   final _authDataService = AuthDataService();
   bool _isConnected = false;
   String? accessToken = '';
-  String? userId = '';
   Timer? _authTimer;
 
   bool get isConnected => _isConnected;
-
-  Auth() {
-    print('creating auth');
-  }
 
   // Tries to fetch auth data and run checks on them$
   // If expired refresh the token and fetch the new ones
@@ -26,22 +21,20 @@ class Auth extends ChangeNotifier {
     try {
       await _authDataService.retrieveAuthData();
 
-      if (!_authDataService.isAuthData)
-        return Future.error(
-          NoAuthDataError('There is no auth data in local memory'),
-        );
+      if (!_authDataService.isAuthData) {
+        print('no auth data, redirection to auth screen');
+        return false;
+      }
+      if (!_authDataService.isAuthDataValid) {
+        print('auth data invalid, redirection to auth screen');
+        return false;
+      }
 
-      if (!_authDataService.isAuthDataValid)
-        return Future.error(
-          AuthDataNonValidError('The auth data is invalid, please login.'),
-        );
-
-      if (_authDataService.isTokenExpired)
-        await _authDataService.requestNewToken();
+      if (_authDataService.isTokenExpired) return _refreshToken();
 
       // Autoconnect successfull
       accessToken = _authDataService.accessToken;
-      userId = _authDataService.userId;
+
       _startTimer();
       return _isConnected = true;
     } on TimeoutException {
@@ -60,14 +53,16 @@ class Auth extends ChangeNotifier {
           await _authDataService.authenticate(email, password, urlPart);
 
       // Authentication successful
-      accessToken = response['accessToken'];
-      userId = response['userId'];
+      accessToken = response;
+
       _isConnected = true;
       _startTimer();
     } on FetchException catch (err) {
       return Future.error(
           AuthConnectionError('There no internet or the server is off.'));
-    } catch (err) {
+    } catch (err, stack) {
+      print(stack);
+      print(err);
       return Future.error('There seems to be a problem, please retry later...');
     }
   }
@@ -80,18 +75,28 @@ class Auth extends ChangeNotifier {
     return await _authenticate(email, password, 'register');
   }
 
+  Future<void> _logout() async {
+    await _authDataService.clearAuthData();
+    accessToken = '';
+  }
+
   // Sends a new access token request to the API
-  Future<void> _refreshToken() async {
+  Future<bool> _refreshToken() async {
     try {
       final newToken = await _authDataService.requestNewToken();
 
       accessToken = newToken;
-      _isConnected = true;
+
       _startTimer();
       notifyListeners();
+
+      return _isConnected = true;
     } catch (err) {
       print('Error while requesting new token, _isConnected now set to false');
-      _isConnected = false;
+
+      print('Now logging out for security reason.');
+      _logout();
+      return _isConnected = false;
     }
   }
 

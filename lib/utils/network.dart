@@ -13,7 +13,7 @@ class NetworkUtils {
 
   // Returns a path to fetch the image for the API
   // Takes the image file name as argument
-  static String createImagePath(String filename) {
+  static String createContentPath(String filename) {
     final host = Config().get('host');
     final port = Config().get('port');
 

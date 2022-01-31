@@ -26,19 +26,25 @@ class AuthDataService {
   DateTime? get expiryDate => _expiryDate;
 
   // Sends login/register data to the API
-  Future<Map<String, String>> authenticate(
+  Future<String> authenticate(
       String email, String password, String urlPart) async {
     try {
       final response = await _authService
           .post(data: {'email': email, 'password': password}, urlPart: urlPart);
 
+      if (response is Exception) throw response;
+
       _accessToken = response['accessToken'];
       _refreshToken = response['refreshToken'];
-      _userId = response['userId'];
 
-      return response;
-    } catch (err) {
-      throw err;
+      _extractTokenData(_accessToken!);
+      _storeAuthData();
+
+      return _accessToken!;
+    } catch (err, stack) {
+      print(stack);
+      print(err);
+      return Future.error(err);
     }
   }
 
@@ -51,22 +57,30 @@ class AuthDataService {
         _refreshTokenKey: _refreshToken
       }, urlPart: 'refreshToken');
 
+      if (response is Exception) throw response;
+
       final data = response;
 
       _accessToken = data['accessToken'];
 
-      final decodedAccessToken = TokenHelper.decodeToken(accessToken!);
-
-      _expiryDate =
-          DateTime.fromMillisecondsSinceEpoch(decodedAccessToken['exp']);
+      _extractTokenData(_accessToken!);
 
       await _storeAuthData();
 
       return _accessToken!;
     } catch (err, stack) {
-      print(stack);
-      throw err;
+      return Future.error(err);
     }
+  }
+
+  // Decodes token and assigns its info to values
+  void _extractTokenData(String encodedToken) {
+    final decodedAccessToken = TokenHelper.decodeToken(accessToken!);
+
+    _expiryDate =
+        DateTime.fromMillisecondsSinceEpoch(decodedAccessToken['exp']);
+
+    _userId = decodedAccessToken['sub'];
   }
 
   // Retrieves auth data stored in memory or null if none
@@ -93,6 +107,10 @@ class AuthDataService {
     });
 
     await SecureStorage().write(_authDataKey, authData);
+  }
+
+  Future<void> clearAuthData() async {
+    await SecureStorage().clear(_authDataKey);
   }
 
   // Check the expiry date validity

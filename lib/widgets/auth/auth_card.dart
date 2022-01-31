@@ -98,13 +98,13 @@ class _AuthCardState extends State<AuthCard>
       if (_authMode == AuthMode.Signup) {
         await Provider.of<Auth>(context, listen: false)
             .register(_credentials['email']!, _credentials['password']!)
-            .then((value) =>
-                Navigator.of(context).popAndPushNamed(HomeScreen.routeName));
+            .then((value) => Navigator.of(context)
+                .popAndPushNamed(AlbumListScreen.routeName));
       } else {
         await Provider.of<Auth>(context, listen: false)
             .login(_credentials['email']!, _credentials['password']!)
-            .then((value) =>
-                Navigator.of(context).popAndPushNamed(HomeScreen.routeName));
+            .then((value) => Navigator.of(context)
+                .popAndPushNamed(AlbumListScreen.routeName));
       }
     } on HttpException catch (err) {
       showDialog(

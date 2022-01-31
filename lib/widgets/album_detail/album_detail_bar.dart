@@ -1,40 +1,39 @@
+import 'package:cloud_chest/view_model/album_content_view_model.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:path/path.dart' as path;
-import 'package:path_provider/path_provider.dart' as syspaths;
 
-class AlbumDetailBar extends StatelessWidget with PreferredSizeWidget {
+class AlbumContentBar extends StatelessWidget with PreferredSizeWidget {
   final String title;
   final String id;
   final ImagePicker _picker = ImagePicker();
 
-  AlbumDetailBar(this.id, this.title);
+  AlbumContentBar(this.id, this.title);
 
   @override
   Size get preferredSize => Size.fromHeight(50);
 
-//   // Allows user to select images from gallery to upload them on the server
-//   Future<void> _uploadFromLGallery(BuildContext context) async {
-//     try {
-//       final pictures = await _picker.pickMultiImage();
+  // Allows user to select images from gallery to upload them on the server
+  Future<void> _uploadFromLGallery(BuildContext context) async {
+    try {
+      final pictures = await _picker.pickMultiImage();
 
-//       if (pictures == null) return;
+      if (pictures == null) return;
 
-//       final paths = pictures.map((e) => e.path).toList();
+      final paths = pictures.map((e) => e.path).toList();
 
-//       await _uploadFiles(paths, context);
-//     } catch (err, stack) {
-//       print(stack);
-//       print('err' + err.toString());
-//     }
-//   }
+      await _uploadFiles(paths, context);
+    } catch (err, stack) {
+      print(stack);
+      print('err' + err.toString());
+    }
+  }
 
-//   // Sends the files to the provider which makes an API call
-//   Future<void> _uploadFiles(List<String> files, BuildContext context) async {
-//     await Provider.of<ContentProvider>(context, listen: false)
-//         .uploadContent(files, id);
-//   }
+  // Sends the files to the provider which makes an API call
+  Future<void> _uploadFiles(List<String> files, BuildContext context) async {
+    await Provider.of<AlbumContentViewModel>(context, listen: false)
+        .uploadToAlbum(files);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +50,7 @@ class AlbumDetailBar extends StatelessWidget with PreferredSizeWidget {
         ),
         IconButton(
           icon: Icon(Icons.add),
-          onPressed: () => {},
+          onPressed: () => _uploadFromLGallery(context),
         ),
       ],
     );
