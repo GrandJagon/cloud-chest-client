@@ -41,7 +41,7 @@ class AuthDataService {
       _storeAuthData();
 
       return _accessToken!;
-    } catch (err, stack) {
+    } on Exception catch (err, stack) {
       print(stack);
       print(err);
       return Future.error(err);
@@ -68,7 +68,7 @@ class AuthDataService {
       await _storeAuthData();
 
       return _accessToken!;
-    } catch (err, stack) {
+    } on Exception catch (err, stack) {
       return Future.error(err);
     }
   }

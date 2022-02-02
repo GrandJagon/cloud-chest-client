@@ -1,6 +1,6 @@
 import 'package:cloud_chest/providers/content_viewer_provider.dart';
 import 'package:cloud_chest/providers/user_selection_provider.dart';
-import 'package:cloud_chest/screens/content/content_viewer.dart';
+import 'package:cloud_chest/screens/content_viewer/content_viewer.dart';
 import 'package:cloud_chest/view_model/album_content_view_model.dart';
 import 'package:cloud_chest/widgets/misc/loading_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';

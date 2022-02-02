@@ -21,7 +21,10 @@ class ContentSelectionButton extends StatelessWidget {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               backgroundColor: Colors.blue,
-              content: Text('Deletion successfull'),
+              content: Text(
+                'Deletion successfull',
+                textAlign: TextAlign.center,
+              ),
             ),
           );
         },
@@ -30,7 +33,10 @@ class ContentSelectionButton extends StatelessWidget {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: Colors.red,
-          content: Text(e.toString()),
+          content: Text(
+            e.toString(),
+            textAlign: TextAlign.center,
+          ),
         ),
       );
     }

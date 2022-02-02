@@ -1,7 +1,7 @@
 import 'package:cloud_chest/data/api_response.dart';
 import 'package:cloud_chest/providers/user_selection_provider.dart';
 import 'package:cloud_chest/view_model/album_content_view_model.dart';
-import 'package:cloud_chest/widgets/content/content_item.dart';
+import 'package:cloud_chest/widgets/album_content/content_item.dart';
 import 'package:cloud_chest/widgets/misc/loading_widget.dart';
 import 'package:cloud_chest/widgets/misc/network_error_widget.dart';
 import 'package:flutter/material.dart';

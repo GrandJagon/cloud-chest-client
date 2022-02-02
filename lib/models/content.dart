@@ -2,6 +2,7 @@
 abstract class Content {
   final String id;
   final String path;
+  final String storageDate;
   final int size;
   final String mimetype;
   final Map<String, dynamic>? metadata;
@@ -9,6 +10,7 @@ abstract class Content {
   Content(
       {required this.id,
       required this.path,
+      required this.storageDate,
       required this.size,
       required this.mimetype,
       this.metadata});
@@ -16,6 +18,7 @@ abstract class Content {
   Map<String, dynamic> toJson() => {
         'id': id,
         'path': path,
+        'storageDate': storageDate,
         'size': size,
         'mimetype': mimetype,
         'metada': metadata ?? {}
@@ -26,8 +29,6 @@ abstract class Content {
     // Convert the absolute path to a relative path in order for the server to locate the files
     final startIndex = path.indexOf('storage');
     final relativePath = path.substring(startIndex, path.length);
-
-    print(relativePath);
 
     return {'id': id, 'path': relativePath};
   }

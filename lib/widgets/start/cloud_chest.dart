@@ -1,10 +1,10 @@
 import 'package:cloud_chest/providers/auth_provider.dart';
 import 'package:cloud_chest/providers/content_viewer_provider.dart';
 import 'package:cloud_chest/providers/user_selection_provider.dart';
-import 'package:cloud_chest/screens/album_detail/album_content_screen.dart';
+import 'package:cloud_chest/screens/album_content/album_content_screen.dart';
 import 'package:cloud_chest/screens/auth/auth_screen.dart';
 import 'package:cloud_chest/screens/auth/connect_screen.dart';
-import 'package:cloud_chest/screens/content/content_viewer.dart';
+import 'package:cloud_chest/screens/content_viewer/content_viewer.dart';
 import 'package:cloud_chest/screens/home_screen.dart';
 import 'package:cloud_chest/screens/splash_screen.dart';
 import 'package:cloud_chest/view_model/album_content_view_model.dart';
@@ -40,7 +40,7 @@ class _CloudChestState extends State<CloudChest> {
                 context: ctx,
                 builder: (BuildContext context) =>
                     AlertDialogFactory.oneButtonDialog(
-                        context, snapshot.error.toString(), 'OK'),
+                        context, 'Error', snapshot.error.toString(), 'OK'),
               ),
             );
             return AuthScreen();

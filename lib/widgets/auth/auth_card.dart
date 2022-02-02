@@ -110,7 +110,7 @@ class _AuthCardState extends State<AuthCard>
       showDialog(
           context: context,
           builder: (ctx) => AlertDialogFactory.oneButtonDialog(
-              ctx, err.message.toString(), 'OK'));
+              ctx, 'Error', err.message.toString(), 'OK'));
     } catch (err, stack) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(err.toString())));

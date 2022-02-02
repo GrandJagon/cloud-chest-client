@@ -2,9 +2,9 @@ import 'package:cloud_chest/models/album.dart';
 import 'package:cloud_chest/providers/auth_provider.dart';
 import 'package:cloud_chest/providers/user_selection_provider.dart';
 import 'package:cloud_chest/screens/auth/auth_screen.dart';
-import 'package:cloud_chest/widgets/content/content_grid.dart';
-import 'package:cloud_chest/widgets/album_detail/album_detail_bar.dart';
-import 'package:cloud_chest/widgets/content/content_selection_button.dart';
+import 'package:cloud_chest/widgets/album_content/content_grid.dart';
+import 'package:cloud_chest/widgets/album_content/album_detail_bar.dart';
+import 'package:cloud_chest/widgets/album_content/content_selection_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

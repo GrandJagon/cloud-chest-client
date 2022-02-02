@@ -1,5 +1,5 @@
 import 'package:cloud_chest/models/album.dart';
-import 'package:cloud_chest/screens/album_detail/album_content_screen.dart';
+import 'package:cloud_chest/screens/album_content/album_content_screen.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 
