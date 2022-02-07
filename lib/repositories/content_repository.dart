@@ -8,15 +8,15 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ContentRepository {
   final NetworkService _contentService = NetworkService(apiUrl: 'content');
-  final String _auth_token_key = dotenv.env['REQUEST_AUTH_TOKEN_KEY']!;
-  final String _album_id_key = dotenv.env['REQUEST_ALBUM_KEY']!;
+  final String _authTokenKey = dotenv.env['REQUEST_AUTH_TOKEN_KEY']!;
+  final String _albumIdKey = dotenv.env['REQUEST_ALBUM_KEY']!;
 
   // Retrieves content for an album given an album id
   Future<List<Content>> getAlbumContent(
       String albumId, String accessToken) async {
     try {
-      final headers = {_auth_token_key: accessToken};
-      final params = {_album_id_key: albumId};
+      final headers = {_authTokenKey: accessToken};
+      final params = {_albumIdKey: albumId};
       final response =
           await _contentService.get(headers: headers, params: params) as List;
 
@@ -36,8 +36,8 @@ class ContentRepository {
   Future<List<Content>> postNewContent(
       List<String> newContent, String albumId, String accessToken) async {
     try {
-      final headers = {_auth_token_key: accessToken};
-      final params = {_album_id_key: albumId};
+      final headers = {_authTokenKey: accessToken};
+      final params = {_albumIdKey: albumId};
       final response = await _contentService.multipart(
           headers: headers, data: newContent, method: 'POST', params: params);
 
@@ -60,10 +60,10 @@ class ContentRepository {
       List<Content> contentToDelete, String albumId, String accessToken) async {
     try {
       final headers = {
-        _auth_token_key: accessToken,
+        _authTokenKey: accessToken,
         HttpHeaders.contentTypeHeader: 'application/json'
       };
-      final params = {_album_id_key: albumId};
+      final params = {_albumIdKey: albumId};
 
       var jsonContent =
           contentToDelete.map((e) => e.toJsonForDeletion()).toList();

@@ -18,7 +18,7 @@ class AlbumRepository {
           response.map((album) => Album.fromJson(album)).toList();
 
       return albums;
-    } catch (err, stack) {
+    } catch (err) {
       return Future.error(err);
     }
   }

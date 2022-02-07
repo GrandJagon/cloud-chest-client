@@ -65,10 +65,11 @@ class AlbumContentViewModel extends ChangeNotifier {
 
   // Upload new content to the album given an ID
   Future<void> uploadToAlbum(List<String> newContent) async {
+    _setResponse(ApiResponse.loading());
     await _contentRepo
         .postNewContent(newContent, _currentAlbumId, _accessToken)
         .then((addedContent) => _addToContentList(addedContent))
-        .whenComplete(() => notifyListeners())
+        .whenComplete(() => _setResponse(ApiResponse.done()))
         .catchError(
       (error, stackTrace) {
         _setResponse(ApiResponse.done());
@@ -79,10 +80,11 @@ class AlbumContentViewModel extends ChangeNotifier {
 
   // Deletes a list of items from the album
   Future<void> deleteFromAlbum(List<Content> contentToDelete) async {
+    _setResponse(ApiResponse.loading());
     await _contentRepo
         .deleteContent(contentToDelete, _currentAlbumId, _accessToken)
         .then((_) => _removeFromContentList(contentToDelete))
-        .whenComplete(() => notifyListeners())
+        .whenComplete(() => _setResponse(ApiResponse.done()))
         .catchError(
       (error, stackTrace) {
         _setResponse(ApiResponse.done());

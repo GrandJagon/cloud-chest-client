@@ -57,7 +57,7 @@ class Auth extends ChangeNotifier {
 
       _isConnected = true;
       _startTimer();
-    } on FetchException catch (err) {
+    } on FetchException {
       return Future.error(
           AuthConnectionError('There no internet or the server is off.'));
     } catch (err, stack) {

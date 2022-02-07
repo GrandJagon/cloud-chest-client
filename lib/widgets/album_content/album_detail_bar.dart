@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:cloud_chest/view_model/album_content_view_model.dart';
+import 'package:exif/exif.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,11 +19,21 @@ class AlbumContentBar extends StatelessWidget with PreferredSizeWidget {
   // Allows user to select images from gallery to upload them on the server
   Future<void> _uploadFromLGallery(BuildContext context) async {
     try {
+      print('________________________uploading_______________________');
       final pictures = await _picker.pickMultiImage();
 
       if (pictures == null) return;
 
       final paths = pictures.map((e) => e.path).toList();
+
+      print('PRINTING EXIF');
+      paths.forEach((element) async {
+        var fileByte = File(element).readAsBytesSync();
+        var exif = await readExifFromBytes(fileByte);
+        for (final entry in exif.entries) {
+          print("${entry.key} : ${entry.value}");
+        }
+      });
 
       await _uploadFiles(paths, context);
     } catch (err, stack) {

@@ -47,7 +47,7 @@ class _MetadataPaneState extends State<MetadataPane> {
         topRight: Radius.circular(8),
       ),
       child: Container(
-        color: Colors.black,
+        color: Colors.grey[900],
         padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,

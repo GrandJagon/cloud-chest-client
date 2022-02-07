@@ -9,6 +9,10 @@ class ContentViewerProvider extends ChangeNotifier {
 
   int get currentItemIndex => _currentItemIndex;
 
+  int get contentListSize => _content.length;
+
+  List<Content> get contentList => _content;
+
   Content get currentItem => _currentItem!;
 
   // Sets the data that will be displayed
@@ -20,6 +24,7 @@ class ContentViewerProvider extends ChangeNotifier {
   void setStartingPoint(int startIndex) {
     _currentItemIndex = startIndex;
     _currentItem = _content[_currentItemIndex];
+    print(_currentItem!.storageDate);
     notifyListeners();
   }
 
