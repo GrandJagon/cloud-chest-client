@@ -48,7 +48,6 @@ class _ContentGridState extends State<ContentGrid> {
 
   // Returns the grid if album is not empty
   Widget _buildGrid(AlbumContentViewModel viewModel) {
-    print('Building content grid');
     return Container(
       child: viewModel.contentList.length <= 0
           ? Center(

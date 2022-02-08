@@ -1,7 +1,9 @@
 import 'package:cloud_chest/data/api_response.dart';
+import 'package:cloud_chest/exceptions/cloud_chest_exceptions.dart';
 import 'package:cloud_chest/models/content.dart';
 import 'package:cloud_chest/repositories/content_repository.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:cloud_chest/helpers/download_helper.dart';
 
 class AlbumContentViewModel extends ChangeNotifier {
   ContentRepository _contentRepo = ContentRepository();
@@ -91,5 +93,18 @@ class AlbumContentViewModel extends ChangeNotifier {
         throw error!;
       },
     );
+  }
+
+  //Downloads a list of items from the server and stores them in the gallery
+  Future<void> downloadFromAlbum(List<Content> contentToDownload) async {
+    final List<String> urls = contentToDownload.map((c) => c.path).toList();
+    _setResponse(ApiResponse.loading());
+    await DownloadHelper()
+        .downloadToGallery(urls)
+        .whenComplete(() => _setResponse(ApiResponse.done()))
+        .catchError((error, stackTrace) {
+      _setResponse(ApiResponse.done());
+      throw error!;
+    });
   }
 }

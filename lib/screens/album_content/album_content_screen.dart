@@ -28,13 +28,7 @@ class AlbumContentScreen extends StatelessWidget {
           Expanded(
             child: ContentGrid(album.albumId),
           ),
-          Consumer<UserSelection>(
-            builder: (_, userSelection, child) {
-              return userSelection.length > 0
-                  ? ContentSelectionButton()
-                  : Container();
-            },
-          )
+          ContentSelectionButton()
         ],
       ),
     );

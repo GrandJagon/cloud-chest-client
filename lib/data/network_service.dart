@@ -81,8 +81,16 @@ class NetworkService {
         );
       });
 
-      final streamedResponse = await request.send();
+      final streamedResponse = await request.send().timeout(
+            Duration(
+              seconds: int.parse(
+                dotenv.env['REQUEST_TIMEOUT']!,
+              ),
+            ),
+          );
       final response = await http.Response.fromStream(streamedResponse);
+
+      print(response);
 
       return _parseResponse(response);
     } on SocketException {

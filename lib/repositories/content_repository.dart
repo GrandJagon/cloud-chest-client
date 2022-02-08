@@ -51,7 +51,7 @@ class ContentRepository {
     } catch (err, stack) {
       print(err);
       print(stack);
-      throw err;
+      rethrow;
     }
   }
 
@@ -79,7 +79,7 @@ class ContentRepository {
     } catch (err, stack) {
       print(stack);
       print(err);
-      throw err;
+      rethrow;
     }
   }
 }

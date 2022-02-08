@@ -14,8 +14,10 @@ class UserSelection extends ChangeNotifier {
       _userSelection.add(content);
     else
       _userSelection.remove(content);
-    print(_userSelection.length);
-    notifyListeners();
+
+    // Rebuilds listeners only if first item is added or last one removed
+    if (_userSelection.length == 0 || _userSelection.length == 1)
+      notifyListeners();
   }
 
   void clearSelection() {
