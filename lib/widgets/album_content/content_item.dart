@@ -61,7 +61,6 @@ class _ContentItemState extends State<ContentItem>
   Widget build(BuildContext context) {
     viewModel = context.read<AlbumContentViewModel>();
     Size size = MediaQuery.of(context).size;
-    print('building item');
     return GestureDetector(
       onLongPress: () => _longPress(),
       onTap: () => _onTap(context),

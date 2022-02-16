@@ -5,7 +5,7 @@ import 'package:cloud_chest/models/album.dart';
 import 'package:cloud_chest/repositories/album_repository.dart';
 import 'package:flutter/foundation.dart';
 
-class AlbumListViewModel extends ChangeNotifier {
+class AlbumsViewModel extends ChangeNotifier {
   String _accessToken = '';
   ApiResponse _response = ApiResponse.loading();
   final AlbumRepository _albumRepo = AlbumRepository();

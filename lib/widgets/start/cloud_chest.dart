@@ -8,7 +8,7 @@ import 'package:cloud_chest/screens/content_viewer/content_viewer.dart';
 import 'package:cloud_chest/screens/home_screen.dart';
 import 'package:cloud_chest/screens/splash_screen.dart';
 import 'package:cloud_chest/view_model/album_content_view_model.dart';
-import 'package:cloud_chest/view_model/album_list_view_model.dart';
+import 'package:cloud_chest/view_model/albums_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_chest/helpers/config_helper.dart';
@@ -57,8 +57,8 @@ class _CloudChestState extends State<CloudChest> {
       providers: [
         ChangeNotifierProvider(create: (context) => Auth()),
         ChangeNotifierProvider(create: (context) => UserSelection()),
-        ChangeNotifierProxyProvider<Auth, AlbumListViewModel>(
-          create: (_) => AlbumListViewModel(),
+        ChangeNotifierProxyProvider<Auth, AlbumsViewModel>(
+          create: (_) => AlbumsViewModel(),
           update: (_, auth, previous) {
             previous!.setToken(auth.accessToken!);
             return previous;

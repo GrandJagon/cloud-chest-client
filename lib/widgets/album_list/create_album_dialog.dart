@@ -1,6 +1,6 @@
 import 'dart:ui';
 import 'package:cloud_chest/data/api_response.dart';
-import 'package:cloud_chest/view_model/album_list_view_model.dart';
+import 'package:cloud_chest/view_model/albums_view_model.dart';
 import 'package:cloud_chest/widgets/misc/loading_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +18,7 @@ class _CreateAlbumDialogState extends State<CreateAlbumDialog> {
     _formKey.currentState!.save();
 
     try {
-      await Provider.of<AlbumListViewModel>(context, listen: false)
+      await Provider.of<AlbumsViewModel>(context, listen: false)
           .createAlbum(_albumInfos['title']!, _albumInfos['description']!)
           .then(
             (value) => Navigator.of(context).pop(),
@@ -38,8 +38,7 @@ class _CreateAlbumDialogState extends State<CreateAlbumDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final AlbumListViewModel albumListViewModel =
-        context.watch<AlbumListViewModel>();
+    final AlbumsViewModel albumListViewModel = context.watch<AlbumsViewModel>();
     double _bottomInset = MediaQuery.of(context).viewInsets.bottom;
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),

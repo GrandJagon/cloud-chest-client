@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_chest/widgets/albums/create_album_dialog.dart';
+import 'package:cloud_chest/widgets/album_list/create_album_dialog.dart';
 
 class HomeBar extends StatelessWidget with PreferredSizeWidget {
   @override
