@@ -1,5 +1,5 @@
 import 'package:cloud_chest/models/content.dart';
-import 'package:cloud_chest/providers/content_viewer_provider.dart';
+import 'package:cloud_chest/view_model/content_viewer_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -13,7 +13,7 @@ class _MetadataPaneState extends State<MetadataPane> {
 
   @override
   Widget build(BuildContext context) {
-    final content = Provider.of<ContentViewerProvider>(context).currentItem;
+    final content = Provider.of<ContentViewerViewModel>(context).currentItem;
 
     // For widget starting state only the header of the bottom sheet is needed
     // Content is displayed when button is clicked and _showMetadata() called

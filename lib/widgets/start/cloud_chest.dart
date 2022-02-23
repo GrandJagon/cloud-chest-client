@@ -1,18 +1,21 @@
 import 'package:cloud_chest/providers/auth_provider.dart';
-import 'package:cloud_chest/providers/content_viewer_provider.dart';
-import 'package:cloud_chest/providers/user_selection_provider.dart';
+import 'package:cloud_chest/view_model/content_viewer_view_model.dart';
+import 'package:cloud_chest/view_model/user_selection_view_model.dart';
 import 'package:cloud_chest/screens/album_content/album_content_screen.dart';
+import 'package:cloud_chest/screens/album_settings/album_settings_screen.dart';
 import 'package:cloud_chest/screens/auth/auth_screen.dart';
 import 'package:cloud_chest/screens/auth/connect_screen.dart';
-import 'package:cloud_chest/screens/content_viewer/content_viewer.dart';
-import 'package:cloud_chest/screens/home_screen.dart';
-import 'package:cloud_chest/screens/splash_screen.dart';
+import 'package:cloud_chest/screens/content_viewer/content_viewer_screen.dart';
+import 'package:cloud_chest/screens/home/home_screen.dart';
+import 'package:cloud_chest/screens/misc/splash_screen.dart';
 import 'package:cloud_chest/view_model/album_content_view_model.dart';
 import 'package:cloud_chest/view_model/albums_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_chest/helpers/config_helper.dart';
 import 'package:cloud_chest/utils/alert_dialog_factory.dart';
+
+import '../../view_model/thumbnail_selection_view_model.dart';
 
 class CloudChest extends StatefulWidget {
   @override
@@ -56,7 +59,9 @@ class _CloudChestState extends State<CloudChest> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => Auth()),
-        ChangeNotifierProvider(create: (context) => UserSelection()),
+        ChangeNotifierProvider(create: (context) => UserSelectionViewModel()),
+        ChangeNotifierProvider(
+            create: (context) => ThumbnailSelectionViewModel()),
         ChangeNotifierProxyProvider<Auth, AlbumsViewModel>(
           create: (_) => AlbumsViewModel(),
           update: (_, auth, previous) {
@@ -72,8 +77,8 @@ class _CloudChestState extends State<CloudChest> {
           },
         ),
         ChangeNotifierProxyProvider<AlbumContentViewModel,
-            ContentViewerProvider>(
-          create: (_) => ContentViewerProvider(),
+            ContentViewerViewModel>(
+          create: (_) => ContentViewerViewModel(),
           update: (_, albumContentViewModel, previous) {
             previous!.setAlbumToView(albumContentViewModel.contentList);
             return previous;
@@ -99,7 +104,8 @@ class _CloudChestState extends State<CloudChest> {
             ConnectScreen.routeName: (ctx) => ConnectScreen(),
             AlbumListScreen.routeName: (ctx) => AlbumListScreen(),
             AlbumContentScreen.routeName: (ctx) => AlbumContentScreen(),
-            ContentViewerScreen.routeName: (ctx) => ContentViewerScreen()
+            ContentViewerScreen.routeName: (ctx) => ContentViewerScreen(),
+            AlbumSettingScreen.routeName: (ctx) => AlbumSettingScreen()
           }),
     );
   }

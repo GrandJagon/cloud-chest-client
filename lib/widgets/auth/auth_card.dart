@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:cloud_chest/providers/auth_provider.dart';
-import 'package:cloud_chest/screens/home_screen.dart';
+import 'package:cloud_chest/screens/home/home_screen.dart';
 import 'package:cloud_chest/utils/alert_dialog_factory.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';

@@ -1,5 +1,5 @@
 import 'package:cloud_chest/data/api_response.dart';
-import 'package:cloud_chest/providers/content_viewer_provider.dart';
+import 'package:cloud_chest/view_model/content_viewer_view_model.dart';
 import 'package:cloud_chest/view_model/album_content_view_model.dart';
 import 'package:cloud_chest/widgets/content_viewer/content_carousel.dart';
 import 'package:cloud_chest/widgets/content_viewer/content_viewer_bar.dart';
@@ -18,8 +18,8 @@ class ContentViewerScreen extends StatefulWidget {
 class _ContentViewerScreenState extends State<ContentViewerScreen> {
   @override
   Widget build(BuildContext context) {
-    final ContentViewerProvider contentViewerProvider =
-        context.read<ContentViewerProvider>();
+    final ContentViewerViewModel contentViewerProvider =
+        context.read<ContentViewerViewModel>();
 
     final ApiResponse deleteResponse =
         context.watch<AlbumContentViewModel>().response;

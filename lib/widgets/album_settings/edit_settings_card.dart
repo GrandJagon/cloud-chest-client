@@ -1,5 +1,4 @@
 import 'package:cloud_chest/models/album.dart';
-import 'package:cloud_chest/models/content.dart';
 import 'package:cloud_chest/view_model/albums_view_model.dart';
 import 'package:cloud_chest/widgets/album_settings/thumbnail_card.dart';
 import 'package:cloud_chest/widgets/album_settings/thumbnail_selection_dialog.dart';
@@ -50,10 +49,7 @@ class _EditSettingsCardState extends State<EditSettingsForm> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            TextFormField(
-              controller: _titleController,
-              initialValue: album.title,
-            ),
+            TextFormField(controller: _titleController..text = album.title),
             SizedBox(
               height: 50,
             ),

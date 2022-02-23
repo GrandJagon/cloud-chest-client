@@ -19,37 +19,10 @@ class ThumbnailSelectionDialog extends StatefulWidget {
 
 class _ThumbnailSelectionDialogState extends State<ThumbnailSelectionDialog> {
   late AlbumContentViewModel viewModel;
-  bool _isSelection = false;
-  Content? _currentSelection;
 
-  // Called from ThumbnailSelectionItem
-  // Sets the current item and toggles confirm button
-  void _selectItem(Content item) {
-    // If the item passed by the item widget is the same as the one already stored then user has unselected it
-    if (_currentSelection == item) {
-      _currentSelection = null;
-      setState(() {
-        _isSelection = false;
-      });
-    } else {
-      _currentSelection = item;
-
-      // If _isSelection equals false then state must be updated to display the confirm button
-      if (_isSelection == false) {
-        setState(() {
-          _isSelection = true;
-        });
-      }
-    }
-  }
-
-  // Called when thumbnail selection is confirmed
+  // Function to be called whenver a selection is confirmed to be sent to parent
   void _confirmSelection() {
-    String path = _currentSelection!.path;
-
-    widget.setThumbnail(path);
-
-    Navigator.of(context).pop();
+    return;
   }
 
   @override
@@ -67,11 +40,11 @@ class _ThumbnailSelectionDialogState extends State<ThumbnailSelectionDialog> {
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2, crossAxisSpacing: 2, mainAxisSpacing: 2),
               itemCount: viewModel.contentList.length,
-              itemBuilder: (ctx, i) => ThumbnailSelectionItem(
-                  viewModel.contentList[i], () => _selectItem),
+              itemBuilder: (ctx, i) =>
+                  ThumbnailSelectionItem(viewModel.contentList[i]),
             ),
           ),
-          if (_isSelection) ConfirmThumbnailSelection(_confirmSelection),
+          ConfirmThumbnailSelection(() => _confirmSelection())
         ],
       ),
     );

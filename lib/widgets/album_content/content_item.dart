@@ -1,6 +1,6 @@
-import 'package:cloud_chest/providers/content_viewer_provider.dart';
-import 'package:cloud_chest/providers/user_selection_provider.dart';
-import 'package:cloud_chest/screens/content_viewer/content_viewer.dart';
+import 'package:cloud_chest/view_model/content_viewer_view_model.dart';
+import 'package:cloud_chest/view_model/user_selection_view_model.dart';
+import 'package:cloud_chest/screens/content_viewer/content_viewer_screen.dart';
 import 'package:cloud_chest/view_model/album_content_view_model.dart';
 import 'package:cloud_chest/widgets/misc/loading_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -34,26 +34,27 @@ class _ContentItemState extends State<ContentItem>
       _isSelected = !_isSelected;
     });
 
-    Provider.of<UserSelection>(context, listen: false).addOrRemove(widget.item);
+    Provider.of<UserSelectionViewModel>(context, listen: false)
+        .addOrRemove(widget.item);
   }
 
   // Sets the content viewer starting point as widget.id and pushes content viewert
   void _showViewer(BuildContext context) {
-    Provider.of<ContentViewerProvider>(context, listen: false)
+    Provider.of<ContentViewerViewModel>(context, listen: false)
         .setStartingPoint(widget.index);
     Navigator.of(context).pushNamed(ContentViewerScreen.routeName);
   }
 
   // If no item already selected display the viewer, if there is already items in the selection add to it
   void _onTap(BuildContext context) {
-    Provider.of<UserSelection>(context, listen: false).length <= 0
+    Provider.of<UserSelectionViewModel>(context, listen: false).length <= 0
         ? _showViewer(context)
         : _selectItem();
   }
 
   // If no item already selected add it to selecton
   void _longPress() {
-    if (Provider.of<UserSelection>(context, listen: false).length <= 0)
+    if (Provider.of<UserSelectionViewModel>(context, listen: false).length <= 0)
       _selectItem();
   }
 

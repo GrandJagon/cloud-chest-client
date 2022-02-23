@@ -1,3 +1,4 @@
+import 'package:cloud_chest/screens/album_settings/album_settings_screen.dart';
 import 'package:cloud_chest/view_model/album_content_view_model.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
@@ -53,7 +54,8 @@ class AlbumContentBar extends StatelessWidget with PreferredSizeWidget {
       actions: <Widget>[
         IconButton(
           icon: Icon(Icons.settings),
-          onPressed: () => print('Album settings'),
+          onPressed: () => Navigator.of(context)
+              .pushNamed(AlbumSettingScreen.routeName, arguments: id),
         ),
         IconButton(
           icon: Icon(Icons.add),

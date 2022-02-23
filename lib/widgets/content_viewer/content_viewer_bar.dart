@@ -1,5 +1,5 @@
 import 'package:cloud_chest/models/content.dart';
-import 'package:cloud_chest/providers/content_viewer_provider.dart';
+import 'package:cloud_chest/view_model/content_viewer_view_model.dart';
 import 'package:cloud_chest/screens/album_content/album_content_screen.dart';
 import 'package:cloud_chest/utils/alert_dialog_factory.dart';
 import 'package:cloud_chest/view_model/album_content_view_model.dart';
@@ -10,7 +10,7 @@ class ContentViewerBar extends StatelessWidget {
   void _deleteButton(BuildContext context) {
     // Fecthes currently displayed content
     final Content _currentContent =
-        Provider.of<ContentViewerProvider>(context, listen: false).currentItem;
+        Provider.of<ContentViewerViewModel>(context, listen: false).currentItem;
 
     showDialog(
       context: context,

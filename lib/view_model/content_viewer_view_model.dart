@@ -2,7 +2,7 @@ import 'package:cloud_chest/models/content.dart';
 import 'package:flutter/material.dart';
 
 // Holds the content viewer state
-class ContentViewerProvider extends ChangeNotifier {
+class ContentViewerViewModel extends ChangeNotifier {
   List<Content> _content = [];
   int _currentItemIndex = 0;
   Content? _currentItem;

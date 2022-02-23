@@ -1,9 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloud_chest/providers/content_viewer_provider.dart';
 import 'package:cloud_chest/widgets/misc/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
+
+import '../../view_model/content_viewer_view_model.dart';
 
 class ContentCarousel extends StatefulWidget {
   @override
@@ -11,16 +12,16 @@ class ContentCarousel extends StatefulWidget {
 }
 
 class _ContentCarouselState extends State<ContentCarousel> {
-  late ContentViewerProvider contentViewerProvider;
+  late ContentViewerViewModel contentViewerViewModel;
   late PageController _pageController;
 
   @override
   void initState() {
     super.initState();
-    contentViewerProvider =
-        Provider.of<ContentViewerProvider>(context, listen: false);
+    contentViewerViewModel =
+        Provider.of<ContentViewerViewModel>(context, listen: false);
     _pageController =
-        PageController(initialPage: contentViewerProvider.currentItemIndex);
+        PageController(initialPage: contentViewerViewModel.currentItemIndex);
   }
 
   @override
@@ -32,17 +33,17 @@ class _ContentCarouselState extends State<ContentCarousel> {
   void _onPageChanged(int index) {
     if (_pageController.position.userScrollDirection ==
         ScrollDirection.reverse) {
-      contentViewerProvider.nextItem();
+      contentViewerViewModel.nextItem();
     }
     if (_pageController.position.userScrollDirection ==
         ScrollDirection.forward) {
-      contentViewerProvider.previousItem();
+      contentViewerViewModel.previousItem();
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return _contentBuilder(contentViewerProvider.currentItemIndex);
+    return _contentBuilder(contentViewerViewModel.currentItemIndex);
   }
 
   // Custom builder to build image corresponding to the content viewer provider state
@@ -50,11 +51,11 @@ class _ContentCarouselState extends State<ContentCarousel> {
     return PageView.builder(
       controller: _pageController,
       onPageChanged: _onPageChanged,
-      itemCount: contentViewerProvider.contentListSize,
+      itemCount: contentViewerViewModel.contentListSize,
       itemBuilder: (context, index) => CachedNetworkImage(
         fit: BoxFit.contain,
         placeholder: (context, url) => LoadingWidget(),
-        imageUrl: contentViewerProvider.contentList[index].path,
+        imageUrl: contentViewerViewModel.contentList[index].path,
       ),
     );
   }
