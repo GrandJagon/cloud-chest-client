@@ -9,14 +9,19 @@ class ThumbnailSelectionViewModel extends ChangeNotifier {
 
   bool get isSelection => _thumbnailSelection != null;
 
+  // Set a content as thumbnail selection
+  // Replaces another if one already set
+  // If the same is already set then removes it
   void setOrRemove(Content content) {
-    print('setOrRemove called with ' + content.id.toString());
-
     if (_thumbnailSelection == content)
       _thumbnailSelection = null;
     else
       _thumbnailSelection = content;
 
     notifyListeners();
+  }
+
+  void clear() {
+    _thumbnailSelection = null;
   }
 }

@@ -17,7 +17,6 @@ class DownloadHelper {
 
   // Downloads files from a list of urls and store them in the gallery
   Future<void> downloadToGallery(List<String> urls) async {
-    print('1');
     Directory directory = await pathProvider.getApplicationDocumentsDirectory();
     print(directory);
     for (final url in urls) {
@@ -28,13 +27,10 @@ class DownloadHelper {
 
       final file = File(tempPath);
       await file.writeAsBytes(response.bodyBytes);
-      print('awaiting delete');
       await _storeInGallery(tempPath).then(
         (value) => file.delete(),
       );
-      print('end of one');
     }
-    print('end');
   }
 
   // Calls the proper method to store in gallery given a type

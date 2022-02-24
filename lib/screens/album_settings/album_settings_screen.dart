@@ -1,3 +1,4 @@
+import 'package:cloud_chest/widgets/album_settings/album_rights_card.dart';
 import 'package:cloud_chest/widgets/album_settings/edit_settings_card.dart';
 import 'package:flutter/material.dart';
 
@@ -24,7 +25,10 @@ class AlbumSettingScreen extends StatelessWidget {
         title: Text('Album settings'),
       ),
       body: Column(
-        children: <Widget>[EditSettingsForm(albumId!)],
+        children: <Widget>[
+          EditSettingsForm(albumId!),
+          AlbumRightsCard(albumId!)
+        ],
       ),
     );
   }

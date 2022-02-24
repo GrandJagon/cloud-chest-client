@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ConfirmThumbnailSelection extends StatefulWidget {
-  late final Function onPressFunction;
+  late final Function(String) onPressFunction;
 
   ConfirmThumbnailSelection(this.onPressFunction);
 
@@ -15,6 +15,16 @@ class ConfirmThumbnailSelection extends StatefulWidget {
 class _ConfirmThumbnailSelectionState extends State<ConfirmThumbnailSelection> {
   late ThumbnailSelectionViewModel viewModel;
 
+  // Fetches the user selection from the view model and passes it to parent through onPressFunction()
+  void _onPress() {
+    String path =
+        Provider.of<ThumbnailSelectionViewModel>(context, listen: false)
+            .selection!
+            .path;
+
+    widget.onPressFunction(path);
+  }
+
   @override
   Widget build(BuildContext context) {
     viewModel = context.watch<ThumbnailSelectionViewModel>();
@@ -23,8 +33,13 @@ class _ConfirmThumbnailSelectionState extends State<ConfirmThumbnailSelection> {
       height: viewModel.isSelection ? 50 : 0,
       color: Colors.green,
       child: TextButton(
-        child: Center(child: Text('Select thumbnail')),
-        onPressed: () => widget.onPressFunction,
+        child: Center(
+          child: Text(
+            'Select thumbnail',
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+        onPressed: () => _onPress(),
       ),
     );
   }

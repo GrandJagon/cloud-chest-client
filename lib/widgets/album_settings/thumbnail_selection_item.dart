@@ -21,11 +21,21 @@ class ThumbnailSelectionItemState extends State<ThumbnailSelectionItem> {
   bool _isSelected = false;
   late ThumbnailSelectionViewModel viewModel;
 
+  // Remove listener on disposal
+  @override
+  void dispose() {
+    try {
+      viewModel.removeListener(_onNewSelectionCallBack);
+    } catch (e) {
+      print(e);
+    }
+    super.dispose();
+  }
+
   // Callback to be registered within listener whenever the widget is selected
   // Allows to undraw borders from view model
   void _onNewSelectionCallBack() {
     if (viewModel.selection != widget.item) {
-      print('New item selected ' + widget.item.id + ' disabled');
       setState(
         () {
           _isSelected = false;
