@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 
 class AlbumRightsCard extends StatefulWidget {
-  final String albumId;
-
-  AlbumRightsCard(this.albumId);
-
   @override
   State<AlbumRightsCard> createState() => _AlbumRightsCardState();
 }

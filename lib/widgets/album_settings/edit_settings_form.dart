@@ -1,6 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_chest/data/api_response.dart';
 import 'package:cloud_chest/models/album.dart';
-import 'package:cloud_chest/view_model/albums_view_model.dart';
+import 'package:cloud_chest/models/album_detail.dart';
+import 'package:cloud_chest/view_model/album_list_view_model.dart';
+import 'package:cloud_chest/view_model/current_album_view_model.dart';
 import 'package:cloud_chest/view_model/thumbnail_selection_view_model.dart';
 import 'package:cloud_chest/widgets/album_settings/thumbnail_selection_dialog.dart';
 import 'package:cloud_chest/widgets/misc/loading_widget.dart';
@@ -8,16 +11,15 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class EditSettingsForm extends StatefulWidget {
-  final String albumId;
-
-  EditSettingsForm(this.albumId);
+  EditSettingsForm();
 
   @override
-  State<EditSettingsForm> createState() => _EditSettingsCardState();
+  State<EditSettingsForm> createState() => _EditSettingsFormState();
 }
 
-class _EditSettingsCardState extends State<EditSettingsForm> {
-  late Album album;
+class _EditSettingsFormState extends State<EditSettingsForm> {
+  late AlbumDetail album;
+  late CurrentAlbumViewModel viewModel;
   TextEditingController _titleController = TextEditingController();
   bool _isThumbnail = false;
   final _newSettings = {'title': '', 'thumbnail': ''};
@@ -26,8 +28,9 @@ class _EditSettingsCardState extends State<EditSettingsForm> {
   void initState() {
     super.initState();
 
-    album = Provider.of<AlbumsViewModel>(context, listen: false)
-        .getAlbumById(widget.albumId);
+    viewModel = Provider.of<CurrentAlbumViewModel>(context, listen: false);
+
+    album = viewModel.currentAlbumDetail;
 
     _isThumbnail = (album.thumbnail != '');
   }
@@ -49,7 +52,6 @@ class _EditSettingsCardState extends State<EditSettingsForm> {
     _newSettings['thumbnail'] = path;
 
     try {
-      print('setting new state');
       setState(() {
         _isThumbnail = true;
       });

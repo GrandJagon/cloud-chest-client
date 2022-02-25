@@ -1,13 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:cloud_chest/data/network_service.dart';
+import 'package:cloud_chest/models/album_detail.dart';
 import 'package:cloud_chest/models/content.dart';
 import 'package:cloud_chest/models/factories/content_factory.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-class ContentRepository {
-  final NetworkService _contentService = NetworkService(apiUrl: 'content');
+class SingleAlbumRepository {
+  final NetworkService _singleAlbumService =
+      NetworkService(apiUrl: 'singleAlbum');
   final String _authTokenKey = dotenv.env['REQUEST_AUTH_TOKEN_KEY']!;
   final String _albumIdKey = dotenv.env['REQUEST_ALBUM_KEY']!;
 
@@ -17,8 +18,8 @@ class ContentRepository {
     try {
       final headers = {_authTokenKey: accessToken};
       final params = {_albumIdKey: albumId};
-      final response =
-          await _contentService.get(headers: headers, params: params) as List;
+      final response = await _singleAlbumService.get(
+          headers: headers, params: params) as List;
 
       if (response is Exception) throw response;
 
@@ -32,13 +33,37 @@ class ContentRepository {
     }
   }
 
+  // Fetches a single album from the API and splits it between content and detail
+  Future<Map<dynamic, dynamic>> getSingleAlbum(
+      String albumId, String accessToken) async {
+    try {
+      final headers = {_authTokenKey: accessToken};
+      final params = {_albumIdKey: albumId};
+      final response =
+          await _singleAlbumService.get(headers: headers, params: params);
+
+      if (response is Exception) throw response;
+
+      List<dynamic> albumContent = response['files']
+          .map((json) => ContentFactory.createFromJson(json))
+          .toList();
+
+      AlbumDetail albumDetail = AlbumDetail.fromJson(response);
+
+      return {'content': albumContent, 'detail': albumDetail};
+    } catch (err, stack) {
+      print(stack);
+      return Future.error(err);
+    }
+  }
+
   // Upload new content to an album via multipart post request
   Future<List<Content>> postNewContent(
       List<String> newContent, String albumId, String accessToken) async {
     try {
       final headers = {_authTokenKey: accessToken};
       final params = {_albumIdKey: albumId};
-      final response = await _contentService.multipart(
+      final response = await _singleAlbumService.multipart(
           headers: headers, data: newContent, method: 'POST', params: params);
 
       if (response is Exception) throw response;
@@ -70,7 +95,7 @@ class ContentRepository {
 
       final body = json.encode(jsonContent);
 
-      final response = await _contentService.delete(
+      final response = await _singleAlbumService.delete(
           headers: headers, body: body, params: params);
 
       if (response is Exception) throw response;
@@ -80,6 +105,23 @@ class ContentRepository {
       print(stack);
       print(err);
       rethrow;
+    }
+  }
+
+  // Returns the details for a given album
+  Future<Map<String, dynamic>> getAlbumDetails(
+      String accessToken, String albumId) async {
+    try {
+      final response = await _singleAlbumService.get(
+          headers: {_authTokenKey: accessToken},
+          params: {'albumId': albumId},
+          urlPart: 'details');
+
+      if (response is Exception) throw response;
+
+      return response;
+    } catch (err) {
+      return Future.error(err);
     }
   }
 }

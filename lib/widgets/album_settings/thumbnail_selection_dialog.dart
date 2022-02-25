@@ -1,5 +1,5 @@
 import 'dart:ui';
-import 'package:cloud_chest/view_model/album_content_view_model.dart';
+import 'package:cloud_chest/view_model/current_album_view_model.dart';
 import 'package:cloud_chest/widgets/album_settings/confirm_thumbnail_button.dart';
 import 'package:cloud_chest/widgets/album_settings/thumbnail_selection_item.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +18,7 @@ class ThumbnailSelectionDialog extends StatefulWidget {
 }
 
 class _ThumbnailSelectionDialogState extends State<ThumbnailSelectionDialog> {
-  late AlbumContentViewModel viewModel;
+  late CurrentAlbumViewModel viewModel;
 
   // Function to be called whenver a selection is confirmed to be sent to parent
   // Pops the dialog once done
@@ -29,7 +29,7 @@ class _ThumbnailSelectionDialogState extends State<ThumbnailSelectionDialog> {
 
   @override
   Widget build(BuildContext context) {
-    viewModel = context.read<AlbumContentViewModel>();
+    viewModel = context.read<CurrentAlbumViewModel>();
 
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),

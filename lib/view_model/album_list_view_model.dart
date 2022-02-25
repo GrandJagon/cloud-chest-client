@@ -2,13 +2,13 @@
 // Holds the state of the user album list
 import 'package:cloud_chest/data/api_response.dart';
 import 'package:cloud_chest/models/album.dart';
-import 'package:cloud_chest/repositories/album_repository.dart';
+import 'package:cloud_chest/repositories/album_list_repository.dart';
 import 'package:flutter/foundation.dart';
 
-class AlbumsViewModel extends ChangeNotifier {
+class AlbumListViewModel extends ChangeNotifier {
   String _accessToken = '';
   ApiResponse _response = ApiResponse.loading();
-  final AlbumRepository _albumRepo = AlbumRepository();
+  final AlbumListRepository _albumListRepo = AlbumListRepository();
   List<Album> _albumList = [];
 
   List<Album> get albumList => [..._albumList];
@@ -45,7 +45,7 @@ class AlbumsViewModel extends ChangeNotifier {
   Future<void> fetchAlbums() async {
     if (_response.status != ResponseStatus.LOADING)
       _response = ApiResponse.loading();
-    await _albumRepo
+    await _albumListRepo
         .getAlbumList(_accessToken)
         .then((response) => _setAlbumList(response))
         .onError(
@@ -61,7 +61,7 @@ class AlbumsViewModel extends ChangeNotifier {
   // Creates a new album and adds it to the current album list
   Future<void> createAlbum(String title, String? description) async {
     _setResponse(ApiResponse.loading());
-    await _albumRepo
+    await _albumListRepo
         .postNewAlbum(_accessToken, title, description)
         .then((response) => _addToAlbumList(response))
         .whenComplete(() => notifyListeners())
@@ -76,7 +76,7 @@ class AlbumsViewModel extends ChangeNotifier {
 
   // Deletes new album and deletes it from the current list
   Future<void> deleteAlbum(String albumId) async {
-    await _albumRepo
+    await _albumListRepo
         .deleteAlbum(_accessToken, albumId)
         .catchError((error, stackTrace) => throw error!)
         .whenComplete(

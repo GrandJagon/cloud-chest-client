@@ -1,5 +1,5 @@
 import 'package:cloud_chest/screens/album_settings/album_settings_screen.dart';
-import 'package:cloud_chest/view_model/album_content_view_model.dart';
+import 'package:cloud_chest/view_model/current_album_view_model.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -39,7 +39,7 @@ class AlbumContentBar extends StatelessWidget with PreferredSizeWidget {
 
   // Sends the files to the provider which makes an API call
   Future<void> _uploadFiles(List<String> files, BuildContext context) async {
-    await Provider.of<AlbumContentViewModel>(context, listen: false)
+    await Provider.of<CurrentAlbumViewModel>(context, listen: false)
         .uploadToAlbum(files);
   }
 

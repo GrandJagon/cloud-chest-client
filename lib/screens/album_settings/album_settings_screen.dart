@@ -1,21 +1,14 @@
+import 'package:cloud_chest/view_model/current_album_view_model.dart';
 import 'package:cloud_chest/widgets/album_settings/album_rights_card.dart';
-import 'package:cloud_chest/widgets/album_settings/edit_settings_card.dart';
+import 'package:cloud_chest/widgets/album_settings/edit_settings_form.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class AlbumSettingScreen extends StatelessWidget {
   static final String routeName = '/albumSettings';
-  bool _isInit = false;
-  String? albumId;
-
-  // Fetches the album ID in the route arguments the first time it's built
-  void _fetchArgument(BuildContext context) {
-    albumId = ModalRoute.of(context)!.settings.arguments as String;
-    _isInit = true;
-  }
 
   @override
   Widget build(BuildContext context) {
-    if (!_isInit) _fetchArgument(context);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -25,10 +18,7 @@ class AlbumSettingScreen extends StatelessWidget {
         title: Text('Album settings'),
       ),
       body: Column(
-        children: <Widget>[
-          EditSettingsForm(albumId!),
-          AlbumRightsCard(albumId!)
-        ],
+        children: <Widget>[EditSettingsForm(), AlbumRightsCard()],
       ),
     );
   }

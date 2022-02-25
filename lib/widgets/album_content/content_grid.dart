@@ -1,6 +1,6 @@
 import 'package:cloud_chest/data/api_response.dart';
 import 'package:cloud_chest/view_model/user_selection_view_model.dart';
-import 'package:cloud_chest/view_model/album_content_view_model.dart';
+import 'package:cloud_chest/view_model/current_album_view_model.dart';
 import 'package:cloud_chest/widgets/album_content/content_item.dart';
 import 'package:cloud_chest/widgets/misc/loading_widget.dart';
 import 'package:cloud_chest/widgets/misc/network_error_widget.dart';
@@ -26,29 +26,29 @@ class _ContentGridState extends State<ContentGrid> {
       () {
         Provider.of<UserSelectionViewModel>(context, listen: false)
             .clearSelection();
-        Provider.of<AlbumContentViewModel>(context, listen: false)
-            .fetchAlbumContent(widget._albumId);
+        Provider.of<CurrentAlbumViewModel>(context, listen: false)
+            .fetchSingleAlbum(widget._albumId);
       },
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final AlbumContentViewModel albumContentViewModel =
-        context.watch<AlbumContentViewModel>();
+    final CurrentAlbumViewModel currentAlbumViewModel =
+        context.watch<CurrentAlbumViewModel>();
 
-    if (albumContentViewModel.response.status == ResponseStatus.LOADING)
+    if (currentAlbumViewModel.response.status == ResponseStatus.LOADING)
       return LoadingWidget();
-    if (albumContentViewModel.response.status == ResponseStatus.ERROR)
+    if (currentAlbumViewModel.response.status == ResponseStatus.ERROR)
       return NetworkErrorWidget(
-        () => albumContentViewModel.fetchAlbumContent(widget._albumId),
-        albumContentViewModel.response.message,
+        () => currentAlbumViewModel.fetchSingleAlbum(widget._albumId),
+        currentAlbumViewModel.response.message,
       );
-    return _buildGrid(albumContentViewModel);
+    return _buildGrid(currentAlbumViewModel);
   }
 
   // Returns the grid if album is not empty
-  Widget _buildGrid(AlbumContentViewModel viewModel) {
+  Widget _buildGrid(CurrentAlbumViewModel viewModel) {
     return Container(
       child: viewModel.contentList.length <= 0
           ? Center(

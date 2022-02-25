@@ -8,8 +8,8 @@ import 'package:cloud_chest/screens/auth/connect_screen.dart';
 import 'package:cloud_chest/screens/content_viewer/content_viewer_screen.dart';
 import 'package:cloud_chest/screens/home/home_screen.dart';
 import 'package:cloud_chest/screens/misc/splash_screen.dart';
-import 'package:cloud_chest/view_model/album_content_view_model.dart';
-import 'package:cloud_chest/view_model/albums_view_model.dart';
+import 'package:cloud_chest/view_model/current_album_view_model.dart';
+import 'package:cloud_chest/view_model/album_list_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_chest/helpers/config_helper.dart';
@@ -62,25 +62,25 @@ class _CloudChestState extends State<CloudChest> {
         ChangeNotifierProvider(create: (context) => UserSelectionViewModel()),
         ChangeNotifierProvider(
             create: (context) => ThumbnailSelectionViewModel()),
-        ChangeNotifierProxyProvider<Auth, AlbumsViewModel>(
-          create: (_) => AlbumsViewModel(),
+        ChangeNotifierProxyProvider<Auth, AlbumListViewModel>(
+          create: (_) => AlbumListViewModel(),
           update: (_, auth, previous) {
             previous!.setToken(auth.accessToken!);
             return previous;
           },
         ),
-        ChangeNotifierProxyProvider<Auth, AlbumContentViewModel>(
-          create: (_) => AlbumContentViewModel(),
+        ChangeNotifierProxyProvider<Auth, CurrentAlbumViewModel>(
+          create: (_) => CurrentAlbumViewModel(),
           update: (_, auth, previous) {
             previous!.setToken(auth.accessToken!);
             return previous;
           },
         ),
-        ChangeNotifierProxyProvider<AlbumContentViewModel,
+        ChangeNotifierProxyProvider<CurrentAlbumViewModel,
             ContentViewerViewModel>(
           create: (_) => ContentViewerViewModel(),
-          update: (_, albumContentViewModel, previous) {
-            previous!.setAlbumToView(albumContentViewModel.contentList);
+          update: (_, CurrentAlbumViewModel, previous) {
+            previous!.setAlbumToView(CurrentAlbumViewModel.contentList);
             return previous;
           },
         )

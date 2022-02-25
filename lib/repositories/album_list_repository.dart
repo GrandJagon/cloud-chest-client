@@ -2,7 +2,7 @@ import 'package:cloud_chest/data/network_service.dart';
 import 'package:cloud_chest/models/album.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-class AlbumRepository {
+class AlbumListRepository {
   NetworkService _albumService = NetworkService(apiUrl: 'albums');
   final String _authTokenKey = dotenv.env['REQUEST_AUTH_TOKEN_KEY']!;
 

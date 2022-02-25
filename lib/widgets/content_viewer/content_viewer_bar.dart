@@ -2,7 +2,7 @@ import 'package:cloud_chest/models/content.dart';
 import 'package:cloud_chest/view_model/content_viewer_view_model.dart';
 import 'package:cloud_chest/screens/album_content/album_content_screen.dart';
 import 'package:cloud_chest/utils/alert_dialog_factory.dart';
-import 'package:cloud_chest/view_model/album_content_view_model.dart';
+import 'package:cloud_chest/view_model/current_album_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -20,7 +20,7 @@ class ContentViewerBar extends StatelessWidget {
         'Are you sure you want to delete this content ?',
         'Delete',
         'Go back',
-        () => Provider.of<AlbumContentViewModel>(context, listen: false)
+        () => Provider.of<CurrentAlbumViewModel>(context, listen: false)
             .deleteFromAlbum(
           [_currentContent],
         ).then(
