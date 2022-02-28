@@ -1,4 +1,5 @@
 import 'package:cloud_chest/providers/auth_provider.dart';
+import 'package:cloud_chest/screens/albums_list/albums_list_screen.dart';
 import 'package:cloud_chest/view_model/content_viewer_view_model.dart';
 import 'package:cloud_chest/view_model/user_selection_view_model.dart';
 import 'package:cloud_chest/screens/album_content/album_content_screen.dart';
@@ -6,7 +7,6 @@ import 'package:cloud_chest/screens/album_settings/album_settings_screen.dart';
 import 'package:cloud_chest/screens/auth/auth_screen.dart';
 import 'package:cloud_chest/screens/auth/connect_screen.dart';
 import 'package:cloud_chest/screens/content_viewer/content_viewer_screen.dart';
-import 'package:cloud_chest/screens/home/home_screen.dart';
 import 'package:cloud_chest/screens/misc/splash_screen.dart';
 import 'package:cloud_chest/view_model/current_album_view_model.dart';
 import 'package:cloud_chest/view_model/album_list_view_model.dart';
@@ -32,7 +32,7 @@ class _CloudChestState extends State<CloudChest> {
           return SplashScreen();
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.data == true) {
-            return AlbumListScreen();
+            return AlbumsListScreen();
           }
           if (!snapshot.hasError && !provider.isConnected) {
             return AuthScreen();
@@ -102,7 +102,7 @@ class _CloudChestState extends State<CloudChest> {
           routes: {
             AuthScreen.routeName: (ctx) => AuthScreen(),
             ConnectScreen.routeName: (ctx) => ConnectScreen(),
-            AlbumListScreen.routeName: (ctx) => AlbumListScreen(),
+            AlbumsListScreen.routeName: (ctx) => AlbumsListScreen(),
             AlbumContentScreen.routeName: (ctx) => AlbumContentScreen(),
             ContentViewerScreen.routeName: (ctx) => ContentViewerScreen(),
             AlbumSettingScreen.routeName: (ctx) => AlbumSettingScreen()

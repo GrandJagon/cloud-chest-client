@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 // Screen that displays all albums to which the user has access
-class AlbumListScreen extends StatelessWidget {
+class AlbumsListScreen extends StatelessWidget {
   static final routeName = '/albumListScreen';
 
   Widget build(BuildContext context) {

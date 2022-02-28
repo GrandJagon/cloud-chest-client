@@ -43,6 +43,13 @@ class CurrentAlbumViewModel extends ChangeNotifier {
     );
   }
 
+  void updateDetails(AlbumDetail newDetails) {
+    _currentAlbumDetail = newDetails;
+    notifyListeners();
+
+    // API CALLS TO UPDATE
+  }
+
   // Fetches a single album content and detail and sets it as current album
   Future<void> fetchSingleAlbum(String albumId) async {
     // Resets selection when fetching as it is likely different album or page reloading

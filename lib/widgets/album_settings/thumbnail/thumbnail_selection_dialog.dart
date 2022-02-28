@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'package:cloud_chest/view_model/current_album_view_model.dart';
-import 'package:cloud_chest/widgets/album_settings/confirm_thumbnail_button.dart';
-import 'package:cloud_chest/widgets/album_settings/thumbnail_selection_item.dart';
+import 'package:cloud_chest/widgets/album_settings/thumbnail/confirm_thumbnail_button.dart';
+import 'package:cloud_chest/widgets/album_settings/thumbnail/thumbnail_selection_item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:cloud_chest/providers/auth_provider.dart';
-import 'package:cloud_chest/screens/home/home_screen.dart';
+import 'package:cloud_chest/screens/albums_list/albums_list_screen.dart';
 import 'package:cloud_chest/utils/alert_dialog_factory.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
@@ -99,12 +99,12 @@ class _AuthCardState extends State<AuthCard>
         await Provider.of<Auth>(context, listen: false)
             .register(_credentials['email']!, _credentials['password']!)
             .then((value) => Navigator.of(context)
-                .popAndPushNamed(AlbumListScreen.routeName));
+                .popAndPushNamed(AlbumsListScreen.routeName));
       } else {
         await Provider.of<Auth>(context, listen: false)
             .login(_credentials['email']!, _credentials['password']!)
             .then((value) => Navigator.of(context)
-                .popAndPushNamed(AlbumListScreen.routeName));
+                .popAndPushNamed(AlbumsListScreen.routeName));
       }
     } on HttpException catch (err) {
       showDialog(

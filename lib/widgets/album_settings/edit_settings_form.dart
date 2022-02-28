@@ -5,7 +5,7 @@ import 'package:cloud_chest/models/album_detail.dart';
 import 'package:cloud_chest/view_model/album_list_view_model.dart';
 import 'package:cloud_chest/view_model/current_album_view_model.dart';
 import 'package:cloud_chest/view_model/thumbnail_selection_view_model.dart';
-import 'package:cloud_chest/widgets/album_settings/thumbnail_selection_dialog.dart';
+import 'package:cloud_chest/widgets/album_settings/thumbnail/thumbnail_selection_dialog.dart';
 import 'package:cloud_chest/widgets/misc/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -100,6 +100,8 @@ class _EditSettingsFormState extends State<EditSettingsForm> {
 
 Widget _buildThumbnail(String path, BuildContext context) {
   return Container(
+    width: 200,
+    height: 200,
     child: CachedNetworkImage(
       fit: BoxFit.cover,
       imageUrl: path,
