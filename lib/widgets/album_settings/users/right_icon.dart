@@ -11,6 +11,7 @@ class RightIcon extends StatelessWidget {
     return Container(
       height: 30,
       width: 30,
+      margin: EdgeInsets.all(1),
       decoration: BoxDecoration(
           color: this.color, borderRadius: BorderRadius.circular(5)),
       child: Center(

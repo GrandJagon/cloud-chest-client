@@ -10,20 +10,18 @@ class UsersCard extends StatefulWidget {
 }
 
 class _UsersCardState extends State<UsersCard> {
-  void _openAddUserDialog() {
-    print('ADDING USER');
-  }
+  void _openAddUserDialog() {}
 
   // Checks whether or not the thumbnail view model has a thumbnail selected
   // Used for adapting the container size
   bool _isThumbnail(BuildContext context) {
     bool result = Provider.of<ThumbnailSelectionViewModel>(context).isSelection;
-    print(result);
     return result;
   }
 
   @override
   Widget build(BuildContext context) {
+    print('rebuilding user cards');
     final users =
         context.read<CurrentAlbumViewModel>().currentAlbumDetail.users;
 
@@ -54,8 +52,8 @@ class _UsersCardState extends State<UsersCard> {
         ),
         Container(
           height: _isThumbnail(context)
-              ? MediaQuery.of(context).size.height / 3.5
-              : MediaQuery.of(context).size.height / 3,
+              ? MediaQuery.of(context).size.height / 4
+              : MediaQuery.of(context).size.height / 2.2,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12), border: Border.all()),
           margin: EdgeInsets.all(10),

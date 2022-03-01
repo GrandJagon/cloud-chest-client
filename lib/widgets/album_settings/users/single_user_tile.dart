@@ -30,11 +30,14 @@ class SingleUserTile extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(5),
+              Container(
+                padding: EdgeInsets.all(2),
+                width: MediaQuery.of(context).size.width / 2,
+                height: 20,
                 child: Text(
                   user.username ?? user.email,
                   style: TextStyle(fontSize: 15),
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
               SizedBox(
@@ -55,8 +58,6 @@ List<RightIcon> _createRightList(User user) {
   user.rights.forEach((right) {
     icons.add(RightIconFactory.createIcon(right));
   });
-
-  print(icons);
 
   return icons;
 }

@@ -19,7 +19,7 @@ class _ConfirmThumbnailSelectionState extends State<ConfirmThumbnailSelection> {
   void _onPress() {
     String path =
         Provider.of<ThumbnailSelectionViewModel>(context, listen: false)
-            .selection!
+            .tempSelection!
             .path;
 
     widget.onPressFunction(path);
@@ -30,7 +30,7 @@ class _ConfirmThumbnailSelectionState extends State<ConfirmThumbnailSelection> {
     viewModel = context.watch<ThumbnailSelectionViewModel>();
     return Container(
       width: double.infinity,
-      height: viewModel.isSelection ? 50 : 0,
+      height: viewModel.isTempSelection ? 50 : 0,
       color: Colors.green,
       child: TextButton(
         child: Center(

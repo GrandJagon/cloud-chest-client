@@ -2,10 +2,10 @@
 import 'package:cloud_chest/models/user.dart';
 
 class AlbumDetail {
-  final String albumId;
-  final String title;
-  final String thumbnail;
-  final List<dynamic> users;
+  String albumId;
+  String title;
+  String thumbnail;
+  List<dynamic> users;
 
   AlbumDetail(
       {required this.albumId,

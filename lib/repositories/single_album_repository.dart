@@ -124,4 +124,10 @@ class SingleAlbumRepository {
       return Future.error(err);
     }
   }
+
+  // Updates an album details
+  Future<void> updateAlbumDetails(
+      String accessToken, String albumId, AlbumDetail newDetails) async {
+    // Converts AlbumDetail to JSON and sends it to service
+  }
 }

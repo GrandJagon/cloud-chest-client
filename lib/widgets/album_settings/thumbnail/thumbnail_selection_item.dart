@@ -35,7 +35,7 @@ class ThumbnailSelectionItemState extends State<ThumbnailSelectionItem> {
   // Callback to be registered within listener whenever the widget is selected
   // Allows to undraw borders from view model
   void _onNewSelectionCallBack() {
-    if (viewModel.selection != widget.item) {
+    if (viewModel.tempSelection != widget.item) {
       setState(
         () {
           _isSelected = false;
@@ -48,7 +48,7 @@ class ThumbnailSelectionItemState extends State<ThumbnailSelectionItem> {
   // To be called when widget is pressed
   // Sets or remove the corresponding item to the view model
   void _toggleSelected() {
-    if (viewModel.selection != widget.item) {
+    if (viewModel.tempSelection != widget.item) {
       setState(() {
         _isSelected = true;
       });

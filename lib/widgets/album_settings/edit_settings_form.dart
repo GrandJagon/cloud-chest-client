@@ -21,8 +21,8 @@ class _EditSettingsFormState extends State<EditSettingsForm> {
   late AlbumDetail album;
   late CurrentAlbumViewModel viewModel;
   TextEditingController _titleController = TextEditingController();
+  FocusNode _focusNode = FocusNode();
   bool _isThumbnail = false;
-  final _newSettings = {'title': '', 'thumbnail': ''};
 
   @override
   void initState() {
@@ -30,26 +30,47 @@ class _EditSettingsFormState extends State<EditSettingsForm> {
 
     viewModel = Provider.of<CurrentAlbumViewModel>(context, listen: false);
 
+    // Adding a listener to the focus node
+    // Every time the user finishes typing something in the title text field
+    // Corresponding value in view model is updated
+    _focusNode.addListener(
+      () {
+        if (!_focusNode.hasFocus) {
+          viewModel.updateDetails('title', _titleController.text);
+        }
+      },
+    );
+
     album = viewModel.currentAlbumDetail;
 
     _isThumbnail = (album.thumbnail != '');
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _titleController.dispose();
   }
 
   // Opens the album in dialog mode to choose a thumbnail from the pictures
   void _openThumbnailSelection(BuildContext context) {
     showDialog(
       context: context,
-      builder: (c) => ThumbnailSelectionDialog(album.albumId, _setTumbnail),
+      builder: (c) => ThumbnailSelectionDialog(album.albumId, _setThumbnail),
     ).then((value) {
-      // Clears the selection on exit
-      Provider.of<ThumbnailSelectionViewModel>(context, listen: false).clear();
+      // Clears the temp selection on exit
+      Provider.of<ThumbnailSelectionViewModel>(context, listen: false)
+          .clearTemp();
     });
   }
 
   // Called from thumbnail dialog selection to pass the chosen thumbnail up
-  void _setTumbnail(String path) async {
-    _newSettings['title'] = _titleController.text;
-    _newSettings['thumbnail'] = path;
+  void _setThumbnail(String path) async {
+    Provider.of<ThumbnailSelectionViewModel>(context, listen: false)
+        .validateSelection();
+
+    // Updates the state
+    viewModel.updateDetails('thumbnail', path);
 
     try {
       setState(() {
@@ -70,6 +91,7 @@ class _EditSettingsFormState extends State<EditSettingsForm> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             TextFormField(
+              focusNode: _focusNode,
               controller: _titleController..text = album.title,
               validator: (value) {
                 if (value!.length <= 0) return 'Title must not be null';
@@ -83,7 +105,7 @@ class _EditSettingsFormState extends State<EditSettingsForm> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 _isThumbnail
-                    ? _buildThumbnail(_newSettings['thumbnail']!, context)
+                    ? _buildThumbnail(album.thumbnail, context)
                     : Text('This album does not have a thumbnail'),
                 IconButton(
                   onPressed: () => _openThumbnailSelection(context),

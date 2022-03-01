@@ -43,8 +43,26 @@ class CurrentAlbumViewModel extends ChangeNotifier {
     );
   }
 
-  void updateDetails(AlbumDetail newDetails) {
-    _currentAlbumDetail = newDetails;
+  // Updates the details on change by the user
+  // Nothing sent to the API until final validation
+  void updateDetails(String key, dynamic value) {
+    print(key + ' will be updated with new value ' + value.toString());
+    switch (key) {
+      case 'title':
+        _currentAlbumDetail!.title = value;
+        return;
+      case 'thumbnail':
+        _currentAlbumDetail!.thumbnail = value;
+        return;
+      case 'users':
+        _currentAlbumDetail!.users = value;
+        return;
+    }
+  }
+
+  // Validates the dcurrent album details
+  // Call made to the API to update the db on server side
+  void validateDetails() {
     notifyListeners();
 
     // API CALLS TO UPDATE
@@ -76,6 +94,7 @@ class CurrentAlbumViewModel extends ChangeNotifier {
   // Sets the current state given an API response
   // Current state contains album content and album detail
   void _setCurrentState(Map<dynamic, dynamic> data) {
+    print('setting state');
     _contentList = data['content'];
     _currentAlbumDetail = data['detail'];
     _setResponse(ApiResponse.done());

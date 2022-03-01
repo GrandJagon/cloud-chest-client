@@ -1,12 +1,24 @@
+import 'package:cloud_chest/view_model/thumbnail_selection_view_model.dart';
 import 'package:cloud_chest/widgets/album_settings/users/users_card.dart';
 import 'package:cloud_chest/widgets/album_settings/edit_settings_form.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class AlbumSettingScreen extends StatelessWidget {
   static final String routeName = '/albumSettings';
 
   void _saveChanges() {
     print('changes saved');
+  }
+
+  void _deleteAlbum() {
+    print('deleting');
+  }
+
+  // Called whenver leaving the page to clear the thumbnail selection state
+  void _onExit(BuildContext context) {
+    Provider.of<ThumbnailSelectionViewModel>(context, listen: false).clear();
+    Navigator.of(context).pop();
   }
 
   @override
@@ -16,9 +28,18 @@ class AlbumSettingScreen extends StatelessWidget {
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back_rounded),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => _onExit(context),
         ),
         title: Text('Album settings'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.delete,
+              color: Colors.red,
+            ),
+            onPressed: () => _deleteAlbum(),
+          )
+        ],
       ),
       body: Column(
         children: <Widget>[
@@ -43,7 +64,7 @@ Widget _buildValidateButton(Function onPress) {
   return Container(
     height: 50,
     width: double.infinity,
-    color: Colors.green,
+    color: Colors.blue,
     child: TextButton(
       onPressed: () => onPress(),
       child: Text(

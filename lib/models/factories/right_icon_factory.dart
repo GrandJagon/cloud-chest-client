@@ -10,9 +10,9 @@ class RightIconFactory {
       case 'content:read':
         return RightIcon(Colors.blue, 'V');
       case 'content:add':
-        return RightIcon(Colors.orange, '+');
+        return RightIcon(Colors.orange, 'P');
       case 'content:delete':
-        return RightIcon(Colors.red, '-');
+        return RightIcon(Colors.red, 'D');
     }
   }
 }
