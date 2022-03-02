@@ -101,8 +101,29 @@ class NetworkService {
     }
   }
 
-  Future<dynamic> patch(String url, Map<String, dynamic> data) {
-    throw new UnsupportedError('This service dos not support patch request');
+  Future<dynamic> patch({
+    String? urlPart,
+    Map<String, String>? headers,
+    Map<String, String>? params,
+    Map<String, dynamic>? data,
+  }) async {
+    Uri url = NetworkUtils.createEndpoint(apiUrl, urlPart ?? '', params);
+
+    try {
+      final dynamic response =
+          await http.patch(url, headers: headers, body: data).timeout(
+                Duration(
+                  seconds: int.parse(
+                    dotenv.env['REQUEST_TIMEOUT']!,
+                  ),
+                ),
+              );
+      return _parseResponse(response);
+    } on SocketException {
+      throw FetchException('No internet connection');
+    } on TimeoutException {
+      throw FetchException('Make sure the server is running.');
+    }
   }
 
   // Handles delete requests

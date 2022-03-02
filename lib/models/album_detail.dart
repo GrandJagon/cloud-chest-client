@@ -13,12 +13,27 @@ class AlbumDetail {
       required this.users,
       this.thumbnail = ''});
 
-  Map<String, dynamic> toJson() => {
-        'albumId': albumId,
-        'title': title,
-        'thumbnail': thumbnail,
-        'users': users
-      };
+  Map<String, dynamic> toJson() {
+    final jsonUsers = [];
+
+    users.forEach(
+      (user) {
+        jsonUsers.add({
+          'userId': user.userId,
+          'email': user.email,
+          'username': user.username,
+          'rights': user.rights
+        });
+      },
+    );
+
+    return {
+      'albumId': albumId,
+      'title': title,
+      'thumbnail': thumbnail,
+      'users': jsonUsers.toString()
+    };
+  }
 
   factory AlbumDetail.fromJson(Map<String, dynamic> json) {
     List<User> users = [];

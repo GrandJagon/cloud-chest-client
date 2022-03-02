@@ -7,7 +7,7 @@ import 'package:cloud_chest/helpers/download_helper.dart';
 
 // Holds the state for the current album, the one actually on display
 class CurrentAlbumViewModel extends ChangeNotifier {
-  SingleAlbumRepository _contentRepo = SingleAlbumRepository();
+  SingleAlbumRepository _singleAlbumRepo = SingleAlbumRepository();
   String _accessToken = '';
   String _currentAlbumId = '';
   AlbumDetail? _currentAlbumDetail;
@@ -62,10 +62,26 @@ class CurrentAlbumViewModel extends ChangeNotifier {
 
   // Validates the dcurrent album details
   // Call made to the API to update the db on server side
-  void validateDetails() {
-    notifyListeners();
+  Future<void> validateDetails() async {
+    if (response.status != ResponseStatus.LOADING) {
+      _setResponse(ApiResponse.loading());
+    }
 
-    // API CALLS TO UPDATE
+    await _singleAlbumRepo
+        .updateAlbumDetails(_accessToken, _currentAlbumId, _currentAlbumDetail!)
+        .then(
+      (data) {
+        print('then');
+        _setResponse(
+          ApiResponse.done(),
+        );
+      },
+    ).catchError(
+      (error, stackTrace) {
+        print(stackTrace);
+        print(error);
+      },
+    );
   }
 
   // Fetches a single album content and detail and sets it as current album
@@ -77,7 +93,7 @@ class CurrentAlbumViewModel extends ChangeNotifier {
     if (_response.status != ResponseStatus.LOADING)
       _setResponse(ApiResponse.loading());
 
-    await _contentRepo
+    await _singleAlbumRepo
         .getSingleAlbum(albumId, _accessToken)
         .then(
           (data) => _setCurrentState(data),
@@ -94,33 +110,15 @@ class CurrentAlbumViewModel extends ChangeNotifier {
   // Sets the current state given an API response
   // Current state contains album content and album detail
   void _setCurrentState(Map<dynamic, dynamic> data) {
-    print('setting state');
     _contentList = data['content'];
     _currentAlbumDetail = data['detail'];
     _setResponse(ApiResponse.done());
   }
 
-  Future<void> fetchCurrentAlbumDetail() async {
-    if (_response.status != ResponseStatus.LOADING)
-      _setResponse(ApiResponse.loading());
-
-    await _contentRepo
-        .getAlbumDetails(_currentAlbumId, _accessToken)
-        .then((albumDetail) =>
-            _currentAlbumDetail = AlbumDetail.fromJson(albumDetail))
-        .catchError((error, stackTrace) {
-      _setResponse(
-        ApiResponse.error(
-          error.toString(),
-        ),
-      );
-    }).whenComplete(() => _setResponse(ApiResponse.done()));
-  }
-
   // Upload new content to the album given an ID
   Future<void> uploadToAlbum(List<String> newContent) async {
     _setResponse(ApiResponse.loading());
-    await _contentRepo
+    await _singleAlbumRepo
         .postNewContent(newContent, _currentAlbumId, _accessToken)
         .then((addedContent) => _addToContentList(addedContent))
         .whenComplete(() => _setResponse(ApiResponse.done()))
@@ -135,7 +133,7 @@ class CurrentAlbumViewModel extends ChangeNotifier {
   // Deletes a list of items from the album
   Future<void> deleteFromAlbum(List<Content> contentToDelete) async {
     _setResponse(ApiResponse.loading());
-    await _contentRepo
+    await _singleAlbumRepo
         .deleteContent(contentToDelete, _currentAlbumId, _accessToken)
         .then((_) => _removeFromContentList(contentToDelete))
         .whenComplete(() => _setResponse(ApiResponse.done()))

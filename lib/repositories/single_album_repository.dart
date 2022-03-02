@@ -108,26 +108,23 @@ class SingleAlbumRepository {
     }
   }
 
-  // Returns the details for a given album
-  Future<Map<String, dynamic>> getAlbumDetails(
-      String accessToken, String albumId) async {
-    try {
-      final response = await _singleAlbumService.get(
-          headers: {_authTokenKey: accessToken},
-          params: {'albumId': albumId},
-          urlPart: 'details');
-
-      if (response is Exception) throw response;
-
-      return response;
-    } catch (err) {
-      return Future.error(err);
-    }
-  }
-
   // Updates an album details
   Future<void> updateAlbumDetails(
       String accessToken, String albumId, AlbumDetail newDetails) async {
-    // Converts AlbumDetail to JSON and sends it to service
+    try {
+      final Map<String, dynamic> data = newDetails.toJson();
+
+      final response = await _singleAlbumService.patch(
+        headers: {_authTokenKey: accessToken},
+        params: {'albumId': albumId},
+        data: data,
+      );
+
+      if (response is Exception) throw response;
+
+      print(response.toString());
+    } catch (err) {
+      return Future.error(err);
+    }
   }
 }

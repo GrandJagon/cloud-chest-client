@@ -1,3 +1,4 @@
+import 'package:cloud_chest/view_model/current_album_view_model.dart';
 import 'package:cloud_chest/view_model/thumbnail_selection_view_model.dart';
 import 'package:cloud_chest/widgets/album_settings/users/users_card.dart';
 import 'package:cloud_chest/widgets/album_settings/edit_settings_form.dart';
@@ -7,8 +8,22 @@ import 'package:provider/provider.dart';
 class AlbumSettingScreen extends StatelessWidget {
   static final String routeName = '/albumSettings';
 
-  void _saveChanges() {
-    print('changes saved');
+  void _saveChanges(BuildContext context) {
+    try {
+      Provider.of<CurrentAlbumViewModel>(context, listen: false)
+          .validateDetails()
+          .then(
+            (value) => Navigator.of(context).pop(),
+          );
+    } catch (err) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          'An error occured while updating',
+          textAlign: TextAlign.center,
+        ),
+        backgroundColor: Colors.red,
+      ));
+    }
   }
 
   void _deleteAlbum() {
@@ -53,7 +68,9 @@ class AlbumSettingScreen extends StatelessWidget {
               ],
             ),
           ),
-          _buildValidateButton(_saveChanges)
+          _buildValidateButton(
+            () => _saveChanges(context),
+          )
         ],
       ),
     );
