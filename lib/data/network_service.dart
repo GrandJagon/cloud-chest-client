@@ -105,7 +105,7 @@ class NetworkService {
     String? urlPart,
     Map<String, String>? headers,
     Map<String, String>? params,
-    Map<String, dynamic>? data,
+    Map<String, String>? data,
   }) async {
     Uri url = NetworkUtils.createEndpoint(apiUrl, urlPart ?? '', params);
 

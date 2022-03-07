@@ -15,4 +15,6 @@ class User {
       email: json['email'],
       rights: json['rights'],
       username: json['username'] ?? null);
+
+  bool isAdmin() => rights.contains('admin');
 }

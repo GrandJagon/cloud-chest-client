@@ -112,7 +112,7 @@ class SingleAlbumRepository {
   Future<void> updateAlbumDetails(
       String accessToken, String albumId, AlbumDetail newDetails) async {
     try {
-      final Map<String, dynamic> data = newDetails.toJson();
+      final Map<String, String> data = newDetails.toJson();
 
       final response = await _singleAlbumService.patch(
         headers: {_authTokenKey: accessToken},

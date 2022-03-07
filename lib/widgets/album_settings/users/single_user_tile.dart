@@ -1,6 +1,7 @@
 import 'package:cloud_chest/models/factories/right_icon_factory.dart';
 import 'package:cloud_chest/models/user.dart';
 import 'package:cloud_chest/widgets/album_settings/users/right_icon.dart';
+import 'package:cloud_chest/widgets/album_settings/users/user_rights_dialog/single_user_rights_dialog.dart';
 import 'package:flutter/material.dart';
 
 class SingleUserTile extends StatelessWidget {
@@ -8,16 +9,13 @@ class SingleUserTile extends StatelessWidget {
 
   SingleUserTile(this.user);
 
-  // Opens the detail dialog for this particular user right
-  // Will also to change rights or remove users
-  void _onTap() {
-    print('User rights detail opened');
-  }
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => _onTap(),
+      onTap: () => showDialog(
+        context: context,
+        builder: (context) => SingleUserRightsDialog(user),
+      ),
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         elevation: 5,

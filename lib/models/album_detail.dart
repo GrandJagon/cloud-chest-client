@@ -1,4 +1,6 @@
 // To be used in a single album settings screen
+import 'dart:convert';
+
 import 'package:cloud_chest/models/user.dart';
 
 class AlbumDetail {
@@ -13,7 +15,7 @@ class AlbumDetail {
       required this.users,
       this.thumbnail = ''});
 
-  Map<String, dynamic> toJson() {
+  Map<String, String> toJson() {
     final jsonUsers = [];
 
     users.forEach(
@@ -21,7 +23,7 @@ class AlbumDetail {
         jsonUsers.add({
           'userId': user.userId,
           'email': user.email,
-          'username': user.username,
+          'username': user.username ?? '',
           'rights': user.rights
         });
       },
@@ -31,7 +33,7 @@ class AlbumDetail {
       'albumId': albumId,
       'title': title,
       'thumbnail': thumbnail,
-      'users': jsonUsers.toString()
+      'users': json.encode(jsonUsers)
     };
   }
 
