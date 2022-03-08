@@ -1,5 +1,5 @@
 import 'package:cloud_chest/view_model/current_album_view_model.dart';
-import 'package:cloud_chest/view_model/thumbnail_selection_view_model.dart';
+import 'package:cloud_chest/view_model/album_settings_view_model.dart';
 import 'package:cloud_chest/widgets/album_settings/users/users_card.dart';
 import 'package:cloud_chest/widgets/album_settings/edit_settings_form.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +32,8 @@ class AlbumSettingScreen extends StatelessWidget {
 
   // Called whenver leaving the page to clear the thumbnail selection state
   void _onExit(BuildContext context) {
-    Provider.of<ThumbnailSelectionViewModel>(context, listen: false).clear();
+    print('EXITING AND CLEARING');
+    Provider.of<AlbumSettingsViewModel>(context, listen: false).clear();
     Navigator.of(context).pop();
   }
 

@@ -1,8 +1,11 @@
+import 'package:cloud_chest/models/factories/right_factory.dart';
+import 'package:cloud_chest/models/right.dart';
+
 class User {
   final String userId;
   final String email;
   String? username;
-  final List<dynamic> rights;
+  List<Right> rights;
 
   User(
       {required this.userId,
@@ -13,8 +16,20 @@ class User {
   factory User.fromJson(Map<String, dynamic> json) => User(
       userId: json['userId'],
       email: json['email'],
-      rights: json['rights'],
+      rights: RightFactory.fromArray(json['rights']),
       username: json['username'] ?? null);
 
-  bool isAdmin() => rights.contains('admin');
+  // Takes a list of string and uses it to create new rights objects
+  void updateRights(List<String> newRights) {
+    rights = RightFactory.fromArray(newRights);
+    print('rights are now ' + rights.toString());
+  }
+
+  // Check within the right array if a user has a right of certain type
+  bool hasRight(Type right) {
+    for (Right r in rights) {
+      if (r.runtimeType == right) return true;
+    }
+    return false;
+  }
 }

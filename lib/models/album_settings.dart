@@ -3,13 +3,13 @@ import 'dart:convert';
 
 import 'package:cloud_chest/models/user.dart';
 
-class AlbumDetail {
+class AlbumSettings {
   String albumId;
   String title;
   String thumbnail;
-  List<dynamic> users;
+  List<User> users;
 
-  AlbumDetail(
+  AlbumSettings(
       {required this.albumId,
       required this.title,
       required this.users,
@@ -37,14 +37,14 @@ class AlbumDetail {
     };
   }
 
-  factory AlbumDetail.fromJson(Map<String, dynamic> json) {
+  factory AlbumSettings.fromJson(Map<String, dynamic> json) {
     List<User> users = [];
 
     for (Map<String, dynamic> u in json['users']) {
       users.add(User.fromJson(u));
     }
 
-    return AlbumDetail(
+    return AlbumSettings(
         albumId: json['_id'],
         title: json['title'],
         thumbnail: json['thumbnail'] ?? '',

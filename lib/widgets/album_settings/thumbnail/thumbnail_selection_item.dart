@@ -1,4 +1,4 @@
-import 'package:cloud_chest/view_model/thumbnail_selection_view_model.dart';
+import 'package:cloud_chest/view_model/album_settings_view_model.dart';
 import 'package:cloud_chest/widgets/misc/loading_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +19,7 @@ class ThumbnailSelectionItem extends StatefulWidget {
 
 class ThumbnailSelectionItemState extends State<ThumbnailSelectionItem> {
   bool _isSelected = false;
-  late ThumbnailSelectionViewModel viewModel;
+  late AlbumSettingsViewModel viewModel;
 
   // Remove listener on disposal
   @override
@@ -35,7 +35,7 @@ class ThumbnailSelectionItemState extends State<ThumbnailSelectionItem> {
   // Callback to be registered within listener whenever the widget is selected
   // Allows to undraw borders from view model
   void _onNewSelectionCallBack() {
-    if (viewModel.tempSelection != widget.item) {
+    if (viewModel.thumbnailTemp != widget.item.path) {
       setState(
         () {
           _isSelected = false;
@@ -48,24 +48,24 @@ class ThumbnailSelectionItemState extends State<ThumbnailSelectionItem> {
   // To be called when widget is pressed
   // Sets or remove the corresponding item to the view model
   void _toggleSelected() {
-    if (viewModel.tempSelection != widget.item) {
+    if (viewModel.thumbnailTemp != widget.item.path) {
       setState(() {
         _isSelected = true;
       });
-      viewModel.setOrRemove(widget.item);
+      viewModel.setOrRemoveThumbnail(widget.item.path);
       // Adds a listener to unselect whenever an other object is selected
       viewModel.addListener(_onNewSelectionCallBack);
     } else {
       setState(() {
         _isSelected = false;
       });
-      viewModel.setOrRemove(widget.item);
+      viewModel.setOrRemoveThumbnail(widget.item.path);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    viewModel = context.read<ThumbnailSelectionViewModel>();
+    viewModel = context.read<AlbumSettingsViewModel>();
     Size size = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: () => _toggleSelected(),

@@ -15,7 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_chest/helpers/config_helper.dart';
 import 'package:cloud_chest/utils/alert_dialog_factory.dart';
 
-import '../../view_model/thumbnail_selection_view_model.dart';
+import '../../view_model/album_settings_view_model.dart';
 
 class CloudChest extends StatefulWidget {
   @override
@@ -60,8 +60,7 @@ class _CloudChestState extends State<CloudChest> {
       providers: [
         ChangeNotifierProvider(create: (context) => Auth()),
         ChangeNotifierProvider(create: (context) => UserSelectionViewModel()),
-        ChangeNotifierProvider(
-            create: (context) => ThumbnailSelectionViewModel()),
+        ChangeNotifierProvider(create: (context) => AlbumSettingsViewModel()),
         ChangeNotifierProxyProvider<Auth, AlbumListViewModel>(
           create: (_) => AlbumListViewModel(),
           update: (_, auth, previous) {

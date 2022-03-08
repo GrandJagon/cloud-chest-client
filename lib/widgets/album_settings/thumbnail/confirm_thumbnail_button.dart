@@ -1,36 +1,33 @@
-import 'package:cloud_chest/view_model/thumbnail_selection_view_model.dart';
+import 'package:cloud_chest/view_model/album_settings_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class ConfirmThumbnailSelection extends StatefulWidget {
+class ConfirmThumbnailButton extends StatefulWidget {
   late final Function(String) onPressFunction;
 
-  ConfirmThumbnailSelection(this.onPressFunction);
+  ConfirmThumbnailButton(this.onPressFunction);
 
   @override
-  State<ConfirmThumbnailSelection> createState() =>
-      _ConfirmThumbnailSelectionState();
+  State<ConfirmThumbnailButton> createState() => _ConfirmThumbnailButtonState();
 }
 
-class _ConfirmThumbnailSelectionState extends State<ConfirmThumbnailSelection> {
-  late ThumbnailSelectionViewModel viewModel;
+class _ConfirmThumbnailButtonState extends State<ConfirmThumbnailButton> {
+  late AlbumSettingsViewModel viewModel;
 
   // Fetches the user selection from the view model and passes it to parent through onPressFunction()
   void _onPress() {
-    String path =
-        Provider.of<ThumbnailSelectionViewModel>(context, listen: false)
-            .tempSelection!
-            .path;
+    String path = Provider.of<AlbumSettingsViewModel>(context, listen: false)
+        .thumbnailTemp!;
 
     widget.onPressFunction(path);
   }
 
   @override
   Widget build(BuildContext context) {
-    viewModel = context.watch<ThumbnailSelectionViewModel>();
+    viewModel = context.watch<AlbumSettingsViewModel>();
     return Container(
       width: double.infinity,
-      height: viewModel.isTempSelection ? 50 : 0,
+      height: viewModel.isThumbnailTemp ? 50 : 0,
       color: Colors.green,
       child: TextButton(
         child: Center(

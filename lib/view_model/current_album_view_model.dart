@@ -1,5 +1,5 @@
 import 'package:cloud_chest/data/api_response.dart';
-import 'package:cloud_chest/models/album_detail.dart';
+import 'package:cloud_chest/models/album_settings.dart';
 import 'package:cloud_chest/models/content.dart';
 import 'package:cloud_chest/repositories/single_album_repository.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +10,7 @@ class CurrentAlbumViewModel extends ChangeNotifier {
   SingleAlbumRepository _singleAlbumRepo = SingleAlbumRepository();
   String _accessToken = '';
   String _currentAlbumId = '';
-  AlbumDetail? _currentAlbumDetail;
+  AlbumSettings? _currentAlbumSettings;
   ApiResponse _response = ApiResponse.loading();
   List<dynamic> _contentList = [];
 
@@ -18,7 +18,7 @@ class CurrentAlbumViewModel extends ChangeNotifier {
 
   List<Content> get contentList => [..._contentList];
 
-  AlbumDetail get currentAlbumDetail => _currentAlbumDetail!;
+  AlbumSettings get currentAlbumSettings => _currentAlbumSettings!;
 
   String get currentAlbumId => _currentAlbumId;
 
@@ -49,13 +49,13 @@ class CurrentAlbumViewModel extends ChangeNotifier {
     print(key + ' will be updated with new value ' + value.toString());
     switch (key) {
       case 'title':
-        _currentAlbumDetail!.title = value;
+        _currentAlbumSettings!.title = value;
         return;
       case 'thumbnail':
-        _currentAlbumDetail!.thumbnail = value;
+        _currentAlbumSettings!.thumbnail = value;
         return;
       case 'users':
-        _currentAlbumDetail!.users = value;
+        _currentAlbumSettings!.users = value;
         return;
     }
   }
@@ -68,7 +68,8 @@ class CurrentAlbumViewModel extends ChangeNotifier {
     }
 
     await _singleAlbumRepo
-        .updateAlbumDetails(_accessToken, _currentAlbumId, _currentAlbumDetail!)
+        .updateAlbumDetails(
+            _accessToken, _currentAlbumId, _currentAlbumSettings!)
         .then(
       (data) {
         print('then');
@@ -111,7 +112,7 @@ class CurrentAlbumViewModel extends ChangeNotifier {
   // Current state contains album content and album detail
   void _setCurrentState(Map<dynamic, dynamic> data) {
     _contentList = data['content'];
-    _currentAlbumDetail = data['detail'];
+    _currentAlbumSettings = data['settings'];
     _setResponse(ApiResponse.done());
   }
 

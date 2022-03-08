@@ -1,10 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloud_chest/data/api_response.dart';
-import 'package:cloud_chest/models/album.dart';
-import 'package:cloud_chest/models/album_detail.dart';
-import 'package:cloud_chest/view_model/album_list_view_model.dart';
 import 'package:cloud_chest/view_model/current_album_view_model.dart';
-import 'package:cloud_chest/view_model/thumbnail_selection_view_model.dart';
+import 'package:cloud_chest/view_model/album_settings_view_model.dart';
 import 'package:cloud_chest/widgets/album_settings/thumbnail/thumbnail_selection_dialog.dart';
 import 'package:cloud_chest/widgets/misc/loading_widget.dart';
 import 'package:flutter/material.dart';
@@ -18,32 +14,21 @@ class EditSettingsForm extends StatefulWidget {
 }
 
 class _EditSettingsFormState extends State<EditSettingsForm> {
-  late AlbumDetail album;
-  late CurrentAlbumViewModel viewModel;
+  late CurrentAlbumViewModel albumViewModel;
+  late AlbumSettingsViewModel settingsViewModel;
   TextEditingController _titleController = TextEditingController();
   FocusNode _focusNode = FocusNode();
-  bool _isThumbnail = false;
 
   @override
   void initState() {
     super.initState();
 
-    viewModel = Provider.of<CurrentAlbumViewModel>(context, listen: false);
+    albumViewModel = Provider.of<CurrentAlbumViewModel>(context, listen: false);
+    settingsViewModel =
+        Provider.of<AlbumSettingsViewModel>(context, listen: false);
 
-    // Adding a listener to the focus node
-    // Every time the user finishes typing something in the title text field
-    // Corresponding value in view model is updated
-    _focusNode.addListener(
-      () {
-        if (!_focusNode.hasFocus) {
-          viewModel.updateDetails('title', _titleController.text);
-        }
-      },
-    );
-
-    album = viewModel.currentAlbumDetail;
-
-    _isThumbnail = (album.thumbnail != '');
+    // Initiating settings view model with current album settings
+    settingsViewModel.initState(albumViewModel.currentAlbumSettings);
   }
 
   @override
@@ -56,25 +41,21 @@ class _EditSettingsFormState extends State<EditSettingsForm> {
   void _openThumbnailSelection(BuildContext context) {
     showDialog(
       context: context,
-      builder: (c) => ThumbnailSelectionDialog(album.albumId, _setThumbnail),
+      builder: (c) =>
+          ThumbnailSelectionDialog(settingsViewModel.id!, _setThumbnail),
     ).then((value) {
       // Clears the temp selection on exit
-      Provider.of<ThumbnailSelectionViewModel>(context, listen: false)
-          .clearTemp();
+      Provider.of<AlbumSettingsViewModel>(context, listen: false)
+          .clearThumbnailTemp();
     });
   }
 
   // Called from thumbnail dialog selection to pass the chosen thumbnail up
   void _setThumbnail(String path) async {
-    Provider.of<ThumbnailSelectionViewModel>(context, listen: false)
-        .validateSelection();
-
-    // Updates the state
-    viewModel.updateDetails('thumbnail', path);
-
     try {
       setState(() {
-        _isThumbnail = true;
+        Provider.of<AlbumSettingsViewModel>(context, listen: false)
+            .validateThumbnailSelection();
       });
     } catch (e, stack) {
       print(stack);
@@ -92,7 +73,7 @@ class _EditSettingsFormState extends State<EditSettingsForm> {
           children: <Widget>[
             TextFormField(
               focusNode: _focusNode,
-              controller: _titleController..text = album.title,
+              controller: _titleController..text = settingsViewModel.title!,
               validator: (value) {
                 if (value!.length <= 0) return 'Title must not be null';
                 return null;
@@ -104,8 +85,8 @@ class _EditSettingsFormState extends State<EditSettingsForm> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                _isThumbnail
-                    ? _buildThumbnail(album.thumbnail, context)
+                settingsViewModel.isThumbnail
+                    ? _buildThumbnail(context)
                     : Text('This album does not have a thumbnail'),
                 IconButton(
                   onPressed: () => _openThumbnailSelection(context),
@@ -118,20 +99,20 @@ class _EditSettingsFormState extends State<EditSettingsForm> {
       ),
     );
   }
-}
 
-Widget _buildThumbnail(String path, BuildContext context) {
-  return Container(
-    width: 200,
-    height: 200,
-    child: CachedNetworkImage(
-      fit: BoxFit.cover,
-      imageUrl: path,
-      placeholder: (url, context) => LoadingWidget(),
-      errorWidget: (context, url, error) => Icon(
-        Icons.error,
-        color: Colors.red,
+  Widget _buildThumbnail(BuildContext context) {
+    return Container(
+      width: 200,
+      height: 200,
+      child: CachedNetworkImage(
+        fit: BoxFit.cover,
+        imageUrl: settingsViewModel.thumbnail!,
+        placeholder: (url, context) => LoadingWidget(),
+        errorWidget: (context, url, error) => Icon(
+          Icons.error,
+          color: Colors.red,
+        ),
       ),
-    ),
-  );
+    );
+  }
 }

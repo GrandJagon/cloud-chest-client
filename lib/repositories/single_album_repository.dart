@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:cloud_chest/data/network_service.dart';
-import 'package:cloud_chest/models/album_detail.dart';
+import 'package:cloud_chest/models/album_settings.dart';
 import 'package:cloud_chest/models/content.dart';
 import 'package:cloud_chest/models/factories/content_factory.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -48,9 +48,9 @@ class SingleAlbumRepository {
           .map((json) => ContentFactory.createFromJson(json))
           .toList();
 
-      AlbumDetail albumDetail = AlbumDetail.fromJson(response);
+      AlbumSettings albumSettings = AlbumSettings.fromJson(response);
 
-      return {'content': albumContent, 'detail': albumDetail};
+      return {'content': albumContent, 'settings': albumSettings};
     } catch (err, stack) {
       print(stack);
       return Future.error(err);
@@ -110,9 +110,9 @@ class SingleAlbumRepository {
 
   // Updates an album details
   Future<void> updateAlbumDetails(
-      String accessToken, String albumId, AlbumDetail newDetails) async {
+      String accessToken, String albumId, AlbumSettings newSettings) async {
     try {
-      final Map<String, String> data = newDetails.toJson();
+      final Map<String, String> data = newSettings.toJson();
 
       final response = await _singleAlbumService.patch(
         headers: {_authTokenKey: accessToken},

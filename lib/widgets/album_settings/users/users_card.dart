@@ -1,5 +1,4 @@
-import 'package:cloud_chest/view_model/current_album_view_model.dart';
-import 'package:cloud_chest/view_model/thumbnail_selection_view_model.dart';
+import 'package:cloud_chest/view_model/album_settings_view_model.dart';
 import 'package:cloud_chest/widgets/album_settings/users/single_user_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -15,17 +14,14 @@ class _UsersCardState extends State<UsersCard> {
   // Checks whether or not the thumbnail view model has a thumbnail selected
   // Used for adapting the container size
   bool _isThumbnail(BuildContext context) {
-    bool result = Provider.of<ThumbnailSelectionViewModel>(context).isSelection;
+    bool result = Provider.of<AlbumSettingsViewModel>(context).isThumbnail;
     return result;
   }
 
   @override
   Widget build(BuildContext context) {
     print('rebuilding user cards');
-    final users =
-        context.read<CurrentAlbumViewModel>().currentAlbumDetail.users;
-
-    context.watch<ThumbnailSelectionViewModel>();
+    final users = context.watch<AlbumSettingsViewModel>().users;
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -59,8 +55,8 @@ class _UsersCardState extends State<UsersCard> {
           margin: EdgeInsets.all(10),
           padding: EdgeInsets.all(10),
           child: ListView.builder(
-            itemCount: users.length,
-            itemBuilder: (context, index) => SingleUserTile(users[index]),
+            itemCount: users!.length,
+            itemBuilder: (context, index) => SingleUserTile(index),
           ),
         ),
       ],

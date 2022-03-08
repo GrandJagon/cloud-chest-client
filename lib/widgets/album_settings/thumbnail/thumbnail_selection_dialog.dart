@@ -35,7 +35,10 @@ class _ThumbnailSelectionDialogState extends State<ThumbnailSelectionDialog> {
       filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
       child: Dialog(
         shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10))),
+          borderRadius: BorderRadius.all(
+            Radius.circular(10),
+          ),
+        ),
         backgroundColor: Colors.transparent,
         child: Container(
           height: MediaQuery.of(context).size.height / 1.5,
@@ -55,7 +58,7 @@ class _ThumbnailSelectionDialogState extends State<ThumbnailSelectionDialog> {
                       ThumbnailSelectionItem(viewModel.contentList[i]),
                 ),
               ),
-              ConfirmThumbnailSelection(_confirmSelection)
+              ConfirmThumbnailButton(_confirmSelection)
             ],
           ),
         ),

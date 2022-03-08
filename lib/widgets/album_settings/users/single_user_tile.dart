@@ -1,21 +1,40 @@
-import 'package:cloud_chest/models/factories/right_icon_factory.dart';
+import 'package:cloud_chest/models/factories/right_factory.dart';
+import 'package:cloud_chest/models/right.dart';
 import 'package:cloud_chest/models/user.dart';
+import 'package:cloud_chest/view_model/album_settings_view_model.dart';
 import 'package:cloud_chest/widgets/album_settings/users/right_icon.dart';
 import 'package:cloud_chest/widgets/album_settings/users/user_rights_dialog/single_user_rights_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class SingleUserTile extends StatelessWidget {
-  final User user;
+class SingleUserTile extends StatefulWidget {
+  final int userIndex;
 
-  SingleUserTile(this.user);
+  SingleUserTile(this.userIndex);
+
+  @override
+  State<SingleUserTile> createState() => _SingleUserTileState();
+}
+
+class _SingleUserTileState extends State<SingleUserTile> {
+  late AlbumSettingsViewModel vm;
+  late User user;
+
+  // Check if user is not admin before showing dialog
+  void _onTap(BuildContext context) {
+    if (user.hasRight(AdminRight)) return;
+    showDialog(
+      context: context,
+      builder: (context) => SingleUserRightsDialog(widget.userIndex),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
+    vm = context.watch<AlbumSettingsViewModel>();
+    user = vm.users![widget.userIndex];
     return GestureDetector(
-      onTap: () => showDialog(
-        context: context,
-        builder: (context) => SingleUserRightsDialog(user),
-      ),
+      onTap: () => _onTap(context),
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         elevation: 5,
@@ -54,7 +73,7 @@ List<RightIcon> _createRightList(User user) {
   List<RightIcon> icons = [];
 
   user.rights.forEach((right) {
-    icons.add(RightIconFactory.createIcon(right));
+    icons.add(RightFactory.createIcon(right.value));
   });
 
   return icons;
