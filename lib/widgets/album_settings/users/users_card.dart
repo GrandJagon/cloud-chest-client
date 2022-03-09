@@ -1,4 +1,5 @@
 import 'package:cloud_chest/view_model/album_settings_view_model.dart';
+import 'package:cloud_chest/widgets/album_settings/users/find_user_dialog/find_user_dialog.dart';
 import 'package:cloud_chest/widgets/album_settings/users/single_user_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -9,7 +10,20 @@ class UsersCard extends StatefulWidget {
 }
 
 class _UsersCardState extends State<UsersCard> {
-  void _openAddUserDialog() {}
+  // Called when add button is pressed
+  // On exit response of view model will be reset to done
+  void _openAddUserDialog(BuildContext context) {
+    print('open add user dialog');
+    showDialog(
+      context: context,
+      builder: (c) => FindUserDialog(),
+    ).then(
+      (value) {
+        Provider.of<AlbumSettingsViewModel>(context, listen: false)
+            .resetResponse();
+      },
+    );
+  }
 
   // Checks whether or not the thumbnail view model has a thumbnail selected
   // Used for adapting the container size
@@ -20,7 +34,6 @@ class _UsersCardState extends State<UsersCard> {
 
   @override
   Widget build(BuildContext context) {
-    print('rebuilding user cards');
     final users = context.watch<AlbumSettingsViewModel>().users;
 
     return Column(
@@ -42,7 +55,7 @@ class _UsersCardState extends State<UsersCard> {
             ),
             IconButton(
               icon: Icon(Icons.add),
-              onPressed: () => _openAddUserDialog(),
+              onPressed: () => _openAddUserDialog(context),
             )
           ],
         ),

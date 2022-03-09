@@ -60,7 +60,6 @@ class _CloudChestState extends State<CloudChest> {
       providers: [
         ChangeNotifierProvider(create: (context) => Auth()),
         ChangeNotifierProvider(create: (context) => UserSelectionViewModel()),
-        ChangeNotifierProvider(create: (context) => AlbumSettingsViewModel()),
         ChangeNotifierProxyProvider<Auth, AlbumListViewModel>(
           create: (_) => AlbumListViewModel(),
           update: (_, auth, previous) {
@@ -78,8 +77,15 @@ class _CloudChestState extends State<CloudChest> {
         ChangeNotifierProxyProvider<CurrentAlbumViewModel,
             ContentViewerViewModel>(
           create: (_) => ContentViewerViewModel(),
-          update: (_, CurrentAlbumViewModel, previous) {
-            previous!.setAlbumToView(CurrentAlbumViewModel.contentList);
+          update: (_, currentAlbumViewModel, previous) {
+            previous!.setAlbumToView(currentAlbumViewModel.contentList);
+            return previous;
+          },
+        ),
+        ChangeNotifierProxyProvider<Auth, AlbumSettingsViewModel>(
+          create: (_) => AlbumSettingsViewModel(),
+          update: (_, auth, previous) {
+            previous!.setToken(auth.accessToken!);
             return previous;
           },
         )

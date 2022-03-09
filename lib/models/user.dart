@@ -32,4 +32,17 @@ class User {
     }
     return false;
   }
+
+  // Returns an array of the user rights string value
+  List<String> getRightValues() {
+    return rights.map((right) => right.value).toList();
+  }
+
+  // Makes a deep copy of a specific user in order to change its rights before validating it
+  User.clone(User user)
+      : this(
+            username: user.username,
+            email: user.email,
+            userId: user.userId,
+            rights: user.rights);
 }

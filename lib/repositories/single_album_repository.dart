@@ -6,6 +6,7 @@ import 'package:cloud_chest/models/content.dart';
 import 'package:cloud_chest/models/factories/content_factory.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
+// Allows fetching data concerning a single album such as content and settings as well as editing it
 class SingleAlbumRepository {
   final NetworkService _singleAlbumService =
       NetworkService(apiUrl: 'singleAlbum');

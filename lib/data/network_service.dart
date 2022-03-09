@@ -157,8 +157,7 @@ class NetworkService {
   // Parses responses and returns it as JSON
   // Throws error according to status code if necessary
   dynamic _parseResponse(http.Response response) {
-    print('STATUS ' + response.statusCode.toString());
-    print(response.body);
+    print(('STATUS ' + response.statusCode.toString() + response.body));
     switch (response.statusCode) {
       case 200:
         // Checks json validity and returns raw body if invalid
@@ -173,6 +172,8 @@ class NetworkService {
       case 401:
       case 403:
         return UnauthorizedException(response.body.toString());
+      case 404:
+        return null;
       case 500:
         return ServerException(response.body.toString());
       default:

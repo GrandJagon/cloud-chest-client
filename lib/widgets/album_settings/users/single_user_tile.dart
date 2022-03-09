@@ -31,7 +31,7 @@ class _SingleUserTileState extends State<SingleUserTile> {
 
   @override
   Widget build(BuildContext context) {
-    vm = context.watch<AlbumSettingsViewModel>();
+    vm = context.read<AlbumSettingsViewModel>();
     user = vm.users![widget.userIndex];
     return GestureDetector(
       onTap: () => _onTap(context),

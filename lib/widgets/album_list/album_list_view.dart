@@ -29,8 +29,8 @@ class _AlbumListViewState extends State<AlbumListView> {
       return LoadingWidget();
     if (albumListViewModel.response.status == ResponseStatus.ERROR)
       return NetworkErrorWidget(
-        () => albumListViewModel.fetchAlbums(),
-        albumListViewModel.response.message,
+        retryCallback: () => albumListViewModel.fetchAlbums(),
+        message: albumListViewModel.response.message,
       );
     return _buildAlbumGrid(albumListViewModel.albumList);
   }

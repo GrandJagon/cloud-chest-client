@@ -42,7 +42,7 @@ class _CreateAlbumDialogState extends State<CreateAlbumDialog> {
         context.watch<AlbumListViewModel>();
     double _bottomInset = MediaQuery.of(context).viewInsets.bottom;
     return BackdropFilter(
-      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+      filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
       child: Dialog(
           insetPadding: _bottomInset > 0
               ? EdgeInsets.fromLTRB(40, 0, 40, 24)

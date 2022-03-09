@@ -1,4 +1,4 @@
-enum ResponseStatus { LOADING, DONE, ERROR }
+enum ResponseStatus { LOADING, DONE, ERROR, NO_RESULT }
 
 class ApiResponse {
   ResponseStatus? status;
@@ -11,6 +11,8 @@ class ApiResponse {
   ApiResponse.done() : status = ResponseStatus.DONE;
 
   ApiResponse.error(this.message) : status = ResponseStatus.ERROR;
+
+  ApiResponse.noResult(this.message) : status = ResponseStatus.NO_RESULT;
 
   @override
   String toString() {

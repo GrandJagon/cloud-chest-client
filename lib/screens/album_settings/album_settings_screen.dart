@@ -10,19 +10,19 @@ class AlbumSettingScreen extends StatelessWidget {
 
   void _saveChanges(BuildContext context) {
     try {
-      Provider.of<CurrentAlbumViewModel>(context, listen: false)
-          .validateDetails()
-          .then(
-            (value) => Navigator.of(context).pop(),
-          );
+      //
+      // PASS DATA FROM ALBUM SETTINGS VM TO CURRENT ALBUM VM
+      //
     } catch (err) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(
-          'An error occured while updating',
-          textAlign: TextAlign.center,
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'An error occured while updating',
+            textAlign: TextAlign.center,
+          ),
+          backgroundColor: Colors.red,
         ),
-        backgroundColor: Colors.red,
-      ));
+      );
     }
   }
 

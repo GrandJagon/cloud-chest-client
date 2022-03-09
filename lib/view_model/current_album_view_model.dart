@@ -46,7 +46,6 @@ class CurrentAlbumViewModel extends ChangeNotifier {
   // Updates the details on change by the user
   // Nothing sent to the API until final validation
   void updateDetails(String key, dynamic value) {
-    print(key + ' will be updated with new value ' + value.toString());
     switch (key) {
       case 'title':
         _currentAlbumSettings!.title = value;

@@ -29,6 +29,16 @@ class _EditSettingsFormState extends State<EditSettingsForm> {
 
     // Initiating settings view model with current album settings
     settingsViewModel.initState(albumViewModel.currentAlbumSettings);
+
+    _focusNode.addListener(
+      () {
+        if (!_focusNode.hasFocus) {
+          print('FOCUS NODE CALL BACK FIRED, VM TITLE SET TO ' +
+              _titleController.text);
+          settingsViewModel.title = _titleController.text;
+        }
+      },
+    );
   }
 
   @override

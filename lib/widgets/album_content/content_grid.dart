@@ -41,8 +41,9 @@ class _ContentGridState extends State<ContentGrid> {
       return LoadingWidget();
     if (currentAlbumViewModel.response.status == ResponseStatus.ERROR)
       return NetworkErrorWidget(
-        () => currentAlbumViewModel.fetchSingleAlbum(widget._albumId),
-        currentAlbumViewModel.response.message,
+        retryCallback: () =>
+            currentAlbumViewModel.fetchSingleAlbum(widget._albumId),
+        message: currentAlbumViewModel.response.message,
       );
     return _buildGrid(currentAlbumViewModel);
   }

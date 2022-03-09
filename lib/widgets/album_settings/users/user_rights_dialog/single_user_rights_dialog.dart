@@ -11,24 +11,32 @@ class SingleUserRightsDialog extends StatelessWidget {
   final int userIndex;
   late final AlbumSettingsViewModel vm;
   late final User user;
-  final List<String> newRights = ['content:read'];
+  late final List<String> rights;
+  bool _isInit = false;
 
   SingleUserRightsDialog(this.userIndex);
 
+  // Fetches this particular user rights from the view model
+  void _fetchRights() {
+    rights = user.getRightValues();
+    _isInit = true;
+    print('fetching rights with => ' + rights.toString());
+  }
+
   // Called from children each time the right selection button is ticked
   void toggleRight(String right) {
-    if (newRights.contains(right)) {
+    if (rights.contains(right)) {
       print('REMOVING ' + right);
-      newRights.remove(right);
+      rights.remove(right);
     } else {
       print('ADDING ' + right);
-      newRights.add(right);
+      rights.add(right);
     }
   }
 
   void _onValidate(BuildContext context) {
     print('CALLING VALIDATION');
-    vm.updateUserRights(userIndex, newRights);
+    vm.updateUserRights(userIndex, rights);
     Navigator.of(context).pop();
   }
 
@@ -36,8 +44,9 @@ class SingleUserRightsDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     vm = context.read<AlbumSettingsViewModel>();
     user = vm.users![userIndex];
+    if (!_isInit) _fetchRights();
     return BackdropFilter(
-      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+      filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
       child: Dialog(
         child: Container(
           height: MediaQuery.of(context).size.height / 3,
