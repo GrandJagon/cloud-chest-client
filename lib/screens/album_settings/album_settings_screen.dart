@@ -1,5 +1,7 @@
-import 'package:cloud_chest/view_model/current_album_view_model.dart';
+import 'package:cloud_chest/models/album_settings.dart';
+import 'package:cloud_chest/view_model/album_list_view_model.dart';
 import 'package:cloud_chest/view_model/album_settings_view_model.dart';
+import 'package:cloud_chest/view_model/current_album_view_model.dart';
 import 'package:cloud_chest/widgets/album_settings/users/users_card.dart';
 import 'package:cloud_chest/widgets/album_settings/edit_settings_form.dart';
 import 'package:flutter/material.dart';
@@ -8,11 +10,23 @@ import 'package:provider/provider.dart';
 class AlbumSettingScreen extends StatelessWidget {
   static final String routeName = '/albumSettings';
 
-  void _saveChanges(BuildContext context) {
+  // Saving user changes to album settings and making api call
+  void _saveChanges(BuildContext context) async {
     try {
-      //
-      // PASS DATA FROM ALBUM SETTINGS VM TO CURRENT ALBUM VM
-      //
+      // Creates albumSettings object from user settings values
+      AlbumSettings newSettings =
+          Provider.of<AlbumSettingsViewModel>(context, listen: false)
+              .generateSetting();
+
+      // Sends them to the new model
+      await Provider.of<CurrentAlbumViewModel>(context, listen: false)
+          .validateSettings(newSettings);
+
+      // Propagates the new settings to the album list in order to update item in list
+      Provider.of<AlbumListViewModel>(context, listen: false).updateAlbum(
+          newSettings.albumId, newSettings.title, newSettings.thumbnail);
+
+      _exit(context);
     } catch (err) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -31,8 +45,7 @@ class AlbumSettingScreen extends StatelessWidget {
   }
 
   // Called whenver leaving the page to clear the thumbnail selection state
-  void _onExit(BuildContext context) {
-    print('EXITING AND CLEARING');
+  void _exit(BuildContext context) {
     Provider.of<AlbumSettingsViewModel>(context, listen: false).clear();
     Navigator.of(context).pop();
   }
@@ -44,7 +57,7 @@ class AlbumSettingScreen extends StatelessWidget {
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back_rounded),
-          onPressed: () => _onExit(context),
+          onPressed: () => _exit(context),
         ),
         title: Text('Album settings'),
         actions: <Widget>[

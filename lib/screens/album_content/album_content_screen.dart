@@ -1,6 +1,6 @@
 import 'package:cloud_chest/models/album.dart';
 import 'package:cloud_chest/providers/auth_provider.dart';
-import 'package:cloud_chest/view_model/user_selection_view_model.dart';
+import 'package:cloud_chest/view_model/content_selection_view_model.dart';
 import 'package:cloud_chest/screens/auth/auth_screen.dart';
 import 'package:cloud_chest/widgets/album_content/content_grid.dart';
 import 'package:cloud_chest/widgets/album_content/album_content_bar.dart';

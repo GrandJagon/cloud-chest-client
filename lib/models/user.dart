@@ -11,13 +11,25 @@ class User {
       {required this.userId,
       required this.email,
       required this.rights,
-      username});
+      this.username});
 
   factory User.fromJson(Map<String, dynamic> json) => User(
-      userId: json['userId'],
+      userId: json['_id'],
       email: json['email'],
-      rights: RightFactory.fromArray(json['rights']),
+      rights:
+          json['rights'] != null ? RightFactory.fromArray(json['rights']) : [],
       username: json['username'] ?? null);
+
+  // Takes a list of user in json format and returns a list of user objects
+  static List<User> fromArray(List<dynamic> jsonArray) {
+    List<User> userArray = [];
+
+    jsonArray.forEach((json) {
+      userArray.add(User.fromJson(json));
+    });
+
+    return userArray;
+  }
 
   // Takes a list of string and uses it to create new rights objects
   void updateRights(List<String> newRights) {
@@ -45,4 +57,16 @@ class User {
             email: user.email,
             userId: user.userId,
             rights: user.rights);
+
+  @override
+  String toString() {
+    return 'ID : ' +
+        userId +
+        ' Email : ' +
+        email +
+        ' Username : ' +
+        (username ?? '') +
+        ' Rights : ' +
+        rights.toString();
+  }
 }

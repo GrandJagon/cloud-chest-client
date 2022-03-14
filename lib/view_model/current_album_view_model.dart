@@ -43,35 +43,19 @@ class CurrentAlbumViewModel extends ChangeNotifier {
     );
   }
 
-  // Updates the details on change by the user
-  // Nothing sent to the API until final validation
-  void updateDetails(String key, dynamic value) {
-    switch (key) {
-      case 'title':
-        _currentAlbumSettings!.title = value;
-        return;
-      case 'thumbnail':
-        _currentAlbumSettings!.thumbnail = value;
-        return;
-      case 'users':
-        _currentAlbumSettings!.users = value;
-        return;
-    }
-  }
-
-  // Validates the dcurrent album details
+  // Validates the current album details
   // Call made to the API to update the db on server side
-  Future<void> validateDetails() async {
+  Future<void> validateSettings(AlbumSettings newSettings) async {
     if (response.status != ResponseStatus.LOADING) {
       _setResponse(ApiResponse.loading());
     }
 
     await _singleAlbumRepo
-        .updateAlbumDetails(
-            _accessToken, _currentAlbumId, _currentAlbumSettings!)
+        .updateAlbumDetails(_accessToken, _currentAlbumId, newSettings)
         .then(
       (data) {
-        print('then');
+        _currentAlbumSettings = newSettings;
+
         _setResponse(
           ApiResponse.done(),
         );

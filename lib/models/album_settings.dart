@@ -1,6 +1,4 @@
-// To be used in a single album settings screen
 import 'dart:convert';
-
 import 'package:cloud_chest/models/user.dart';
 
 class AlbumSettings {
@@ -24,7 +22,7 @@ class AlbumSettings {
           'userId': user.userId,
           'email': user.email,
           'username': user.username ?? '',
-          'rights': user.rights
+          'rights': user.rights.map((r) => r.value).toList()
         });
       },
     );

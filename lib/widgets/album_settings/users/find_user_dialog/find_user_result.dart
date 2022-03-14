@@ -1,5 +1,6 @@
 import 'package:cloud_chest/data/api_response.dart';
-import 'package:cloud_chest/view_model/album_settings_view_model.dart';
+import 'package:cloud_chest/view_model/user_selection_view_model.dart';
+import 'package:cloud_chest/widgets/album_settings/users/find_user_dialog/single_user_result.dart';
 import 'package:cloud_chest/widgets/misc/loading_widget.dart';
 import 'package:cloud_chest/widgets/misc/network_error_widget.dart';
 import 'package:flutter/material.dart';
@@ -11,11 +12,12 @@ class FindUserResult extends StatefulWidget {
 }
 
 class _FindUserResultState extends State<FindUserResult> {
-  late AlbumSettingsViewModel vm;
+  late UserSelectionViewModel vm;
 
   @override
   Widget build(BuildContext context) {
-    vm = context.watch<AlbumSettingsViewModel>();
+    vm = context.watch<UserSelectionViewModel>();
+
     if (vm.response.status == ResponseStatus.LOADING)
       return LoadingWidget();
     else if (vm.response.status == ResponseStatus.NO_RESULT)
@@ -30,28 +32,42 @@ class _FindUserResultState extends State<FindUserResult> {
   }
 
   Widget _buildResult(BuildContext context) {
-    if (!vm.searchUserResult!.isEmpty)
+    if (vm.searchUserResult!.isNotEmpty)
       return _resultTable();
     else
       return Container();
   }
-}
 
-Widget _resultTable() {
-  return Container(
-    decoration: BoxDecoration(
-        color: Colors.black54, borderRadius: BorderRadius.circular(12)),
-    padding: EdgeInsets.all(12),
-    child: Text('TEST'),
-  );
-}
+  Widget _resultTable() {
+    return Column(
+      children: [
+        Text(
+          'Select a user to add',
+          style: TextStyle(
+              fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white54),
+        ),
+        SizedBox(height: 15),
+        Container(
+          decoration: BoxDecoration(
+              color: Colors.black54, borderRadius: BorderRadius.circular(12)),
+          padding: EdgeInsets.all(12),
+          child: ListView.builder(
+            shrinkWrap: true,
+            itemCount: vm.searchUserResult!.length,
+            itemBuilder: (ctx, i) => SingleUserResult(vm.searchUserResult![i]),
+          ),
+        ),
+      ],
+    );
+  }
 
-Widget _noResult(String message) {
-  return Center(
-    child: Text(
-      message,
-      style: TextStyle(
-          fontWeight: FontWeight.bold, fontSize: 25, color: Colors.white),
-    ),
-  );
+  Widget _noResult(String message) {
+    return Center(
+      child: Text(
+        message,
+        style: TextStyle(
+            fontWeight: FontWeight.bold, fontSize: 25, color: Colors.white),
+      ),
+    );
+  }
 }

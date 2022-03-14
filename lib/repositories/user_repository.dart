@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:cloud_chest/data/network_service.dart';
 import 'package:cloud_chest/exceptions/cloud_chest_exceptions.dart';
+import 'package:cloud_chest/models/user.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 // Allows to fetch data concerning user and edit it
@@ -23,8 +24,6 @@ class UserRepository {
       final params = {'search': data};
 
       final response = await _userService.get(headers: headers, params: params);
-
-      print(response);
 
       if (response is Exception) throw response;
 

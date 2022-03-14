@@ -1,4 +1,4 @@
-import 'package:cloud_chest/view_model/user_selection_view_model.dart';
+import 'package:cloud_chest/view_model/content_selection_view_model.dart';
 import 'package:cloud_chest/view_model/current_album_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -11,7 +11,7 @@ class ContentSelectionButton extends StatefulWidget {
 }
 
 class _ContentSelectionButtonState extends State<ContentSelectionButton> {
-  late UserSelectionViewModel userSelection;
+  late ContentSelectionViewModel userSelection;
   bool _hidden = false;
 
   // Main function that will be called when any of the two buttons are pressed
@@ -31,7 +31,7 @@ class _ContentSelectionButtonState extends State<ContentSelectionButton> {
       }
 
       // Clears the selection
-      Provider.of<UserSelectionViewModel>(context, listen: false)
+      Provider.of<ContentSelectionViewModel>(context, listen: false)
           .clearSelection();
     } catch (e) {
       // Displays a snackbar given the action type requested
@@ -101,7 +101,7 @@ class _ContentSelectionButtonState extends State<ContentSelectionButton> {
   @override
   Widget build(BuildContext context) {
     // Fetching user current selection
-    userSelection = context.watch<UserSelectionViewModel>();
+    userSelection = context.watch<ContentSelectionViewModel>();
 
     return Container(
       height: userSelection.length > 0 && !_hidden ? 50 : 0,

@@ -1,4 +1,6 @@
 import 'package:cloud_chest/data/api_response.dart';
+import 'package:cloud_chest/models/factories/right_factory.dart';
+import 'package:cloud_chest/models/right.dart';
 import 'package:cloud_chest/models/user.dart';
 import 'package:cloud_chest/repositories/user_repository.dart';
 import 'package:flutter/material.dart';
@@ -9,23 +11,15 @@ import '../models/album_settings.dart';
 // Notifies listener when needed
 // Thumbnail has 2 values thumbnailSelection and thumbnailTempSelection in order to change display of chosen one in selection dialog
 class AlbumSettingsViewModel extends ChangeNotifier {
-  UserRepository _userRepo = UserRepository();
-  ApiResponse _response = ApiResponse.done();
-  String _accessToken = '';
   String? _id;
   String? title;
   List<User>? _users;
-  List<dynamic>? _searchUserResult;
   String? _thumbnail;
   String? _thumbnailTemp;
-
-  ApiResponse get response => _response;
 
   String? get id => _id;
 
   List<User>? get users => [..._users!];
-
-  List<User>? get searchUserResult => [..._searchUserResult!];
 
   String? get thumbnail => _thumbnail;
 
@@ -35,28 +29,12 @@ class AlbumSettingsViewModel extends ChangeNotifier {
 
   bool get isThumbnailTemp => (_thumbnailTemp != '' && _thumbnailTemp != null);
 
-  void setToken(String token) {
-    _accessToken = token;
-  }
-
-  void _setResponse(ApiResponse response) {
-    _response = response;
-    notifyListeners();
-  }
-
-  // Reset the response
-  // usually used on exit to create a clean state if come back to view
-  void resetResponse() {
-    _response = ApiResponse.done();
-  }
-
   // Takes an AlbumDetail object to init its values
   void initState(AlbumSettings albumSettings) {
     _id = albumSettings.albumId;
     title = albumSettings.title;
     _thumbnail = albumSettings.thumbnail;
     _users = List.from(albumSettings.users);
-    _searchUserResult = [];
   }
 
   // Clears all the state
@@ -67,7 +45,6 @@ class AlbumSettingsViewModel extends ChangeNotifier {
     _id = null;
     title = null;
     _users = null;
-    _searchUserResult = null;
   }
 
   // Called when choosing a thumbnail from thumbnail dialog
@@ -106,26 +83,20 @@ class AlbumSettingsViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Fetches a user from email or username if exist
-  Future<void> findUser(String? data) async {
-    _searchUserResult!.clear();
+  // Adds a user to the authorized user list with the minimum right
+  void addNewUser(User user) {
+    user.rights.add(RightFactory.createRight('content:read'));
+    _users!.add(user);
+    notifyListeners();
+  }
 
-    _setResponse(ApiResponse.loading());
-    await _userRepo.getUser(data, _accessToken).then(
-      (json) {
-        if (json == null) {
-          _setResponse(ApiResponse.noResult('User does not exist'));
-          return;
-        }
-        _searchUserResult!.add(User.fromJson(json));
-        _setResponse(ApiResponse.done());
-      },
-    ).onError(
-      (error, stackTrace) {
-        _setResponse(ApiResponse.error(error.toString()));
-        print('ERROR WHILE FINDING USER');
-        print(stackTrace);
-      },
-    );
+  // Create AlbumSettings object with current value
+  // To be passed to current album view model in order to update it and pass data to API
+  AlbumSettings generateSetting() {
+    return AlbumSettings(
+        albumId: _id!,
+        title: title!,
+        users: _users!,
+        thumbnail: _thumbnail ?? '');
   }
 }

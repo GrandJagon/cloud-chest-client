@@ -1,8 +1,8 @@
 // To be used in the home page with small info about each album to display in a grid
 class Album {
   final String albumId;
-  final String title;
-  final String thumbnail;
+  String title;
+  String thumbnail;
   final List<dynamic> rights;
 
   Album(

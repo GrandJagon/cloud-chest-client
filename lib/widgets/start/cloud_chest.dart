@@ -1,7 +1,7 @@
 import 'package:cloud_chest/providers/auth_provider.dart';
 import 'package:cloud_chest/screens/albums_list/albums_list_screen.dart';
 import 'package:cloud_chest/view_model/content_viewer_view_model.dart';
-import 'package:cloud_chest/view_model/user_selection_view_model.dart';
+import 'package:cloud_chest/view_model/content_selection_view_model.dart';
 import 'package:cloud_chest/screens/album_content/album_content_screen.dart';
 import 'package:cloud_chest/screens/album_settings/album_settings_screen.dart';
 import 'package:cloud_chest/screens/auth/auth_screen.dart';
@@ -10,6 +10,7 @@ import 'package:cloud_chest/screens/content_viewer/content_viewer_screen.dart';
 import 'package:cloud_chest/screens/misc/splash_screen.dart';
 import 'package:cloud_chest/view_model/current_album_view_model.dart';
 import 'package:cloud_chest/view_model/album_list_view_model.dart';
+import 'package:cloud_chest/view_model/user_selection_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_chest/helpers/config_helper.dart';
@@ -58,8 +59,15 @@ class _CloudChestState extends State<CloudChest> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => Auth()),
-        ChangeNotifierProvider(create: (context) => UserSelectionViewModel()),
+        ChangeNotifierProvider(
+          create: (context) => Auth(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ContentSelectionViewModel(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => AlbumSettingsViewModel(),
+        ),
         ChangeNotifierProxyProvider<Auth, AlbumListViewModel>(
           create: (_) => AlbumListViewModel(),
           update: (_, auth, previous) {
@@ -82,8 +90,8 @@ class _CloudChestState extends State<CloudChest> {
             return previous;
           },
         ),
-        ChangeNotifierProxyProvider<Auth, AlbumSettingsViewModel>(
-          create: (_) => AlbumSettingsViewModel(),
+        ChangeNotifierProxyProvider<Auth, UserSelectionViewModel>(
+          create: (_) => UserSelectionViewModel(),
           update: (_, auth, previous) {
             previous!.setToken(auth.accessToken!);
             return previous;

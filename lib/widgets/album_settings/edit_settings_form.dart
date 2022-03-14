@@ -33,8 +33,6 @@ class _EditSettingsFormState extends State<EditSettingsForm> {
     _focusNode.addListener(
       () {
         if (!_focusNode.hasFocus) {
-          print('FOCUS NODE CALL BACK FIRED, VM TITLE SET TO ' +
-              _titleController.text);
           settingsViewModel.title = _titleController.text;
         }
       },

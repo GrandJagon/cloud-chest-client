@@ -83,4 +83,15 @@ class AlbumListViewModel extends ChangeNotifier {
           () => _albumList.removeWhere((album) => album.albumId == albumId),
         );
   }
+
+  // Called from currentAlbumViewModel in order to propagate new settings to the list
+  // For list update purpose (title and thumbnail)
+  void updateAlbum(String albumId, String title, String thumbnail) {
+    Album targetAlbum = getAlbumById(albumId);
+
+    targetAlbum.title = title;
+    targetAlbum.thumbnail = thumbnail;
+
+    notifyListeners();
+  }
 }

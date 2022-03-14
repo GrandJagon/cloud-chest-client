@@ -1,5 +1,5 @@
 import 'package:cloud_chest/data/api_response.dart';
-import 'package:cloud_chest/view_model/user_selection_view_model.dart';
+import 'package:cloud_chest/view_model/content_selection_view_model.dart';
 import 'package:cloud_chest/view_model/current_album_view_model.dart';
 import 'package:cloud_chest/widgets/album_content/content_item.dart';
 import 'package:cloud_chest/widgets/misc/loading_widget.dart';
@@ -24,7 +24,7 @@ class _ContentGridState extends State<ContentGrid> {
     Future.delayed(
       Duration.zero,
       () {
-        Provider.of<UserSelectionViewModel>(context, listen: false)
+        Provider.of<ContentSelectionViewModel>(context, listen: false)
             .clearSelection();
         Provider.of<CurrentAlbumViewModel>(context, listen: false)
             .fetchSingleAlbum(widget._albumId);

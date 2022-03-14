@@ -1,5 +1,5 @@
 import 'package:cloud_chest/view_model/content_viewer_view_model.dart';
-import 'package:cloud_chest/view_model/user_selection_view_model.dart';
+import 'package:cloud_chest/view_model/content_selection_view_model.dart';
 import 'package:cloud_chest/screens/content_viewer/content_viewer_screen.dart';
 import 'package:cloud_chest/view_model/current_album_view_model.dart';
 import 'package:cloud_chest/widgets/misc/loading_widget.dart';
@@ -34,7 +34,7 @@ class _ContentItemState extends State<ContentItem>
       _isSelected = !_isSelected;
     });
 
-    Provider.of<UserSelectionViewModel>(context, listen: false)
+    Provider.of<ContentSelectionViewModel>(context, listen: false)
         .addOrRemove(widget.item);
   }
 
@@ -47,15 +47,15 @@ class _ContentItemState extends State<ContentItem>
 
   // If no item already selected display the viewer, if there is already items in the selection add to it
   void _onTap(BuildContext context) {
-    Provider.of<UserSelectionViewModel>(context, listen: false).length <= 0
+    Provider.of<ContentSelectionViewModel>(context, listen: false).length <= 0
         ? _showViewer(context)
         : _selectItem();
   }
 
   // If no item already selected add it to selecton
   void _longPress() {
-    if (Provider.of<UserSelectionViewModel>(context, listen: false).length <= 0)
-      _selectItem();
+    if (Provider.of<ContentSelectionViewModel>(context, listen: false).length <=
+        0) _selectItem();
   }
 
   @override
