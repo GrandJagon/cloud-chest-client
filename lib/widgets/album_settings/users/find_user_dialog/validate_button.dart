@@ -13,7 +13,20 @@ class _ValidateButtonState extends State<ValidateButton> {
   late AlbumSettingsViewModel vm;
 
   void _onPress(BuildContext context) {
-    vm.addNewUser(selection.user);
+    try {
+      vm.addNewUser(selection.user);
+    } on Exception catch (err) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 2),
+          content: Text(
+            err.toString(),
+          ),
+        ),
+      );
+    }
+
     selection.clear();
     Navigator.of(context).pop();
   }

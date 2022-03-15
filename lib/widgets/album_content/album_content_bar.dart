@@ -5,11 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class AlbumContentBar extends StatelessWidget with PreferredSizeWidget {
-  final String title;
-  final String id;
   final ImagePicker _picker = ImagePicker();
+  late final CurrentAlbumViewModel vm;
 
-  AlbumContentBar(this.id, this.title);
+  AlbumContentBar();
 
   @override
   Size get preferredSize => Size.fromHeight(50);
@@ -45,8 +44,9 @@ class AlbumContentBar extends StatelessWidget with PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    vm = context.watch<CurrentAlbumViewModel>();
     return AppBar(
-      title: Text(title),
+      title: Text(vm.currentAlbumSettings.title),
       leading: IconButton(
         icon: Icon(Icons.arrow_back_rounded),
         onPressed: () => Navigator.of(context).pop(),
@@ -54,8 +54,9 @@ class AlbumContentBar extends StatelessWidget with PreferredSizeWidget {
       actions: <Widget>[
         IconButton(
           icon: Icon(Icons.settings),
-          onPressed: () => Navigator.of(context)
-              .pushNamed(AlbumSettingScreen.routeName, arguments: id),
+          onPressed: () => Navigator.of(context).pushNamed(
+              AlbumSettingScreen.routeName,
+              arguments: vm.currentAlbumSettings.albumId),
         ),
         IconButton(
           icon: Icon(Icons.add),

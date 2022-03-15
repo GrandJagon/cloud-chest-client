@@ -14,7 +14,7 @@ class User {
       this.username});
 
   factory User.fromJson(Map<String, dynamic> json) => User(
-      userId: json['_id'],
+      userId: json['userId'] ?? json['_id'],
       email: json['email'],
       rights:
           json['rights'] != null ? RightFactory.fromArray(json['rights']) : [],

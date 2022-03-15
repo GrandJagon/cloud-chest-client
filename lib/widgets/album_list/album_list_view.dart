@@ -24,6 +24,7 @@ class _AlbumListViewState extends State<AlbumListView> {
 
   @override
   Widget build(BuildContext context) {
+    print('BUILDING');
     AlbumListViewModel albumListViewModel = context.watch<AlbumListViewModel>();
     if (albumListViewModel.response.status == ResponseStatus.LOADING)
       return LoadingWidget();
@@ -37,6 +38,7 @@ class _AlbumListViewState extends State<AlbumListView> {
 }
 
 _buildAlbumGrid(List albums) {
+  print(albums.toList());
   return Container(
     child: albums.length <= 0
         ? Center(

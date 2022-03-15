@@ -8,44 +8,32 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ContentGrid extends StatefulWidget {
-  final String _albumId;
-
-  ContentGrid(this._albumId);
-
   @override
   State<StatefulWidget> createState() => _ContentGridState();
 }
 
 class _ContentGridState extends State<ContentGrid> {
-  // Clears user selection and fetches album content
+  late CurrentAlbumViewModel vm;
+
+  // Clears previous user selection
   @override
   void initState() {
     super.initState();
-    Future.delayed(
-      Duration.zero,
-      () {
-        Provider.of<ContentSelectionViewModel>(context, listen: false)
-            .clearSelection();
-        Provider.of<CurrentAlbumViewModel>(context, listen: false)
-            .fetchSingleAlbum(widget._albumId);
-      },
-    );
+    Provider.of<ContentSelectionViewModel>(context, listen: false)
+        .clearSelection();
   }
 
   @override
   Widget build(BuildContext context) {
-    final CurrentAlbumViewModel currentAlbumViewModel =
-        context.watch<CurrentAlbumViewModel>();
+    vm = context.watch<CurrentAlbumViewModel>();
 
-    if (currentAlbumViewModel.response.status == ResponseStatus.LOADING)
-      return LoadingWidget();
-    if (currentAlbumViewModel.response.status == ResponseStatus.ERROR)
+    if (vm.response.status == ResponseStatus.LOADING) return LoadingWidget();
+    if (vm.response.status == ResponseStatus.ERROR)
       return NetworkErrorWidget(
-        retryCallback: () =>
-            currentAlbumViewModel.fetchSingleAlbum(widget._albumId),
-        message: currentAlbumViewModel.response.message,
+        retryCallback: () => vm.fetchSingleAlbum(vm.currentAlbumId),
+        message: vm.response.message,
       );
-    return _buildGrid(currentAlbumViewModel);
+    return _buildGrid(vm);
   }
 
   // Returns the grid if album is not empty

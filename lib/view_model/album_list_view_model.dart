@@ -37,7 +37,7 @@ class AlbumListViewModel extends ChangeNotifier {
 
   // Adds an album to the current album list
   void _addToAlbumList(Album album) {
-    albumList.add(album);
+    _albumList.add(album);
     _setResponse(ApiResponse.done());
   }
 
@@ -64,7 +64,6 @@ class AlbumListViewModel extends ChangeNotifier {
     await _albumListRepo
         .postNewAlbum(_accessToken, title, description)
         .then((response) => _addToAlbumList(response))
-        .whenComplete(() => notifyListeners())
         .catchError(
             // API call no mandatory for album list to be displayed here
             // No need to update the response as we won't rebuild in case of error but just catching the error and show snackbar
@@ -76,12 +75,18 @@ class AlbumListViewModel extends ChangeNotifier {
 
   // Deletes new album and deletes it from the current list
   Future<void> deleteAlbum(String albumId) async {
+    _setResponse(ApiResponse.loading());
     await _albumListRepo
         .deleteAlbum(_accessToken, albumId)
         .catchError((error, stackTrace) => throw error!)
-        .whenComplete(
-          () => _albumList.removeWhere((album) => album.albumId == albumId),
-        );
+        .then((value) {
+      _albumList.removeWhere((album) => album.albumId == albumId);
+      notifyListeners();
+    }).whenComplete(
+      () => _setResponse(
+        ApiResponse.done(),
+      ),
+    );
   }
 
   // Called from currentAlbumViewModel in order to propagate new settings to the list

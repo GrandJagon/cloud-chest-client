@@ -22,6 +22,5 @@ class ContentSelectionViewModel extends ChangeNotifier {
 
   void clearSelection() {
     _userSelection.clear();
-    notifyListeners();
   }
 }

@@ -1,8 +1,6 @@
-import 'package:cloud_chest/data/api_response.dart';
+import 'package:cloud_chest/exceptions/cloud_chest_exceptions.dart';
 import 'package:cloud_chest/models/factories/right_factory.dart';
-import 'package:cloud_chest/models/right.dart';
 import 'package:cloud_chest/models/user.dart';
-import 'package:cloud_chest/repositories/user_repository.dart';
 import 'package:flutter/material.dart';
 
 import '../models/album_settings.dart';
@@ -71,6 +69,11 @@ class AlbumSettingsViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  // Called whenever a user wants an album thumbnail to be removed
+  void clearThumbnail() {
+    _thumbnail = null;
+  }
+
   // Called to update one particular user right
   // Makes a deep copy of original user in order for the change to be discarded if exit without saving
   void updateUserRights(int userIndex, List<String> newRights) {
@@ -85,9 +88,24 @@ class AlbumSettingsViewModel extends ChangeNotifier {
 
   // Adds a user to the authorized user list with the minimum right
   void addNewUser(User user) {
+    if (userExists(user))
+      throw InvalidException('User has already access to this album');
     user.rights.add(RightFactory.createRight('content:read'));
     _users!.add(user);
     notifyListeners();
+  }
+
+  bool userExists(User user) {
+    print(_users.toString());
+    print(user.userId);
+    for (User u in _users!) {
+      if (u.userId == user.userId) {
+        print('found');
+        return true;
+      }
+    }
+    print('not found');
+    return false;
   }
 
   // Create AlbumSettings object with current value

@@ -60,7 +60,7 @@ class UserSelectionViewModel extends ChangeNotifier {
           _setResponse(ApiResponse.noResult('No result'));
           return;
         }
-        print(json);
+
         _searchUserResult.addAll(User.fromArray(json).toList());
         _setResponse(ApiResponse.done());
       },

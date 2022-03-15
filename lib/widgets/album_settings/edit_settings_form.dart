@@ -59,7 +59,7 @@ class _EditSettingsFormState extends State<EditSettingsForm> {
   }
 
   // Called from thumbnail dialog selection to pass the chosen thumbnail up
-  void _setThumbnail(String path) async {
+  void _setThumbnail(String path) {
     try {
       setState(() {
         Provider.of<AlbumSettingsViewModel>(context, listen: false)
@@ -69,6 +69,14 @@ class _EditSettingsFormState extends State<EditSettingsForm> {
       print(stack);
       print(e);
     }
+  }
+
+  // Removes the current thumbnail selection
+  void _removeThumbnail() {
+    setState(() {
+      Provider.of<AlbumSettingsViewModel>(context, listen: false)
+          .clearThumbnail();
+    });
   }
 
   @override
@@ -96,10 +104,20 @@ class _EditSettingsFormState extends State<EditSettingsForm> {
                 settingsViewModel.isThumbnail
                     ? _buildThumbnail(context)
                     : Text('This album does not have a thumbnail'),
-                IconButton(
-                  onPressed: () => _openThumbnailSelection(context),
-                  icon: Icon(Icons.add_a_photo),
-                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    IconButton(
+                      onPressed: () => _openThumbnailSelection(context),
+                      icon: Icon(Icons.add_a_photo),
+                    ),
+                    settingsViewModel.isThumbnail
+                        ? IconButton(
+                            onPressed: () => _removeThumbnail(),
+                            icon: Icon(Icons.close))
+                        : Container(),
+                  ],
+                )
               ],
             )
           ],

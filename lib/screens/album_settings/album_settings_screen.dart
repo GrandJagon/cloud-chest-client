@@ -1,7 +1,9 @@
 import 'package:cloud_chest/models/album_settings.dart';
+import 'package:cloud_chest/screens/albums_list/albums_list_screen.dart';
 import 'package:cloud_chest/view_model/album_list_view_model.dart';
 import 'package:cloud_chest/view_model/album_settings_view_model.dart';
 import 'package:cloud_chest/view_model/current_album_view_model.dart';
+import 'package:cloud_chest/widgets/album_settings/confirm_delete_dialog.dart';
 import 'package:cloud_chest/widgets/album_settings/users/users_card.dart';
 import 'package:cloud_chest/widgets/album_settings/edit_settings_form.dart';
 import 'package:flutter/material.dart';
@@ -40,8 +42,17 @@ class AlbumSettingScreen extends StatelessWidget {
     }
   }
 
-  void _deleteAlbum() {
-    print('deleting');
+  void _deleteAlbum(BuildContext context) {
+    final String title =
+        Provider.of<CurrentAlbumViewModel>(context, listen: false)
+            .currentAlbumSettings
+            .title;
+    final String id = Provider.of<CurrentAlbumViewModel>(context, listen: false)
+        .currentAlbumId;
+    showDialog(
+      context: context,
+      builder: (c) => ConfirmDeleteDialog(title, id),
+    );
   }
 
   // Called whenver leaving the page to clear the thumbnail selection state
@@ -66,7 +77,7 @@ class AlbumSettingScreen extends StatelessWidget {
               Icons.delete,
               color: Colors.red,
             ),
-            onPressed: () => _deleteAlbum(),
+            onPressed: () => _deleteAlbum(context),
           )
         ],
       ),

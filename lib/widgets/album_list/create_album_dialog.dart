@@ -12,14 +12,14 @@ class CreateAlbumDialog extends StatefulWidget {
 
 class _CreateAlbumDialogState extends State<CreateAlbumDialog> {
   final GlobalKey<FormState> _formKey = GlobalKey();
-  final _albumInfos = {'title': '', 'description': ''};
+  final _albumInfos = {'title': ''};
 
   Future<void> _submitForm(BuildContext context) async {
     _formKey.currentState!.save();
 
     try {
       await Provider.of<AlbumListViewModel>(context, listen: false)
-          .createAlbum(_albumInfos['title']!, _albumInfos['description']!)
+          .createAlbum(_albumInfos['title']!, _albumInfos['description'])
           .then(
             (value) => Navigator.of(context).pop(),
           );
@@ -76,14 +76,6 @@ class _CreateAlbumDialogState extends State<CreateAlbumDialog> {
               TextFormField(
                 decoration: const InputDecoration(labelText: 'Album title'),
                 onSaved: (newValue) => _albumInfos['title'] = newValue!,
-              ),
-              TextFormField(
-                keyboardType: TextInputType.multiline,
-                minLines: 3,
-                maxLines: 3,
-                decoration:
-                    const InputDecoration(labelText: 'Album description'),
-                onSaved: (newValue) => _albumInfos['description'] = newValue!,
               ),
               TextButton(
                 child: Text(

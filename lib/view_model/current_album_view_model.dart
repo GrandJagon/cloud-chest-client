@@ -97,6 +97,7 @@ class CurrentAlbumViewModel extends ChangeNotifier {
     _contentList = data['content'];
     _currentAlbumSettings = data['settings'];
     _setResponse(ApiResponse.done());
+    print('STATE SET');
   }
 
   // Upload new content to the album given an ID
