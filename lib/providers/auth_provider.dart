@@ -1,14 +1,14 @@
 import 'dart:async';
 import 'package:cloud_chest/exceptions/cloud_chest_exceptions.dart';
-import 'package:cloud_chest/services/auth_data_service.dart';
+import 'package:cloud_chest/repositories/auth_repository.dart';
 import 'package:flutter/material.dart';
 import '../exceptions/auth_exceptions.dart';
 
 // Holds the auth state
 // Only keeps most essential variable to provider (access token and user ID)
-// All the auth data logic is handled by _authDataService
+// All the auth data logic is handled by _authRepo
 class Auth extends ChangeNotifier {
-  final _authDataService = AuthDataService();
+  final _authRepo = AuthRepository();
   bool _isConnected = false;
   String? accessToken = '';
   Timer? _authTimer;
@@ -19,21 +19,21 @@ class Auth extends ChangeNotifier {
   // If expired refresh the token and fetch the new ones
   Future<bool> tryAutoConnect() async {
     try {
-      await _authDataService.retrieveAuthData();
+      await _authRepo.retrieveAuthData();
 
-      if (!_authDataService.isAuthData) {
+      if (!_authRepo.isAuthData) {
         print('no auth data, redirection to auth screen');
         return false;
       }
-      if (!_authDataService.isAuthDataValid) {
+      if (!_authRepo.isAuthDataValid) {
         print('auth data invalid, redirection to auth screen');
         return false;
       }
 
-      if (_authDataService.isTokenExpired) return _refreshToken();
+      if (_authRepo.isTokenExpired) return _refreshToken();
 
       // Autoconnect successfull
-      accessToken = _authDataService.accessToken;
+      accessToken = _authRepo.accessToken;
 
       _startTimer();
       return _isConnected = true;
@@ -49,8 +49,7 @@ class Auth extends ChangeNotifier {
   Future<void> _authenticate(
       String email, String password, String urlPart) async {
     try {
-      final response =
-          await _authDataService.authenticate(email, password, urlPart);
+      final response = await _authRepo.authenticate(email, password, urlPart);
 
       // Authentication successful
       accessToken = response;
@@ -76,14 +75,14 @@ class Auth extends ChangeNotifier {
   }
 
   Future<void> _logout() async {
-    await _authDataService.clearAuthData();
+    await _authRepo.clearAuthData();
     accessToken = '';
   }
 
   // Sends a new access token request to the API
   Future<bool> _refreshToken() async {
     try {
-      final newToken = await _authDataService.requestNewToken();
+      final newToken = await _authRepo.requestNewToken();
 
       accessToken = newToken;
 
@@ -103,7 +102,7 @@ class Auth extends ChangeNotifier {
   // Timer that will ask for a new access token once the current one is expired
   void _startTimer() {
     final _timeToExpiry =
-        _authDataService.expiryDate!.difference(DateTime.now()).inSeconds;
+        _authRepo.expiryDate!.difference(DateTime.now()).inSeconds;
     if (_authTimer != null)
       print('Timer already set with ' +
           _timeToExpiry.toString() +

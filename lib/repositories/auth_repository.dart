@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:cloud_chest/data/network_service.dart';
-import 'package:cloud_chest/helpers/storage_helper.dart';
+import 'package:cloud_chest/helpers/persistance/storage_helper.dart';
 import 'package:cloud_chest/helpers/token_helper.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 // Handles all authentication data retrieval and logic
-class AuthDataService {
+class AuthRepository {
   NetworkService _authService = NetworkService(apiUrl: 'auth');
   final String _accessTokenKey = dotenv.env['REQUEST_ACCESS_TOKEN_KEY']!;
   final String _refreshTokenKey = dotenv.env['REQUEST_REFRESH_TOKEN_KEY']!;

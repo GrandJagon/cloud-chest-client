@@ -1,5 +1,4 @@
 import 'package:cloud_chest/helpers/gallery_helper.dart';
-import 'package:gallery_saver/gallery_saver.dart';
 import 'dart:io';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart' as pathProvider;

@@ -1,4 +1,4 @@
-import 'package:cloud_chest/helpers/storage_helper.dart';
+import 'package:cloud_chest/helpers/persistance/storage_helper.dart';
 import 'dart:convert';
 
 // Singleton class to handle user config to access the server
