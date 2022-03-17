@@ -1,3 +1,4 @@
+import 'package:cloud_chest/exceptions/cloud_chest_exceptions.dart';
 import 'db_helper.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -5,40 +6,77 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 // Goal is to alleviate server bandwith and feztching only necessary files
 class DbParsingHelper {
   // Takes a content id and fetches its local path if exists
-  // Returns it unchanged if not
-  static Future<String> fetchLocalPath(String contentId) async {
+  // Returns 0 if there is no local path stored
+  // Returns null if entry does not exist in db
+  static Future<dynamic> fetchLocalPath(String contentId) async {
     List<Map<String, dynamic>> fetchResult =
         await DbHelper().fetch(dotenv.env['DB_TABLE_NAME']!, contentId);
 
     if (fetchResult.length <= 0) {
       print(contentId + ' not found in the db');
-      return contentId;
-      // EXCEPTION ??
-      // ADD IT ?
+      return null;
     }
 
     if (fetchResult.length > 1) {
       print(contentId + ' collision in database');
-      // COLLISION EXCEPTION
+      throw DbException('Collision while fetching ' + contentId);
     }
 
     Map<String, dynamic> dbRow = fetchResult[0];
 
+    print(dbRow);
+
     if (dbRow['storedLocal'] == 1) return dbRow['localPath'];
 
-    return contentId;
+    return 0;
   }
 
-  static Future<void> addLocalPath(String contentId, String localPath) async {
-    // ADD A PATH TO ROW OR CREATE IT IF NOT EXIST
+  // If path is null then add the entry and sets the storedLocal int to false (0)
+  static Future<void> addEntry(String contentId, [String? localPath]) async {
+    Map<String, Object> _data = {
+      "id": contentId,
+      "storedLocal": localPath != null ? 1 : 0,
+      "localPath": localPath ?? ''
+    };
+    int result = await DbHelper().insert(dotenv.env['DB_TABLE_NAME']!, _data);
+
+    if (result == 0) {
+      throw DbException('Could not add entry into the database');
+    }
+
+    print('Entry added ' + _data.toString());
   }
 
-  static Future<void> removeLocalPath(String contentId) async {
-    // REMOVE LOCAL PATH FROM DB AND TOGGLE BOOL TO 0
+  static Future<void> removeEntry(String contentId) async {
+    int result =
+        await DbHelper().delete(dotenv.env['DB_TABLE_NAME']!, contentId);
+
+    if (result == 0) {
+      throw DbException('Could not delete entry from the database');
+    }
+
+    print('Entry removed ' + contentId);
   }
 
-  static Future<void> removeContentEntry(String contentId) async {
-    // REMOVE ENTRY FROM DB
-    // WHEN CONTENT IS DELETED
+  // If localPath is null then removes it and toggles storedLocal to 0
+  // If localPath is not null then adds it and toggles storedLocal to 1
+  static Future<void> toggleStoredLocal(String contentId,
+      [String? localPath]) async {
+    Map<String, Object> data = {
+      'storedLocal': localPath != null ? 1 : 0,
+      'localPath': localPath ?? ''
+    };
+
+    int result =
+        await DbHelper().update(dotenv.env['DB_TABLE_NAME']!, contentId, data);
+
+    if (result == 0) {
+      throw DbException('Could not update entry in the database');
+    }
+
+    print('Entry ' +
+        contentId +
+        ' state toggled to ' +
+        (localPath != null).toString());
   }
 }

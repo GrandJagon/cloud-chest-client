@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:cloud_chest/helpers/config_helper.dart';
+import 'package:cloud_chest/helpers/network/config_helper.dart';
 
 // Overrides the HTTP client for all requests
 // Check the host and port destination for each request and allows self signed certificate

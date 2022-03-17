@@ -1,6 +1,7 @@
 import 'package:cloud_chest/data/api_response.dart';
+import 'package:cloud_chest/helpers/content/content_path_helper.dart';
 import 'package:cloud_chest/models/album_settings.dart';
-import 'package:cloud_chest/models/content.dart';
+import 'package:cloud_chest/models/content/content.dart';
 import 'package:cloud_chest/repositories/single_album_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_chest/helpers/persistance/download_helper.dart';
@@ -82,22 +83,31 @@ class CurrentAlbumViewModel extends ChangeNotifier {
         .then(
           (data) => _setCurrentState(data),
         )
-        .catchError(
-          (error, stackTrace) => _setResponse(
-            ApiResponse.error(
-              error.toString(),
-            ),
-          ),
-        );
+        .catchError((error, stackTrace) {
+      print(stackTrace);
+      _setResponse(
+        ApiResponse.error(
+          error.toString(),
+        ),
+      );
+    });
   }
 
   // Sets the current state given an API response
   // Current state contains album content and album detail
-  void _setCurrentState(Map<dynamic, dynamic> data) {
-    _contentList = data['content'];
+  // Tries to update the album content with local paths if exists in local storage
+  // Like so alleviate server bandwidth
+  Future<void> _setCurrentState(Map<dynamic, dynamic> data) async {
     _currentAlbumSettings = data['settings'];
-    _setResponse(ApiResponse.done());
-    print('STATE SET');
+
+    await ContentPathHelper.updateList(data['content']).then(
+      (contentList) => {
+        _addToContentList(contentList),
+        _setResponse(
+          ApiResponse.done(),
+        ),
+      },
+    );
   }
 
   // Upload new content to the album given an ID
@@ -105,14 +115,22 @@ class CurrentAlbumViewModel extends ChangeNotifier {
     _setResponse(ApiResponse.loading());
     await _singleAlbumRepo
         .postNewContent(newContent, _currentAlbumId, _accessToken)
-        .then((addedContent) => _addToContentList(addedContent))
+        .then(
+          (addedContent) {
+            _addToContentList(addedContent);
+            return addedContent;
+          },
+        )
+        .then(
+          (addedContent) => ContentPathHelper.addList(addedContent),
+        )
         .whenComplete(() => _setResponse(ApiResponse.done()))
         .catchError(
-      (error, stackTrace) {
-        _setResponse(ApiResponse.done());
-        throw error!;
-      },
-    );
+          (error, stackTrace) {
+            _setResponse(ApiResponse.done());
+            throw error!;
+          },
+        );
   }
 
   // Deletes a list of items from the album
@@ -132,13 +150,15 @@ class CurrentAlbumViewModel extends ChangeNotifier {
 
   //Downloads a list of items from the server and stores them in the gallery
   Future<void> downloadFromAlbum(List<Content> contentToDownload) async {
-    final List<String> urls = contentToDownload.map((c) => c.path).toList();
-    _setResponse(ApiResponse.loading());
     await DownloadHelper()
-        .downloadToGallery(urls)
-        .whenComplete(() => _setResponse(ApiResponse.done()))
+        .downloadToGallery(contentToDownload)
+        .then(
+          (updatedContent) =>
+              ContentPathHelper.addLocalPathToList(updatedContent),
+        )
         .catchError((error, stackTrace) {
-      _setResponse(ApiResponse.done());
+      print(stackTrace);
+      print(error);
       throw error!;
     });
   }

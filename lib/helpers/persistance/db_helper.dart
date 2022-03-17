@@ -36,10 +36,10 @@ class DbHelper {
 
   //Inserts some data into a table
   //JSON must have the same fields as database
-  Future<void> insert(String table, Map<String, Object> data) async {
+  Future<int> insert(String table, Map<String, Object> data) async {
     final db = await database(table);
 
-    await db.insert(table, data,
+    return await db.insert(table, data,
         conflictAlgorithm: sql.ConflictAlgorithm.replace);
   }
 
@@ -60,22 +60,17 @@ class DbHelper {
 
   //Deletes a given object in a given table
   //Object identified with ID
-  Future<void> delete(String table, String id) async {
+  Future<int> delete(String table, String id) async {
     final db = await database(table);
 
-    final int count = await db.delete(table, where: 'id= ?', whereArgs: [id]);
-
-    print(count.toString() + ' rows deleted');
+    return await db.delete(table, where: 'id= ?', whereArgs: [id]);
   }
 
   // Updates an entry in a given table given an id
-  Future<void> update(
+  Future<int> update(
       String table, String id, Map<String, Object> values) async {
     final db = await database(table);
 
-    final int count =
-        await db.update(table, values, where: 'id= ?', whereArgs: [id]);
-
-    print(count.toString() + 'rows updated');
+    return await db.update(table, values, where: 'id= ?', whereArgs: [id]);
   }
 }

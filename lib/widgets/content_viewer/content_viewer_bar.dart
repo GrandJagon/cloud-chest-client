@@ -1,4 +1,4 @@
-import 'package:cloud_chest/models/content.dart';
+import 'package:cloud_chest/models/content/content.dart';
 import 'package:cloud_chest/view_model/content_viewer_view_model.dart';
 import 'package:cloud_chest/screens/album_content/album_content_screen.dart';
 import 'package:cloud_chest/utils/alert_dialog_factory.dart';

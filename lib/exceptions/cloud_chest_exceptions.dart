@@ -24,3 +24,7 @@ class InvalidException extends CloudChestException {
 class ServerException extends CloudChestException {
   ServerException(message) : super(message, 'Server error');
 }
+
+class DbException extends CloudChestException {
+  DbException(message) : super(message, 'Database error');
+}

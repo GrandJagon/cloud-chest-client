@@ -1,6 +1,6 @@
 import 'package:cloud_chest/screens/auth/auth_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_chest/helpers/config_helper.dart';
+import 'package:cloud_chest/helpers/network/config_helper.dart';
 import 'package:cloud_chest/widgets/misc/loading_widget.dart';
 
 // Class responsible for connecting to the server when app first use

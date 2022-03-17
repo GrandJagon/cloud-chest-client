@@ -1,6 +1,6 @@
-import 'package:cloud_chest/models/picture.dart';
-import 'package:cloud_chest/models/video.dart';
-import '../content.dart';
+import 'package:cloud_chest/models/content/picture.dart';
+import 'package:cloud_chest/models/content/video.dart';
+import '../content/content.dart';
 
 // Factory class to handle content creation according to the extension (picture/video)
 // More types to be added later

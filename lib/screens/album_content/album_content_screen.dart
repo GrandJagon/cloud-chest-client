@@ -1,5 +1,5 @@
 import 'package:cloud_chest/data/api_response.dart';
-import 'package:cloud_chest/models/album.dart';
+import 'package:cloud_chest/models/content/album.dart';
 import 'package:cloud_chest/screens/misc/splash_screen.dart';
 import 'package:cloud_chest/view_model/current_album_view_model.dart';
 import 'package:cloud_chest/widgets/album_content/content_grid.dart';

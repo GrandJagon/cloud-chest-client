@@ -13,7 +13,7 @@ import 'package:cloud_chest/view_model/album_list_view_model.dart';
 import 'package:cloud_chest/view_model/user_selection_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_chest/helpers/config_helper.dart';
+import 'package:cloud_chest/helpers/network/config_helper.dart';
 import 'package:cloud_chest/utils/alert_dialog_factory.dart';
 
 import '../../view_model/album_settings_view_model.dart';

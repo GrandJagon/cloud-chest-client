@@ -1,4 +1,4 @@
-import 'package:cloud_chest/models/album.dart';
+import 'package:cloud_chest/models/content/album.dart';
 import 'package:cloud_chest/screens/album_content/album_content_screen.dart';
 import 'package:cloud_chest/view_model/current_album_view_model.dart';
 import 'package:flutter/material.dart';

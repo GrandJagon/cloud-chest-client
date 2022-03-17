@@ -1,6 +1,6 @@
 import 'package:cloud_chest/screens/auth/connect_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_chest/helpers/config_helper.dart';
+import 'package:cloud_chest/helpers/network/config_helper.dart';
 
 class ServerInfo extends StatelessWidget {
   final String _host = Config().get('host');

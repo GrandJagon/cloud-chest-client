@@ -1,9 +1,11 @@
+import 'dart:ui';
+
 import 'package:cloud_chest/utils/network.dart';
 
 import 'content.dart';
 
-class Video extends Content {
-  Video(
+class Picture extends Content {
+  Picture(
       {required id,
       required path,
       required storageDate,
@@ -15,10 +17,9 @@ class Video extends Content {
             path: path,
             storageDate: storageDate,
             size: size,
-            mimetype: mimetype,
-            metadata: metadata);
+            mimetype: mimetype);
 
-  factory Video.fromJson(Map<String, dynamic> json) => Video(
+  factory Picture.fromJson(Map<String, dynamic> json) => Picture(
       id: json['_id'],
       path: NetworkUtils.createContentPath(json['path']),
       storageDate: json['storageDate']
@@ -27,7 +28,5 @@ class Video extends Content {
           .replaceFirst('T', ' '),
       size: json['size'],
       mimetype: json['mimetype'],
-      metadata: json['metada'] ?? null);
-
-  void play() {}
+      metadata: json['metadata'] ?? null);
 }

@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:cloud_chest/data/network_service.dart';
 import 'package:cloud_chest/models/album_settings.dart';
-import 'package:cloud_chest/models/content.dart';
+import 'package:cloud_chest/models/content/content.dart';
 import 'package:cloud_chest/models/factories/content_factory.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -12,27 +12,6 @@ class SingleAlbumRepository {
       NetworkService(apiUrl: 'singleAlbum');
   final String _authTokenKey = dotenv.env['REQUEST_AUTH_TOKEN_KEY']!;
   final String _albumIdKey = dotenv.env['REQUEST_ALBUM_KEY']!;
-
-  // Retrieves content for an album given an album id
-  Future<List<Content>> getAlbumContent(
-      String albumId, String accessToken) async {
-    try {
-      final headers = {_authTokenKey: accessToken};
-      final params = {_albumIdKey: albumId};
-      final response = await _singleAlbumService.get(
-          headers: headers, params: params) as List;
-
-      if (response is Exception) throw response;
-
-      List<Content> albumContent =
-          response.map((json) => ContentFactory.createFromJson(json)).toList();
-
-      return albumContent;
-    } catch (err, stack) {
-      print(stack);
-      return Future.error(err);
-    }
-  }
 
   // Fetches a single album from the API and splits it between content and detail
   Future<Map<dynamic, dynamic>> getSingleAlbum(
@@ -45,7 +24,7 @@ class SingleAlbumRepository {
 
       if (response is Exception) throw response;
 
-      List<dynamic> albumContent = response['files']
+      List<Content> albumContent = (response['files'] as List<dynamic>)
           .map((json) => ContentFactory.createFromJson(json))
           .toList();
 

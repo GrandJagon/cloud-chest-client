@@ -1,4 +1,4 @@
-import 'package:cloud_chest/helpers/config_helper.dart';
+import 'package:cloud_chest/helpers/network/config_helper.dart';
 
 class NetworkUtils {
   // Returns an endpoint url given an api and a request

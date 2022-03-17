@@ -1,9 +1,9 @@
 // Handles data passing between the model and the view
 // Holds the state of the user album list
 import 'package:cloud_chest/data/api_response.dart';
-import 'package:cloud_chest/models/album.dart';
+import 'package:cloud_chest/models/content/album.dart';
 import 'package:cloud_chest/repositories/album_list_repository.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 class AlbumListViewModel extends ChangeNotifier {
   String _accessToken = '';

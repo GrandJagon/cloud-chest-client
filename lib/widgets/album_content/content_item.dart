@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_chest/view_model/content_viewer_view_model.dart';
 import 'package:cloud_chest/view_model/content_selection_view_model.dart';
 import 'package:cloud_chest/screens/content_viewer/content_viewer_screen.dart';
@@ -5,7 +7,7 @@ import 'package:cloud_chest/view_model/current_album_view_model.dart';
 import 'package:cloud_chest/widgets/misc/loading_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_chest/models/content.dart';
+import 'package:cloud_chest/models/content/content.dart';
 import 'package:provider/provider.dart';
 
 class ContentItem extends StatefulWidget {
@@ -27,13 +29,20 @@ class _ContentItemState extends State<ContentItem>
   @override
   bool get wantKeepAlive => true;
 
+  @override
+  void initState() {
+    super.initState();
+
+    // Fired whenever the item object has its state toggled
+    widget.item.addListener(() {
+      setState(() {});
+    });
+  }
+
   // To be called when item is long pressed in order to select it
   // Can later take action on the selection
   void _selectItem() {
-    setState(() {
-      _isSelected = !_isSelected;
-    });
-
+    widget.item.toggleSelected();
     Provider.of<ContentSelectionViewModel>(context, listen: false)
         .addOrRemove(widget.item);
   }
@@ -60,7 +69,9 @@ class _ContentItemState extends State<ContentItem>
 
   @override
   Widget build(BuildContext context) {
-    viewModel = context.read<CurrentAlbumViewModel>();
+    _isSelected = widget.item.isSelected();
+
+    // viewModel = context.read<CurrentAlbumViewModel>();
     Size size = MediaQuery.of(context).size;
     return GestureDetector(
       onLongPress: () => _longPress(),
@@ -74,7 +85,21 @@ class _ContentItemState extends State<ContentItem>
         ),
         child: Hero(
           tag: widget.item.id,
-          child: CachedNetworkImage(
+          child: Opacity(
+              opacity: widget.item.isDownloading() ? 0.5 : 1,
+              child: _buildImage(context)),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildImage(BuildContext context) {
+    return widget.item.isLocal()
+        ? Image.file(
+            File(widget.item.path),
+            fit: BoxFit.cover,
+          )
+        : CachedNetworkImage(
             fit: BoxFit.cover,
             placeholder: (ctx, url) => LoadingWidget(),
             imageUrl: widget.item.path,
@@ -82,9 +107,6 @@ class _ContentItemState extends State<ContentItem>
               Icons.error,
               color: Colors.red,
             ),
-          ),
-        ),
-      ),
-    );
+          );
   }
 }

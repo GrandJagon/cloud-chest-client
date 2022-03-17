@@ -1,4 +1,4 @@
-import 'package:cloud_chest/models/content.dart';
+import 'package:cloud_chest/models/content/content.dart';
 import 'package:flutter/material.dart';
 
 // Holds user selection and provides methods to interact with it
