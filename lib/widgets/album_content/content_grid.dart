@@ -5,6 +5,7 @@ import 'package:cloud_chest/widgets/album_content/content_item.dart';
 import 'package:cloud_chest/widgets/misc/loading_widget.dart';
 import 'package:cloud_chest/widgets/misc/network_error_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 
 class ContentGrid extends StatefulWidget {
@@ -26,8 +27,11 @@ class _ContentGridState extends State<ContentGrid> {
   @override
   Widget build(BuildContext context) {
     vm = context.watch<CurrentAlbumViewModel>();
+    print('rebuilding grid');
 
-    if (vm.response.status == ResponseStatus.LOADING) return LoadingWidget();
+    if (vm.response.status == ResponseStatus.LOADING_PARTIAL ||
+        vm.response.status == ResponseStatus.LOADING_FULL)
+      return LoadingWidget();
     if (vm.response.status == ResponseStatus.ERROR)
       return NetworkErrorWidget(
         retryCallback: () => vm.fetchSingleAlbum(vm.currentAlbumId),

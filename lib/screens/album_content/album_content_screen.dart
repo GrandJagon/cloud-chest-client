@@ -23,7 +23,7 @@ class _AlbumContentScreenState extends State<AlbumContentScreen> {
   Widget build(BuildContext context) {
     vm = context.watch<CurrentAlbumViewModel>();
 
-    if (vm.response.status == ResponseStatus.LOADING)
+    if (vm.response.status == ResponseStatus.LOADING_FULL)
       return SplashScreen();
     else
       return _buildScreen(context);

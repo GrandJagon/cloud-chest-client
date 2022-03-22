@@ -27,7 +27,7 @@ class _ContentItemState extends State<ContentItem>
   late CurrentAlbumViewModel viewModel;
 
   @override
-  bool get wantKeepAlive => true;
+  bool get wantKeepAlive => false;
 
   @override
   void initState() {
@@ -39,9 +39,17 @@ class _ContentItemState extends State<ContentItem>
     });
   }
 
+  @override
+  void dispose() {
+    widget.item.cancelSubscription();
+    super.dispose();
+  }
+
   // To be called when item is long pressed in order to select it
   // Can later take action on the selection
   void _selectItem() {
+    print('SELECTED ' + widget.item.path);
+    print('SELECTED ' + (widget.item.localPath ?? 'null'));
     widget.item.toggleSelected();
     Provider.of<ContentSelectionViewModel>(context, listen: false)
         .addOrRemove(widget.item);
@@ -94,9 +102,10 @@ class _ContentItemState extends State<ContentItem>
   }
 
   Widget _buildImage(BuildContext context) {
+    print('BUILDING ' + (widget.item.localPath ?? widget.item.path));
     return widget.item.isLocal()
         ? Image.file(
-            File(widget.item.path),
+            File(widget.item.localPath!),
             fit: BoxFit.cover,
           )
         : CachedNetworkImage(

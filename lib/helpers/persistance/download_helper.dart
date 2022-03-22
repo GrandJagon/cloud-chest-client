@@ -1,4 +1,3 @@
-import 'package:cloud_chest/helpers/persistance/gallery_helper.dart';
 import 'dart:io';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart' as pathProvider;
@@ -20,30 +19,41 @@ class DownloadHelper {
   // Returns the updated it in order for parent to update path in db
   Future<List<Content>> downloadToGallery(List<Content> contents) async {
     try {
-      Directory directory =
-          await pathProvider.getApplicationDocumentsDirectory();
+      Directory? dir;
+
+      if (Platform.isIOS) {
+        dir = await pathProvider.getApplicationDocumentsDirectory();
+      } else {
+        dir = await pathProvider.getExternalStorageDirectory();
+      }
+
+      String documentsPath = dir!.path;
 
       for (Content content in contents) {
+        // Content already downloaded
+        if (content.isLocal()) {
+          content.setSelected(false);
+          continue;
+        }
         // Toggles content state so display is updated accordingly
         content.toggleDownloading();
 
         final String url = content.path;
         final response = await http.get(Uri.parse(url));
         final name = path.basename(url);
-        final tempPath = path.join(directory.path, name);
+        final tempPath = path.join(documentsPath, name);
 
         final file = File(tempPath);
         await file.writeAsBytes(response.bodyBytes);
-        await _storeInGallery(tempPath).then(
-          (value) => file.delete(),
-        );
 
-        content.path = tempPath;
+        print('FILE DOWNLOADED WITH PATH ' + tempPath);
+
+        content.localPath = tempPath;
+        content.setLocal(true);
 
         // Reset state to false before path changing so image does not reload
         content.clearState();
       }
-      print(contents.toString());
 
       return contents;
     } on Exception catch (e, s) {
@@ -59,17 +69,17 @@ class DownloadHelper {
       case 'jpg':
       case 'jpeg':
       case 'png':
-        await GalleryHelper().savePicture(filepath);
+        //await GalleryHelper().savePicture(filepath);
         break;
       case 'mp4':
       case 'mkv':
       case 'm4v':
       case 'wmw':
       case 'avi':
-        await GalleryHelper().saveVideo(filepath);
+        //await GalleryHelper().saveVideo(filepath);
         break;
       default:
-        await GalleryHelper().savePicture(filepath);
+        //await GalleryHelper().savePicture(filepath);
         break;
     }
   }

@@ -48,9 +48,10 @@ class _CreateAlbumDialogState extends State<CreateAlbumDialog> {
               ? EdgeInsets.fromLTRB(40, 0, 40, 24)
               : EdgeInsets.symmetric(horizontal: 40.0, vertical: 24.0),
           elevation: 8,
-          child: albumListViewModel.response.status == ResponseStatus.LOADING
-              ? LoadingWidget()
-              : _buildForm(_bottomInset)),
+          child:
+              albumListViewModel.response.status == ResponseStatus.LOADING_FULL
+                  ? LoadingWidget()
+                  : _buildForm(_bottomInset)),
     );
   }
 

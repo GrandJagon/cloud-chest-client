@@ -1,4 +1,4 @@
-enum ResponseStatus { LOADING, DONE, ERROR, NO_RESULT }
+enum ResponseStatus { LOADING_FULL, LOADING_PARTIAL, DONE, ERROR, NO_RESULT }
 
 class ApiResponse {
   ResponseStatus? status;
@@ -6,7 +6,10 @@ class ApiResponse {
 
   ApiResponse(this.status, this.message);
 
-  ApiResponse.loading() : status = ResponseStatus.LOADING;
+  // Two loading states in order to differentiate between full screen rebuilding or just some elements
+  ApiResponse.loadingFull() : status = ResponseStatus.LOADING_FULL;
+
+  ApiResponse.loadingPartial() : status = ResponseStatus.LOADING_PARTIAL;
 
   ApiResponse.done() : status = ResponseStatus.DONE;
 

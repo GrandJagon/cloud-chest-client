@@ -13,8 +13,6 @@ class ContentPathHelper {
     for (Content content in contentList) {
       var localPath = await DbParsingHelper.fetchLocalPath(content.id);
 
-      print(content.id + ' => LOCAL PATH FECTHED =' + localPath.toString());
-
       if (localPath == 0) continue;
       if (localPath == null) {
         await DbParsingHelper.addEntry(content.id);
@@ -24,12 +22,13 @@ class ContentPathHelper {
       final bool fileExists = await _fileExists(localPath);
 
       if (!fileExists) {
-        DbParsingHelper.toggleStoredLocal(content.id);
+        await DbParsingHelper.toggleStoredLocal(content.id);
         continue;
       }
 
-      content.path = localPath;
+      content.localPath = localPath;
       content.setLocal(true);
+      print('just set ' + content.isLocal().toString());
     }
     print(contentList);
     return contentList;
@@ -50,10 +49,11 @@ class ContentPathHelper {
     }
   }
 
-  // Sets local path to a list, used when user downloads content from serve
+  // Sets local path to a list, used when user downloads content from server
   static Future<void> addLocalPathToList(List<Content> contentList) async {
     for (Content content in contentList) {
-      await DbParsingHelper.toggleStoredLocal(content.id, content.path);
+      await DbParsingHelper.toggleStoredLocal(content.id, content.localPath)
+          .then((value) => content.setLocal(true));
     }
   }
 
@@ -61,8 +61,6 @@ class ContentPathHelper {
   // In case user deleted picture directly from gallery
   static Future<bool> _fileExists(String localPath) async {
     final bool fileExists = await io.File(localPath).exists();
-
-    print('FILE EXISTS = ' + fileExists.toString());
 
     return fileExists;
   }

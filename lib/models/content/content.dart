@@ -5,6 +5,7 @@ abstract class Content implements Listenable {
   final String id;
   bool _local = false;
   String path;
+  String? localPath;
   final String storageDate;
   final int size;
   final String mimetype;
@@ -52,9 +53,12 @@ abstract class Content implements Listenable {
     _listeners.remove(listener);
   }
 
+  void cancelSubscription() {
+    _listeners.clear();
+  }
+
   // Listeners are individual content items
   void notifyListeners() {
-    print('notifying');
     try {
       for (Function l in _listeners) {
         l.call();
@@ -69,6 +73,11 @@ abstract class Content implements Listenable {
     _local = state;
   }
 
+  void setSelected(bool state) {
+    _isSelected = state;
+    notifyListeners();
+  }
+
   void toggleSelected() {
     _isSelected = !_isSelected;
     notifyListeners();
@@ -76,7 +85,6 @@ abstract class Content implements Listenable {
 
   void toggleDownloading() {
     _isDownloading = !_isDownloading;
-    print('toggling');
     notifyListeners();
   }
 

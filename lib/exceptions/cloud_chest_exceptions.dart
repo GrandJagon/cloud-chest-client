@@ -28,3 +28,7 @@ class ServerException extends CloudChestException {
 class DbException extends CloudChestException {
   DbException(message) : super(message, 'Database error');
 }
+
+class DlException extends CloudChestException {
+  DlException(message) : super(message, 'Download error');
+}

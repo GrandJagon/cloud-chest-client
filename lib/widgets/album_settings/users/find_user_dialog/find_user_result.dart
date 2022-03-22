@@ -18,7 +18,7 @@ class _FindUserResultState extends State<FindUserResult> {
   Widget build(BuildContext context) {
     vm = context.watch<UserSelectionViewModel>();
 
-    if (vm.response.status == ResponseStatus.LOADING)
+    if (vm.response.status == ResponseStatus.LOADING_FULL)
       return LoadingWidget();
     else if (vm.response.status == ResponseStatus.NO_RESULT)
       return _noResult(vm.response.message!);

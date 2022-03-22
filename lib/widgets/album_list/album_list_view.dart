@@ -26,7 +26,7 @@ class _AlbumListViewState extends State<AlbumListView> {
   Widget build(BuildContext context) {
     print('BUILDING');
     AlbumListViewModel albumListViewModel = context.watch<AlbumListViewModel>();
-    if (albumListViewModel.response.status == ResponseStatus.LOADING)
+    if (albumListViewModel.response.status == ResponseStatus.LOADING_FULL)
       return LoadingWidget();
     if (albumListViewModel.response.status == ResponseStatus.ERROR)
       return NetworkErrorWidget(

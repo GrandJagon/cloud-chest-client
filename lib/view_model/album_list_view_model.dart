@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 
 class AlbumListViewModel extends ChangeNotifier {
   String _accessToken = '';
-  ApiResponse _response = ApiResponse.loading();
+  ApiResponse _response = ApiResponse.loadingFull();
   final AlbumListRepository _albumListRepo = AlbumListRepository();
   List<Album> _albumList = [];
 
@@ -43,8 +43,8 @@ class AlbumListViewModel extends ChangeNotifier {
 
   // Set the response as loading and fetches the data from repo before setting it as a response
   Future<void> fetchAlbums() async {
-    if (_response.status != ResponseStatus.LOADING)
-      _response = ApiResponse.loading();
+    if (_response.status != ResponseStatus.LOADING_FULL)
+      _response = ApiResponse.loadingFull();
     await _albumListRepo
         .getAlbumList(_accessToken)
         .then((response) => _setAlbumList(response))
@@ -60,7 +60,7 @@ class AlbumListViewModel extends ChangeNotifier {
 
   // Creates a new album and adds it to the current album list
   Future<void> createAlbum(String title, String? description) async {
-    _setResponse(ApiResponse.loading());
+    _setResponse(ApiResponse.loadingPartial());
     await _albumListRepo
         .postNewAlbum(_accessToken, title, description)
         .then((response) => _addToAlbumList(response))
@@ -75,7 +75,7 @@ class AlbumListViewModel extends ChangeNotifier {
 
   // Deletes new album and deletes it from the current list
   Future<void> deleteAlbum(String albumId) async {
-    _setResponse(ApiResponse.loading());
+    _setResponse(ApiResponse.loadingPartial());
     await _albumListRepo
         .deleteAlbum(_accessToken, albumId)
         .catchError((error, stackTrace) => throw error!)

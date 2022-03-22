@@ -22,6 +22,8 @@ class AlbumContentBar extends StatelessWidget with PreferredSizeWidget {
 
       final paths = pictures.map((e) => e.path).toList();
 
+      print('PATHS ABOUT TO BE UPLOADED ' + paths.toString());
+
       await _uploadFiles(paths, context);
     } catch (err, stack) {
       ScaffoldMessenger.of(context).showSnackBar(

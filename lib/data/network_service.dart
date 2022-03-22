@@ -162,7 +162,7 @@ class NetworkService {
       case 200:
         // Checks json validity and returns raw body if invalid
         try {
-          final jsonResponse = jsonDecode(response.body);
+          final jsonResponse = json.decode(response.body);
           return jsonResponse;
         } catch (e) {
           return response.body;

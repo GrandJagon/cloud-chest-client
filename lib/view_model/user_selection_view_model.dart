@@ -53,7 +53,7 @@ class UserSelectionViewModel extends ChangeNotifier {
   Future<void> findUser(String? data) async {
     _searchUserResult.clear();
 
-    _setResponse(ApiResponse.loading());
+    _setResponse(ApiResponse.loadingFull());
     await _userRepo.getUser(data, _accessToken).then(
       (json) {
         if (json == null) {
