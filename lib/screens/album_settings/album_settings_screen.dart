@@ -73,10 +73,7 @@ class AlbumSettingScreen extends StatelessWidget {
         title: Text('Album settings'),
         actions: <Widget>[
           IconButton(
-            icon: Icon(
-              Icons.delete,
-              color: Colors.red,
-            ),
+            icon: Icon(Icons.delete),
             onPressed: () => _deleteAlbum(context),
           )
         ],
@@ -106,7 +103,7 @@ Widget _buildValidateButton(Function onPress) {
   return Container(
     height: 50,
     width: double.infinity,
-    color: Colors.blue,
+    color: Colors.black38,
     child: TextButton(
       onPressed: () => onPress(),
       child: Text(

@@ -1,5 +1,5 @@
 import 'package:cloud_chest/data/api_response.dart';
-import 'package:cloud_chest/view_model/user_selection_view_model.dart';
+import 'package:cloud_chest/view_model/user_view_model.dart';
 import 'package:cloud_chest/widgets/album_settings/users/find_user_dialog/single_user_result.dart';
 import 'package:cloud_chest/widgets/misc/loading_widget.dart';
 import 'package:cloud_chest/widgets/misc/network_error_widget.dart';
@@ -12,11 +12,11 @@ class FindUserResult extends StatefulWidget {
 }
 
 class _FindUserResultState extends State<FindUserResult> {
-  late UserSelectionViewModel vm;
+  late UserViewModel vm;
 
   @override
   Widget build(BuildContext context) {
-    vm = context.watch<UserSelectionViewModel>();
+    vm = context.watch<UserViewModel>();
 
     if (vm.response.status == ResponseStatus.LOADING_FULL)
       return LoadingWidget();

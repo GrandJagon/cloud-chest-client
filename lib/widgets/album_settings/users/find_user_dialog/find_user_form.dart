@@ -1,5 +1,5 @@
 import 'package:cloud_chest/view_model/album_settings_view_model.dart';
-import 'package:cloud_chest/view_model/user_selection_view_model.dart';
+import 'package:cloud_chest/view_model/user_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -20,7 +20,7 @@ class _FindUserFormState extends State<FindUserForm> {
   Future<void> _search(BuildContext context) async {
     FocusScope.of(context).unfocus();
     try {
-      await Provider.of<UserSelectionViewModel>(context, listen: false)
+      await Provider.of<UserViewModel>(context, listen: false)
           .findUser(_controller.text);
     } catch (e, stack) {
       print(stack);

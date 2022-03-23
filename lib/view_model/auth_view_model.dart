@@ -12,14 +12,17 @@ class Auth extends ChangeNotifier {
   bool _isConnected = false;
   String? accessToken = '';
   Timer? _authTimer;
+  String _userId = '';
 
   bool get isConnected => _isConnected;
+
+  String get userId => _userId;
 
   // Tries to fetch auth data and run checks on them$
   // If expired refresh the token and fetch the new ones
   Future<bool> tryAutoConnect() async {
     try {
-      await _authRepo.retrieveAuthData();
+      _userId = await _authRepo.retrieveAuthData();
 
       if (!_authRepo.isAuthData) {
         print('no auth data, redirection to auth screen');

@@ -59,7 +59,7 @@ class _CreateAlbumDialogState extends State<CreateAlbumDialog> {
     return Form(
       key: _formKey,
       child: Container(
-        height: MediaQuery.of(context).size.height / 1.9,
+        height: MediaQuery.of(context).size.height / 3.5,
         padding: EdgeInsets.all(12),
         alignment: FractionalOffset.center,
         child: SingleChildScrollView(
@@ -67,9 +67,9 @@ class _CreateAlbumDialogState extends State<CreateAlbumDialog> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(
-                'Create a new album',
+                'New album',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                style: Theme.of(context).textTheme.headline1,
               ),
               SizedBox(
                 height: bottomInset > 0 ? 0 : 12,
@@ -78,17 +78,16 @@ class _CreateAlbumDialogState extends State<CreateAlbumDialog> {
                 decoration: const InputDecoration(labelText: 'Album title'),
                 onSaved: (newValue) => _albumInfos['title'] = newValue!,
               ),
+              SizedBox(
+                height: 25,
+              ),
               TextButton(
                 child: Text(
                   'Create',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  style: Theme.of(context).textTheme.headline2,
                 ),
                 onPressed: () => _submitForm(context),
               ),
-              TextButton(
-                child: Text('Cancel'),
-                onPressed: () => Navigator.of(context).pop(),
-              )
             ],
           ),
         ),

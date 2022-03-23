@@ -95,6 +95,8 @@ class AuthRepository {
     _userId = await json.decode(authData)['userId'];
 
     _isAuthData = true;
+
+    return _userId;
   }
 
   // Store the auth informations in the secure storage

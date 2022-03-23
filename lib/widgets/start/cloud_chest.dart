@@ -1,5 +1,7 @@
-import 'package:cloud_chest/providers/auth_provider.dart';
+import 'package:cloud_chest/view_model/auth_view_model.dart';
+import 'package:cloud_chest/screens/account/account_screen.dart';
 import 'package:cloud_chest/screens/albums_list/albums_list_screen.dart';
+import 'package:cloud_chest/themes/app_theme.dart';
 import 'package:cloud_chest/view_model/content_viewer_view_model.dart';
 import 'package:cloud_chest/view_model/content_selection_view_model.dart';
 import 'package:cloud_chest/screens/album_content/album_content_screen.dart';
@@ -10,7 +12,7 @@ import 'package:cloud_chest/screens/content_viewer/content_viewer_screen.dart';
 import 'package:cloud_chest/screens/misc/splash_screen.dart';
 import 'package:cloud_chest/view_model/current_album_view_model.dart';
 import 'package:cloud_chest/view_model/album_list_view_model.dart';
-import 'package:cloud_chest/view_model/user_selection_view_model.dart';
+import 'package:cloud_chest/view_model/user_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_chest/helpers/network/config_helper.dart';
@@ -90,36 +92,37 @@ class _CloudChestState extends State<CloudChest> {
             return previous;
           },
         ),
-        ChangeNotifierProxyProvider<Auth, UserSelectionViewModel>(
-          create: (_) => UserSelectionViewModel(),
+        ChangeNotifierProxyProvider<Auth, UserViewModel>(
+          create: (_) => UserViewModel(),
           update: (_, auth, previous) {
             previous!.setToken(auth.accessToken!);
+            previous.setUserDetail('id', auth.userId);
             return previous;
           },
         )
       ],
       child: MaterialApp(
-          title: 'Cloud Chest',
-          debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-            primarySwatch: Colors.blue,
-          ),
-          home: !Config().isSetup
-              ? ConnectScreen()
-              : Consumer<Auth>(
-                  builder: (ctx, auth, _) => _authFutureBuilder(
-                    auth,
-                    auth.tryAutoConnect(),
-                  ),
+        title: 'Cloud Chest',
+        debugShowCheckedModeBanner: false,
+        theme: DarkTheme(),
+        home: !Config().isSetup
+            ? ConnectScreen()
+            : Consumer<Auth>(
+                builder: (ctx, auth, _) => _authFutureBuilder(
+                  auth,
+                  auth.tryAutoConnect(),
                 ),
-          routes: {
-            AuthScreen.routeName: (ctx) => AuthScreen(),
-            ConnectScreen.routeName: (ctx) => ConnectScreen(),
-            AlbumsListScreen.routeName: (ctx) => AlbumsListScreen(),
-            AlbumContentScreen.routeName: (ctx) => AlbumContentScreen(),
-            ContentViewerScreen.routeName: (ctx) => ContentViewerScreen(),
-            AlbumSettingScreen.routeName: (ctx) => AlbumSettingScreen()
-          }),
+              ),
+        routes: {
+          AuthScreen.routeName: (ctx) => AuthScreen(),
+          ConnectScreen.routeName: (ctx) => ConnectScreen(),
+          AlbumsListScreen.routeName: (ctx) => AlbumsListScreen(),
+          AlbumContentScreen.routeName: (ctx) => AlbumContentScreen(),
+          ContentViewerScreen.routeName: (ctx) => ContentViewerScreen(),
+          AlbumSettingScreen.routeName: (ctx) => AlbumSettingScreen(),
+          AccountScreen.routeName: (ctx) => AccountScreen()
+        },
+      ),
     );
   }
 }

@@ -4,12 +4,15 @@ import 'package:flutter/material.dart';
 
 import '../repositories/user_repository.dart';
 
-class UserSelectionViewModel extends ChangeNotifier {
+class UserViewModel extends ChangeNotifier {
   User? _user;
   List<User> _searchUserResult = [];
+  Map<String, String> _userDetails = {'id': '', 'email': '', 'username': ''};
   UserRepository _userRepo = UserRepository();
   ApiResponse _response = ApiResponse.done();
   String _accessToken = '';
+
+  Map<String, String> get userDetauls => _userDetails;
 
   User get user => _user!;
 
@@ -26,6 +29,11 @@ class UserSelectionViewModel extends ChangeNotifier {
   void _setResponse(ApiResponse response) {
     _response = response;
     notifyListeners();
+  }
+
+  void setUserDetail(String key, String value) {
+    _userDetails[key] = value;
+    print(key + ' set to ' + value);
   }
 
   // Reset the response
@@ -72,4 +80,6 @@ class UserSelectionViewModel extends ChangeNotifier {
       },
     );
   }
+
+  Future<void> updateUser(Map<String, String> updatedUser) async {}
 }

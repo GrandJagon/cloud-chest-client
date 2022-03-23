@@ -106,7 +106,7 @@ class _ContentSelectionButtonState extends State<ContentSelectionButton> {
     return Container(
       height: userSelection.length > 0 && !_hidden ? 50 : 0,
       width: double.infinity,
-      color: Colors.orange,
+      color: Colors.black38,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[

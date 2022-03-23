@@ -13,21 +13,25 @@ class AlbumItem extends StatelessWidget {
 
   // Random gradient for background if no thumbnail
   LinearGradient _randomGradient() {
-    return LinearGradient(colors: [
-      Color(Random().nextInt(0xffffffff)),
-      Color(Random().nextInt(0xffffffff))
-    ], begin: Alignment.topLeft, end: Alignment.bottomRight);
+    return LinearGradient(
+      colors: [
+        Color(Random().nextInt(0xffffffff)),
+        Color(Random().nextInt(0xffffffff))
+      ],
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+    );
   }
 
   // Album title styling
-  Widget _titleContainer(String title) {
+  Widget _titleContainer(BuildContext context, String title) {
     return Container(
       padding: EdgeInsets.all(5),
-      color: Colors.white60,
+      color: Colors.black38,
       child: Text(
         title,
         textAlign: TextAlign.center,
-        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        style: Theme.of(context).textTheme.headline1,
       ),
     );
   }
@@ -66,7 +70,7 @@ class AlbumItem extends StatelessWidget {
                       ),
                     )
                   : SizedBox.shrink(),
-              Center(child: _titleContainer(album.title))
+              Center(child: _titleContainer(context, album.title))
             ],
           ),
         ),

@@ -8,7 +8,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 class UserRepository {
   final NetworkService _userService = NetworkService(apiUrl: 'users');
   final String _authTokenKey = dotenv.env['REQUEST_AUTH_TOKEN_KEY']!;
-  final String _albumIdKey = dotenv.env['REQUEST_ALBUM_KEY']!;
 
   // Fetches a user either from username or email
   Future<dynamic> getUser(
@@ -28,9 +27,23 @@ class UserRepository {
       if (response is Exception) throw response;
 
       return response;
-    } catch (err, stack) {
+    } on Exception catch (err, stack) {
       print(stack);
       return Future.error(err);
     }
+  }
+
+  // Updates an user with the new details provided in data
+  Future<dynamic> updateUser(
+      String accessToken, String id, Map<String, String> data) async {
+    final headers = {_authTokenKey: accessToken};
+
+    final params = data;
+
+    final response = await _userService.patch(headers: headers, params: params);
+
+    if (response.runtimeType == Exception) throw response;
+
+    return response;
   }
 }
