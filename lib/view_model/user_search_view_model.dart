@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../repositories/user_repository.dart';
 
-class UserViewModel extends ChangeNotifier {
+class UserSearchViewModel extends ChangeNotifier {
   User? _user;
   List<User> _searchUserResult = [];
   Map<String, String> _userDetails = {'id': '', 'email': '', 'username': ''};
@@ -75,11 +75,8 @@ class UserViewModel extends ChangeNotifier {
     ).onError(
       (error, stackTrace) {
         _setResponse(ApiResponse.error(error.toString()));
-        print('ERROR WHILE FINDING USER');
         print(stackTrace);
       },
     );
   }
-
-  Future<void> updateUser(Map<String, String> updatedUser) async {}
 }

@@ -1,3 +1,4 @@
+import 'package:cloud_chest/view_model/account_settings_view_model.dart';
 import 'package:cloud_chest/view_model/auth_view_model.dart';
 import 'package:cloud_chest/screens/account/account_screen.dart';
 import 'package:cloud_chest/screens/albums_list/albums_list_screen.dart';
@@ -12,7 +13,7 @@ import 'package:cloud_chest/screens/content_viewer/content_viewer_screen.dart';
 import 'package:cloud_chest/screens/misc/splash_screen.dart';
 import 'package:cloud_chest/view_model/current_album_view_model.dart';
 import 'package:cloud_chest/view_model/album_list_view_model.dart';
-import 'package:cloud_chest/view_model/user_view_model.dart';
+import 'package:cloud_chest/view_model/user_search_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_chest/helpers/network/config_helper.dart';
@@ -92,8 +93,15 @@ class _CloudChestState extends State<CloudChest> {
             return previous;
           },
         ),
-        ChangeNotifierProxyProvider<Auth, UserViewModel>(
-          create: (_) => UserViewModel(),
+        ChangeNotifierProxyProvider<Auth, UserSearchViewModel>(
+          create: (_) => UserSearchViewModel(),
+          update: (_, auth, previous) {
+            previous!.setToken(auth.accessToken!);
+            return previous;
+          },
+        ),
+        ChangeNotifierProxyProvider<Auth, AccountSettingsViewModel>(
+          create: (_) => AccountSettingsViewModel(),
           update: (_, auth, previous) {
             previous!.setToken(auth.accessToken!);
             previous.setUserDetail('id', auth.userId);

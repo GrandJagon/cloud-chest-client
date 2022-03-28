@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:cloud_chest/providers/auth_provider.dart';
+import 'package:cloud_chest/view_model/auth_view_model.dart';
 import 'package:cloud_chest/screens/albums_list/albums_list_screen.dart';
 import 'package:cloud_chest/utils/alert_dialog_factory.dart';
 import 'package:provider/provider.dart';

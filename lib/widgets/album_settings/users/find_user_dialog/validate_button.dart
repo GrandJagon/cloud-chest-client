@@ -1,5 +1,5 @@
 import 'package:cloud_chest/view_model/album_settings_view_model.dart';
-import 'package:cloud_chest/view_model/user_view_model.dart';
+import 'package:cloud_chest/view_model/user_search_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -9,7 +9,7 @@ class ValidateButton extends StatefulWidget {
 }
 
 class _ValidateButtonState extends State<ValidateButton> {
-  late UserViewModel selection;
+  late UserSearchViewModel selection;
   late AlbumSettingsViewModel vm;
 
   void _onPress(BuildContext context) {
@@ -33,7 +33,7 @@ class _ValidateButtonState extends State<ValidateButton> {
 
   @override
   Widget build(BuildContext context) {
-    selection = context.watch<UserViewModel>();
+    selection = context.watch<UserSearchViewModel>();
     vm = context.read<AlbumSettingsViewModel>();
     return Container(
       width: double.infinity,

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:cloud_chest/data/network_service.dart';
 import 'package:cloud_chest/helpers/persistance/storage_helper.dart';
 import 'package:cloud_chest/helpers/network/token_helper.dart';
+import 'package:cloud_chest/view_model/auth_view_model.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 // Handles all authentication data retrieval and logic
@@ -16,6 +17,15 @@ class AuthRepository {
   DateTime? _expiryDate;
   String? _userId;
   bool _isAuthData = false;
+
+  // Singleton initialization
+  static final AuthRepository _instance = AuthRepository._internal();
+
+  factory AuthRepository() {
+    return _instance;
+  }
+
+  AuthRepository._internal();
 
   bool get isAuthData => _isAuthData;
 

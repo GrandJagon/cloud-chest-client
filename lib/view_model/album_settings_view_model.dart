@@ -96,8 +96,6 @@ class AlbumSettingsViewModel extends ChangeNotifier {
   }
 
   bool userExists(User user) {
-    print(_users.toString());
-    print(user.userId);
     for (User u in _users!) {
       if (u.userId == user.userId) {
         print('found');

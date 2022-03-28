@@ -9,6 +9,15 @@ class UserRepository {
   final NetworkService _userService = NetworkService(apiUrl: 'users');
   final String _authTokenKey = dotenv.env['REQUEST_AUTH_TOKEN_KEY']!;
 
+  // Singleton initialization$
+  static final UserRepository _instance = UserRepository._internal();
+
+  factory UserRepository() {
+    return _instance;
+  }
+
+  UserRepository._internal();
+
   // Fetches a user either from username or email
   Future<dynamic> getUser(
     String? data,
@@ -24,11 +33,28 @@ class UserRepository {
 
       final response = await _userService.get(headers: headers, params: params);
 
-      if (response is Exception) throw response;
-
       return response;
-    } on Exception catch (err, stack) {
+    } catch (err, stack) {
       print(stack);
+      return Future.error(err);
+    }
+  }
+
+  // fetches user details from an id
+  Future<dynamic> findUserById(String accessToken, String id) async {
+    try {
+      final headers = {_authTokenKey: accessToken};
+
+      final params = {'id': id};
+
+      final response = await _userService.get(
+          headers: headers, params: params, urlPart: 'byId');
+
+      return {
+        'email': response[0]['email'],
+        'username': response[0]['username']
+      };
+    } on Exception catch (err, stack) {
       return Future.error(err);
     }
   }
@@ -38,11 +64,11 @@ class UserRepository {
       String accessToken, String id, Map<String, String> data) async {
     final headers = {_authTokenKey: accessToken};
 
-    final params = data;
-
-    final response = await _userService.patch(headers: headers, params: params);
+    final response = await _userService.patch(headers: headers, data: data);
 
     if (response.runtimeType == Exception) throw response;
+
+    print(response);
 
     return response;
   }

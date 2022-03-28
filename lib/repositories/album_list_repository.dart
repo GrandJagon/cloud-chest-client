@@ -6,6 +6,15 @@ class AlbumListRepository {
   NetworkService _albumService = NetworkService(apiUrl: 'albums');
   final String _authTokenKey = dotenv.env['REQUEST_AUTH_TOKEN_KEY']!;
 
+  // Singleton initialization
+  static final AlbumListRepository _instance = AlbumListRepository._internal();
+
+  factory AlbumListRepository() {
+    return _instance;
+  }
+
+  AlbumListRepository._internal();
+
   // Returns user's all albums from the API
   Future<List<Album>> getAlbumList(String accessToken) async {
     try {

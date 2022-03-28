@@ -1,5 +1,5 @@
 import 'package:cloud_chest/models/user.dart';
-import 'package:cloud_chest/view_model/user_view_model.dart';
+import 'package:cloud_chest/view_model/user_search_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -14,7 +14,7 @@ class SingleUserResult extends StatefulWidget {
 
 class _SingleUserResultState extends State<SingleUserResult> {
   bool _isSelected = false;
-  late UserViewModel vm;
+  late UserSearchViewModel vm;
 
   // Displays card color and sends user to parent
   void _onTap(BuildContext context) {
@@ -26,7 +26,7 @@ class _SingleUserResultState extends State<SingleUserResult> {
 
   @override
   Widget build(BuildContext context) {
-    vm = context.read<UserViewModel>();
+    vm = context.read<UserSearchViewModel>();
     return GestureDetector(
       onTap: () => _onTap(context),
       child: Card(

@@ -1,5 +1,5 @@
 import 'package:cloud_chest/view_model/album_settings_view_model.dart';
-import 'package:cloud_chest/view_model/user_view_model.dart';
+import 'package:cloud_chest/view_model/user_search_view_model.dart';
 import 'package:cloud_chest/widgets/album_settings/users/find_user_dialog/find_user_dialog.dart';
 import 'package:cloud_chest/widgets/album_settings/users/single_user_tile.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +20,7 @@ class _UsersCardState extends State<UsersCard> {
       builder: (c) => FindUserDialog(),
     ).then(
       (value) {
-        Provider.of<UserViewModel>(context, listen: false).clear();
+        Provider.of<UserSearchViewModel>(context, listen: false).clear();
       },
     );
   }

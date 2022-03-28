@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:cloud_chest/data/network_service.dart';
+import 'package:cloud_chest/exceptions/cloud_chest_exceptions.dart';
 import 'package:cloud_chest/models/album_settings.dart';
 import 'package:cloud_chest/models/content/content.dart';
 import 'package:cloud_chest/models/factories/content_factory.dart';
@@ -13,6 +14,16 @@ class SingleAlbumRepository {
   final String _authTokenKey = dotenv.env['REQUEST_AUTH_TOKEN_KEY']!;
   final String _albumIdKey = dotenv.env['REQUEST_ALBUM_KEY']!;
 
+  // Singleton initialization
+  static final SingleAlbumRepository _instance =
+      SingleAlbumRepository._internal();
+
+  factory SingleAlbumRepository() {
+    return _instance;
+  }
+
+  SingleAlbumRepository._internal();
+
   // Fetches a single album from the API and splits it between content and detail
   Future<Map<dynamic, dynamic>> getSingleAlbum(
       String albumId, String accessToken) async {
@@ -21,8 +32,6 @@ class SingleAlbumRepository {
       final params = {_albumIdKey: albumId};
       final response =
           await _singleAlbumService.get(headers: headers, params: params);
-
-      if (response is Exception) throw response;
 
       List<Content> albumContent = (response['files'] as List<dynamic>)
           .map((json) => ContentFactory.createFromJson(json))
@@ -45,8 +54,6 @@ class SingleAlbumRepository {
       final params = {_albumIdKey: albumId};
       final response = await _singleAlbumService.multipart(
           headers: headers, data: newContent, method: 'POST', params: params);
-
-      if (response is Exception) throw response;
 
       List<Content> addedContent = response
           .map<Content>((json) => ContentFactory.createFromJson(json))
@@ -75,10 +82,8 @@ class SingleAlbumRepository {
 
       final body = json.encode(jsonContent);
 
-      final response = await _singleAlbumService.delete(
+      await _singleAlbumService.delete(
           headers: headers, body: body, params: params);
-
-      if (response is Exception) throw response;
 
       return true;
     } catch (err, stack) {
@@ -99,10 +104,6 @@ class SingleAlbumRepository {
         params: {'albumId': albumId},
         data: data,
       );
-
-      if (response is Exception) throw response;
-
-      print(response.toString());
     } catch (err) {
       return Future.error(err);
     }
