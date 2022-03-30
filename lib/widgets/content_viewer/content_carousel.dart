@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 
-import '../../view_model/content_viewer_view_model.dart';
+import '../../view_model/content/content_viewer_view_model.dart';
 
 class ContentCarousel extends StatefulWidget {
   @override

@@ -1,8 +1,7 @@
 import 'package:cloud_chest/models/album_settings.dart';
-import 'package:cloud_chest/screens/albums_list/albums_list_screen.dart';
-import 'package:cloud_chest/view_model/album_list_view_model.dart';
-import 'package:cloud_chest/view_model/album_settings_view_model.dart';
-import 'package:cloud_chest/view_model/current_album_view_model.dart';
+import 'package:cloud_chest/view_model/album_list/album_list_view_model.dart';
+import 'package:cloud_chest/view_model/album_settings/album_settings_view_model.dart';
+import 'package:cloud_chest/view_model/content/current_album_content_view_model.dart';
 import 'package:cloud_chest/widgets/album_settings/confirm_delete_dialog.dart';
 import 'package:cloud_chest/widgets/album_settings/users/users_card.dart';
 import 'package:cloud_chest/widgets/album_settings/edit_settings_form.dart';
@@ -21,7 +20,7 @@ class AlbumSettingScreen extends StatelessWidget {
               .generateSetting();
 
       // Sends them to the new model
-      await Provider.of<CurrentAlbumViewModel>(context, listen: false)
+      await Provider.of<CurrentAlbumContentViewModel>(context, listen: false)
           .validateSettings(newSettings);
 
       // Propagates the new settings to the album list in order to update item in list
@@ -44,11 +43,12 @@ class AlbumSettingScreen extends StatelessWidget {
 
   void _deleteAlbum(BuildContext context) {
     final String title =
-        Provider.of<CurrentAlbumViewModel>(context, listen: false)
+        Provider.of<CurrentAlbumContentViewModel>(context, listen: false)
             .currentAlbumSettings
             .title;
-    final String id = Provider.of<CurrentAlbumViewModel>(context, listen: false)
-        .currentAlbumId;
+    final String id =
+        Provider.of<CurrentAlbumContentViewModel>(context, listen: false)
+            .currentAlbumId;
     showDialog(
       context: context,
       builder: (c) => ConfirmDeleteDialog(title, id),

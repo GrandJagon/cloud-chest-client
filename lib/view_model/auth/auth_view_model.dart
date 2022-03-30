@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:cloud_chest/exceptions/cloud_chest_exceptions.dart';
 import 'package:cloud_chest/repositories/auth_repository.dart';
 import 'package:flutter/material.dart';
-import '../exceptions/auth_exceptions.dart';
+import '../../exceptions/auth_exceptions.dart';
 
 // Holds the auth state
 // Only keeps most essential variable to provider (access token and user ID)
@@ -22,12 +22,16 @@ class Auth extends ChangeNotifier {
   // If expired refresh the token and fetch the new ones
   Future<bool> tryAutoConnect() async {
     try {
-      _userId = await _authRepo.retrieveAuthData();
+      print('autoconnecting');
+      await _authRepo.retrieveAuthData();
 
       if (!_authRepo.isAuthData) {
         print('no auth data, redirection to auth screen');
         return false;
       }
+
+      _userId = _authRepo.userId!;
+
       if (!_authRepo.isAuthDataValid) {
         print('auth data invalid, redirection to auth screen');
         return false;
@@ -40,10 +44,9 @@ class Auth extends ChangeNotifier {
 
       _startTimer();
       return _isConnected = true;
-    } on TimeoutException {
+    } on TimeoutException catch (e) {
       return Future.error('No internet connection or server offline');
     } catch (err, stack) {
-      print(stack);
       return Future.error(err);
     }
   }
@@ -57,14 +60,15 @@ class Auth extends ChangeNotifier {
       // Authentication successful
       accessToken = response;
 
+      _userId = _authRepo.userId!;
+
       _isConnected = true;
       _startTimer();
     } on FetchException {
       return Future.error(
-          AuthConnectionError('There no internet or the server is off.'));
+        AuthConnectionError('Server not responding'),
+      );
     } catch (err, stack) {
-      print(stack);
-      print(err);
       return Future.error('There seems to be a problem, please retry later...');
     }
   }

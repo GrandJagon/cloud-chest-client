@@ -1,5 +1,5 @@
 import 'dart:ui';
-import 'package:cloud_chest/view_model/current_album_view_model.dart';
+import 'package:cloud_chest/view_model/content/current_album_content_view_model.dart';
 import 'package:cloud_chest/widgets/album_settings/thumbnail/confirm_thumbnail_button.dart';
 import 'package:cloud_chest/widgets/album_settings/thumbnail/thumbnail_selection_item.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +18,7 @@ class ThumbnailSelectionDialog extends StatefulWidget {
 }
 
 class _ThumbnailSelectionDialogState extends State<ThumbnailSelectionDialog> {
-  late CurrentAlbumViewModel viewModel;
+  late CurrentAlbumContentViewModel viewModel;
 
   // Function to be called whenver a selection is confirmed to be sent to parent
   // Pops the dialog once done
@@ -29,7 +29,7 @@ class _ThumbnailSelectionDialogState extends State<ThumbnailSelectionDialog> {
 
   @override
   Widget build(BuildContext context) {
-    viewModel = context.read<CurrentAlbumViewModel>();
+    viewModel = context.read<CurrentAlbumContentViewModel>();
 
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
@@ -42,25 +42,32 @@ class _ThumbnailSelectionDialogState extends State<ThumbnailSelectionDialog> {
         backgroundColor: Colors.transparent,
         child: Container(
           height: MediaQuery.of(context).size.height / 1.5,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              Expanded(
-                child: GridView.builder(
-                  physics: ScrollPhysics(),
-                  shrinkWrap: true,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      crossAxisSpacing: 2,
-                      mainAxisSpacing: 2),
-                  itemCount: viewModel.contentList.length,
-                  itemBuilder: (ctx, i) =>
-                      ThumbnailSelectionItem(viewModel.contentList[i]),
+          child: viewModel.contentList.length < 1
+              ? Center(
+                  child: Text(
+                    'You have no content yet....',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                )
+              : Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    Expanded(
+                      child: GridView.builder(
+                        physics: ScrollPhysics(),
+                        shrinkWrap: true,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                            crossAxisSpacing: 2,
+                            mainAxisSpacing: 2),
+                        itemCount: viewModel.contentList.length,
+                        itemBuilder: (ctx, i) =>
+                            ThumbnailSelectionItem(viewModel.contentList[i]),
+                      ),
+                    ),
+                    ConfirmThumbnailButton(_confirmSelection)
+                  ],
                 ),
-              ),
-              ConfirmThumbnailButton(_confirmSelection)
-            ],
-          ),
         ),
       ),
     );

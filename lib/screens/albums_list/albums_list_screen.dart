@@ -1,4 +1,4 @@
-import 'package:cloud_chest/view_model/auth_view_model.dart';
+import 'package:cloud_chest/view_model/auth/auth_view_model.dart';
 import 'package:cloud_chest/screens/auth/auth_screen.dart';
 import 'package:cloud_chest/widgets/album_list/album_list_view.dart';
 import 'package:cloud_chest/widgets/album_list/home_bar.dart';

@@ -1,5 +1,5 @@
-import 'package:cloud_chest/view_model/content_selection_view_model.dart';
-import 'package:cloud_chest/view_model/current_album_view_model.dart';
+import 'package:cloud_chest/view_model/content/content_selection_view_model.dart';
+import 'package:cloud_chest/view_model/content/current_album_content_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -58,7 +58,7 @@ class _ContentSelectionButtonState extends State<ContentSelectionButton> {
 
   Future<void> _deleteSelection(BuildContext context) async {
     // Requesting the view model to delete the user selection
-    await Provider.of<CurrentAlbumViewModel>(context, listen: false)
+    await Provider.of<CurrentAlbumContentViewModel>(context, listen: false)
         .deleteFromAlbum(userSelection.userSelection)
         .then(
       (value) {
@@ -79,7 +79,7 @@ class _ContentSelectionButtonState extends State<ContentSelectionButton> {
 
   Future<void> _downloadSelection(BuildContext context) async {
     // Requesting the view model to delete it
-    await Provider.of<CurrentAlbumViewModel>(context, listen: false)
+    await Provider.of<CurrentAlbumContentViewModel>(context, listen: false)
         .downloadFromAlbum(userSelection.userSelection)
         .then(
       (value) {

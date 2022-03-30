@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:cloud_chest/screens/albums_list/albums_list_screen.dart';
-import 'package:cloud_chest/view_model/album_list_view_model.dart';
+import 'package:cloud_chest/view_model/album_list/album_list_view_model.dart';
 import 'package:cloud_chest/widgets/album_list/album_list_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

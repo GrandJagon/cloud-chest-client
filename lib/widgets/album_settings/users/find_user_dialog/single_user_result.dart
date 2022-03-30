@@ -1,5 +1,5 @@
 import 'package:cloud_chest/models/user.dart';
-import 'package:cloud_chest/view_model/user_search_view_model.dart';
+import 'package:cloud_chest/view_model/album_settings/user_search_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -52,6 +52,7 @@ class _SingleUserResultState extends State<SingleUserResult> {
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
+                            color: Colors.black,
                             fontSize: 20,
                           ),
                         )
@@ -59,6 +60,7 @@ class _SingleUserResultState extends State<SingleUserResult> {
                   Text(
                     widget.user.email,
                     overflow: TextOverflow.ellipsis,
+                    style: TextStyle(color: Colors.black),
                   )
                 ],
               ),

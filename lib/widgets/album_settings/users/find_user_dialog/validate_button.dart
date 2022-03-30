@@ -1,5 +1,5 @@
-import 'package:cloud_chest/view_model/album_settings_view_model.dart';
-import 'package:cloud_chest/view_model/user_search_view_model.dart';
+import 'package:cloud_chest/view_model/album_settings/album_settings_view_model.dart';
+import 'package:cloud_chest/view_model/album_settings/user_search_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

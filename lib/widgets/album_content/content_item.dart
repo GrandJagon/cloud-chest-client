@@ -1,9 +1,8 @@
 import 'dart:io';
-
-import 'package:cloud_chest/view_model/content_viewer_view_model.dart';
-import 'package:cloud_chest/view_model/content_selection_view_model.dart';
+import 'package:cloud_chest/view_model/content/content_viewer_view_model.dart';
+import 'package:cloud_chest/view_model/content/content_selection_view_model.dart';
 import 'package:cloud_chest/screens/content_viewer/content_viewer_screen.dart';
-import 'package:cloud_chest/view_model/current_album_view_model.dart';
+import 'package:cloud_chest/view_model/content/current_album_content_view_model.dart';
 import 'package:cloud_chest/widgets/misc/loading_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +23,7 @@ class ContentItem extends StatefulWidget {
 class _ContentItemState extends State<ContentItem>
     with AutomaticKeepAliveClientMixin {
   bool _isSelected = false;
-  late CurrentAlbumViewModel viewModel;
+  late CurrentAlbumContentViewModel viewModel;
 
   @override
   bool get wantKeepAlive => false;

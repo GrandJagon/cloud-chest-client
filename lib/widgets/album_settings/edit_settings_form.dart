@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloud_chest/view_model/current_album_view_model.dart';
-import 'package:cloud_chest/view_model/album_settings_view_model.dart';
+import 'package:cloud_chest/view_model/content/current_album_content_view_model.dart';
+import 'package:cloud_chest/view_model/album_settings/album_settings_view_model.dart';
 import 'package:cloud_chest/widgets/album_settings/thumbnail/thumbnail_selection_dialog.dart';
 import 'package:cloud_chest/widgets/misc/loading_widget.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +14,7 @@ class EditSettingsForm extends StatefulWidget {
 }
 
 class _EditSettingsFormState extends State<EditSettingsForm> {
-  late CurrentAlbumViewModel albumViewModel;
+  late CurrentAlbumContentViewModel albumViewModel;
   late AlbumSettingsViewModel settingsViewModel;
   TextEditingController _titleController = TextEditingController();
   FocusNode _focusNode = FocusNode();
@@ -23,7 +23,8 @@ class _EditSettingsFormState extends State<EditSettingsForm> {
   void initState() {
     super.initState();
 
-    albumViewModel = Provider.of<CurrentAlbumViewModel>(context, listen: false);
+    albumViewModel =
+        Provider.of<CurrentAlbumContentViewModel>(context, listen: false);
     settingsViewModel =
         Provider.of<AlbumSettingsViewModel>(context, listen: false);
 
@@ -47,6 +48,7 @@ class _EditSettingsFormState extends State<EditSettingsForm> {
 
   // Opens the album in dialog mode to choose a thumbnail from the pictures
   void _openThumbnailSelection(BuildContext context) {
+    FocusScope.of(context).unfocus();
     showDialog(
       context: context,
       builder: (c) =>

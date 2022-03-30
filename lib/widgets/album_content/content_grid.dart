@@ -1,6 +1,6 @@
 import 'package:cloud_chest/data/api_response.dart';
-import 'package:cloud_chest/view_model/content_selection_view_model.dart';
-import 'package:cloud_chest/view_model/current_album_view_model.dart';
+import 'package:cloud_chest/view_model/content/content_selection_view_model.dart';
+import 'package:cloud_chest/view_model/content/current_album_content_view_model.dart';
 import 'package:cloud_chest/widgets/album_content/content_item.dart';
 import 'package:cloud_chest/widgets/misc/loading_widget.dart';
 import 'package:cloud_chest/widgets/misc/network_error_widget.dart';
@@ -14,7 +14,7 @@ class ContentGrid extends StatefulWidget {
 }
 
 class _ContentGridState extends State<ContentGrid> {
-  late CurrentAlbumViewModel vm;
+  late CurrentAlbumContentViewModel vm;
 
   // Clears previous user selection
   @override
@@ -26,7 +26,7 @@ class _ContentGridState extends State<ContentGrid> {
 
   @override
   Widget build(BuildContext context) {
-    vm = context.watch<CurrentAlbumViewModel>();
+    vm = context.watch<CurrentAlbumContentViewModel>();
     print('rebuilding grid');
 
     if (vm.response.status == ResponseStatus.LOADING_PARTIAL ||
@@ -41,7 +41,7 @@ class _ContentGridState extends State<ContentGrid> {
   }
 
   // Returns the grid if album is not empty
-  Widget _buildGrid(CurrentAlbumViewModel viewModel) {
+  Widget _buildGrid(CurrentAlbumContentViewModel viewModel) {
     return Container(
       child: viewModel.contentList.length <= 0
           ? Center(

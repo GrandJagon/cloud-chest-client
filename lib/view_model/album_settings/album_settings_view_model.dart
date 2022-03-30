@@ -3,7 +3,7 @@ import 'package:cloud_chest/models/factories/right_factory.dart';
 import 'package:cloud_chest/models/user.dart';
 import 'package:flutter/material.dart';
 
-import '../models/album_settings.dart';
+import '../../models/album_settings.dart';
 
 // Holds album settings state until it is validated and passed to the current album view model and the API
 // Notifies listener when needed

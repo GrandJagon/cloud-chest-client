@@ -1,7 +1,7 @@
 import 'package:cloud_chest/models/factories/right_factory.dart';
 import 'package:cloud_chest/models/right.dart';
 import 'package:cloud_chest/models/user.dart';
-import 'package:cloud_chest/view_model/album_settings_view_model.dart';
+import 'package:cloud_chest/view_model/album_settings/album_settings_view_model.dart';
 import 'package:cloud_chest/widgets/album_settings/users/right_icon.dart';
 import 'package:cloud_chest/widgets/album_settings/users/user_rights_dialog/single_user_rights_dialog.dart';
 import 'package:flutter/material.dart';

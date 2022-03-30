@@ -1,5 +1,5 @@
 import 'package:cloud_chest/data/api_response.dart';
-import 'package:cloud_chest/view_model/album_list_view_model.dart';
+import 'package:cloud_chest/view_model/album_list/album_list_view_model.dart';
 import 'package:cloud_chest/widgets/misc/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -24,7 +24,6 @@ class _AlbumListViewState extends State<AlbumListView> {
 
   @override
   Widget build(BuildContext context) {
-    print('BUILDING');
     AlbumListViewModel albumListViewModel = context.watch<AlbumListViewModel>();
     if (albumListViewModel.response.status == ResponseStatus.LOADING_FULL)
       return LoadingWidget();

@@ -1,72 +1,45 @@
-import 'package:cloud_chest/view_model/account_settings_view_model.dart';
+import 'package:cloud_chest/data/api_response.dart';
+import 'package:cloud_chest/view_model/account/account_settings_view_model.dart';
+import 'package:cloud_chest/widgets/account/password_dialog/password_dialog.dart';
+import 'package:cloud_chest/widgets/misc/loading_widget.dart';
+import 'package:cloud_chest/widgets/misc/network_error_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class AccountSettingsForm extends StatefulWidget {
-  final String email;
-  final String username;
+  final TextEditingController mailController;
+  final TextEditingController usernameController;
 
-  AccountSettingsForm(this.email, this.username);
+  AccountSettingsForm(this.mailController, this.usernameController);
 
   @override
   _AccountSettingsFormState createState() => _AccountSettingsFormState();
 }
 
 class _AccountSettingsFormState extends State<AccountSettingsForm> {
-  TextEditingController _mailController = TextEditingController();
-  TextEditingController _usernameController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    _mailController.text = widget.email;
-    _usernameController.text = widget.username;
-  }
+  late AccountSettingsViewModel vm;
 
   void _deleteAccount() {
     print('deleting');
   }
 
-  void _saveChanges(BuildContext context) async {
-    if (_mailController.text == '') {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Email must not be empty'),
-          backgroundColor: Colors.red,
-        ),
-      );
-      return;
-    }
-
-    final newDetails = {
-      'email': _mailController.text,
-      'username': _usernameController.text
-    };
-
-    await Provider.of<AccountSettingsViewModel>(context, listen: false)
-        .updateUserDetails(newDetails)
-        .then(
-          (value) => ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Update successfull'),
-              backgroundColor: Colors.green,
-            ),
-          ),
-        )
-        .catchError(
-          (err) => ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                err.toString(),
-              ),
-              backgroundColor: Colors.red,
-            ),
-          ),
-        );
+  void _showPasswordDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => PasswordDialog(),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    vm = context.watch<AccountSettingsViewModel>();
+    if (vm.response.status == ResponseStatus.LOADING_PARTIAL ||
+        vm.response.status == ResponseStatus.LOADING_FULL)
+      return LoadingWidget();
+    if (vm.response.status == ResponseStatus.ERROR)
+      return NetworkErrorWidget(
+        retryCallback: vm.fetchUserDetails,
+      );
     return Container(
       child: Column(
         children: [
@@ -83,7 +56,7 @@ class _AccountSettingsFormState extends State<AccountSettingsForm> {
                     SizedBox(
                       height: 10,
                     ),
-                    _buildTextField(_mailController),
+                    _buildTextField(widget.mailController),
                     SizedBox(
                       height: 20,
                     ),
@@ -92,10 +65,32 @@ class _AccountSettingsFormState extends State<AccountSettingsForm> {
                     SizedBox(
                       height: 10,
                     ),
-                    _buildTextField(_usernameController),
+                    _buildTextField(widget.usernameController),
                     SizedBox(
                       height: 50,
                     ),
+                    TextButton(
+                      child: Center(
+                        child: Text(
+                          'Change password',
+                          style: Theme.of(context).textTheme.headline2,
+                        ),
+                      ),
+                      onPressed: () => _showPasswordDialog(),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    TextButton(
+                      child: Center(
+                        child: Text(
+                          'Disconnect',
+                          style: Theme.of(context).textTheme.headline2,
+                        ),
+                      ),
+                      onPressed: () => _deleteAccount(),
+                    ),
+                    Spacer(),
                     TextButton(
                       child: Center(
                         child: Text(
@@ -110,9 +105,6 @@ class _AccountSettingsFormState extends State<AccountSettingsForm> {
               ),
             ),
           ),
-          _saveButton(
-            () => _saveChanges(context),
-          )
         ],
       ),
     );
@@ -134,22 +126,6 @@ class _AccountSettingsFormState extends State<AccountSettingsForm> {
             border: InputBorder.none,
             isCollapsed: true,
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget _saveButton(Function onPress) {
-    return Container(
-      height: 50,
-      width: double.infinity,
-      color: Colors.black38,
-      child: TextButton(
-        onPressed: () => onPress(),
-        child: Text(
-          'Save changes',
-          textAlign: TextAlign.center,
-          style: TextStyle(color: Colors.white),
         ),
       ),
     );

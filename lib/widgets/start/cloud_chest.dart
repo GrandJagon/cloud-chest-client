@@ -1,25 +1,25 @@
-import 'package:cloud_chest/view_model/account_settings_view_model.dart';
-import 'package:cloud_chest/view_model/auth_view_model.dart';
+import 'package:cloud_chest/view_model/account/account_settings_view_model.dart';
+import 'package:cloud_chest/view_model/account/change_password_view_model.dart';
+import 'package:cloud_chest/view_model/auth/auth_view_model.dart';
 import 'package:cloud_chest/screens/account/account_screen.dart';
 import 'package:cloud_chest/screens/albums_list/albums_list_screen.dart';
 import 'package:cloud_chest/themes/app_theme.dart';
-import 'package:cloud_chest/view_model/content_viewer_view_model.dart';
-import 'package:cloud_chest/view_model/content_selection_view_model.dart';
+import 'package:cloud_chest/view_model/content/content_viewer_view_model.dart';
+import 'package:cloud_chest/view_model/content/content_selection_view_model.dart';
 import 'package:cloud_chest/screens/album_content/album_content_screen.dart';
 import 'package:cloud_chest/screens/album_settings/album_settings_screen.dart';
 import 'package:cloud_chest/screens/auth/auth_screen.dart';
 import 'package:cloud_chest/screens/auth/connect_screen.dart';
 import 'package:cloud_chest/screens/content_viewer/content_viewer_screen.dart';
 import 'package:cloud_chest/screens/misc/splash_screen.dart';
-import 'package:cloud_chest/view_model/current_album_view_model.dart';
-import 'package:cloud_chest/view_model/album_list_view_model.dart';
-import 'package:cloud_chest/view_model/user_search_view_model.dart';
+import 'package:cloud_chest/view_model/content/current_album_content_view_model.dart';
+import 'package:cloud_chest/view_model/album_list/album_list_view_model.dart';
+import 'package:cloud_chest/view_model/album_settings/user_search_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_chest/helpers/network/config_helper.dart';
 import 'package:cloud_chest/utils/alert_dialog_factory.dart';
-
-import '../../view_model/album_settings_view_model.dart';
+import '../../view_model/album_settings/album_settings_view_model.dart';
 
 class CloudChest extends StatefulWidget {
   @override
@@ -71,6 +71,9 @@ class _CloudChestState extends State<CloudChest> {
         ChangeNotifierProvider(
           create: (context) => AlbumSettingsViewModel(),
         ),
+        ChangeNotifierProvider(
+          create: (context) => ChangePasswordViewModel(),
+        ),
         ChangeNotifierProxyProvider<Auth, AlbumListViewModel>(
           create: (_) => AlbumListViewModel(),
           update: (_, auth, previous) {
@@ -78,14 +81,14 @@ class _CloudChestState extends State<CloudChest> {
             return previous;
           },
         ),
-        ChangeNotifierProxyProvider<Auth, CurrentAlbumViewModel>(
-          create: (_) => CurrentAlbumViewModel(),
+        ChangeNotifierProxyProvider<Auth, CurrentAlbumContentViewModel>(
+          create: (_) => CurrentAlbumContentViewModel(),
           update: (_, auth, previous) {
             previous!.setToken(auth.accessToken!);
             return previous;
           },
         ),
-        ChangeNotifierProxyProvider<CurrentAlbumViewModel,
+        ChangeNotifierProxyProvider<CurrentAlbumContentViewModel,
             ContentViewerViewModel>(
           create: (_) => ContentViewerViewModel(),
           update: (_, currentAlbumViewModel, previous) {

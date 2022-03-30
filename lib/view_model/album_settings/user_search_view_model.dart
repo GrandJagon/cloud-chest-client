@@ -2,7 +2,7 @@ import 'package:cloud_chest/data/api_response.dart';
 import 'package:cloud_chest/models/user.dart';
 import 'package:flutter/material.dart';
 
-import '../repositories/user_repository.dart';
+import '../../repositories/user_repository.dart';
 
 class UserSearchViewModel extends ChangeNotifier {
   User? _user;
@@ -59,7 +59,7 @@ class UserSearchViewModel extends ChangeNotifier {
 
   // Fetches a user from email or username if exist
   Future<void> findUser(String? data) async {
-    _searchUserResult.clear();
+    clear();
 
     _setResponse(ApiResponse.loadingFull());
     await _userRepo.getUser(data, _accessToken).then(

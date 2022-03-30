@@ -1,7 +1,7 @@
 import 'package:cloud_chest/data/api_response.dart';
 import 'package:cloud_chest/models/content/album.dart';
 import 'package:cloud_chest/screens/misc/splash_screen.dart';
-import 'package:cloud_chest/view_model/current_album_view_model.dart';
+import 'package:cloud_chest/view_model/content/current_album_content_view_model.dart';
 import 'package:cloud_chest/widgets/album_content/content_grid.dart';
 import 'package:cloud_chest/widgets/album_content/album_content_bar.dart';
 import 'package:cloud_chest/widgets/album_content/content_selection_button.dart';
@@ -17,11 +17,11 @@ class AlbumContentScreen extends StatefulWidget {
 
 class _AlbumContentScreenState extends State<AlbumContentScreen> {
   late final Album album;
-  late CurrentAlbumViewModel vm;
+  late CurrentAlbumContentViewModel vm;
 
   @override
   Widget build(BuildContext context) {
-    vm = context.watch<CurrentAlbumViewModel>();
+    vm = context.watch<CurrentAlbumContentViewModel>();
 
     if (vm.response.status == ResponseStatus.LOADING_FULL)
       return SplashScreen();

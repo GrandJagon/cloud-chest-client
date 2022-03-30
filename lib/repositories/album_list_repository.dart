@@ -18,9 +18,11 @@ class AlbumListRepository {
   // Returns user's all albums from the API
   Future<List<Album>> getAlbumList(String accessToken) async {
     try {
-      final response = await _albumService
-          .get(headers: {_authTokenKey: accessToken}) as List;
-
+      print('getting album list');
+      final List response = await _albumService
+          .get(headers: {_authTokenKey: accessToken}).catchError(
+        (e) => print('error while fetching album list' + e),
+      );
       if (response is Exception) throw response;
 
       List<Album> albums =

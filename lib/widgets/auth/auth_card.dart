@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:cloud_chest/view_model/auth_view_model.dart';
+import 'package:cloud_chest/view_model/auth/auth_view_model.dart';
 import 'package:cloud_chest/screens/albums_list/albums_list_screen.dart';
 import 'package:cloud_chest/utils/alert_dialog_factory.dart';
 import 'package:provider/provider.dart';
@@ -112,8 +112,14 @@ class _AuthCardState extends State<AuthCard>
           builder: (ctx) => AlertDialogFactory.oneButtonDialog(
               ctx, 'Error', err.message.toString(), 'OK'));
     } catch (err, stack) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(err.toString())));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            err.toString(),
+          ),
+          backgroundColor: Colors.red,
+        ),
+      );
     } finally {
       setState(() {
         _isLoading = false;

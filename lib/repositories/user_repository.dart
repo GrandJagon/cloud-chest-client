@@ -62,14 +62,17 @@ class UserRepository {
   // Updates an user with the new details provided in data
   Future<dynamic> updateUser(
       String accessToken, String id, Map<String, String> data) async {
-    final headers = {_authTokenKey: accessToken};
+    try {
+      final headers = {_authTokenKey: accessToken};
 
-    final response = await _userService.patch(headers: headers, data: data);
+      final response = await _userService.patch(headers: headers, data: data);
 
-    if (response.runtimeType == Exception) throw response;
+      if (response is Exception) throw response;
 
-    print(response);
-
-    return response;
+      return response;
+    } catch (e) {
+      print(e);
+      return Future.error(e);
+    }
   }
 }

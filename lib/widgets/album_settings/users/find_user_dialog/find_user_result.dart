@@ -1,5 +1,5 @@
 import 'package:cloud_chest/data/api_response.dart';
-import 'package:cloud_chest/view_model/user_search_view_model.dart';
+import 'package:cloud_chest/view_model/album_settings/user_search_view_model.dart';
 import 'package:cloud_chest/widgets/album_settings/users/find_user_dialog/single_user_result.dart';
 import 'package:cloud_chest/widgets/misc/loading_widget.dart';
 import 'package:cloud_chest/widgets/misc/network_error_widget.dart';
@@ -44,18 +44,13 @@ class _FindUserResultState extends State<FindUserResult> {
         Text(
           'Select a user to add',
           style: TextStyle(
-              fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white54),
+              fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white70),
         ),
         SizedBox(height: 15),
-        Container(
-          decoration: BoxDecoration(
-              color: Colors.black54, borderRadius: BorderRadius.circular(12)),
-          padding: EdgeInsets.all(12),
-          child: ListView.builder(
-            shrinkWrap: true,
-            itemCount: vm.searchUserResult!.length,
-            itemBuilder: (ctx, i) => SingleUserResult(vm.searchUserResult![i]),
-          ),
+        ListView.builder(
+          shrinkWrap: true,
+          itemCount: vm.searchUserResult!.length,
+          itemBuilder: (ctx, i) => SingleUserResult(vm.searchUserResult![i]),
         ),
       ],
     );

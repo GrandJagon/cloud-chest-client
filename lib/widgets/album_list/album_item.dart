@@ -1,6 +1,6 @@
 import 'package:cloud_chest/models/content/album.dart';
 import 'package:cloud_chest/screens/album_content/album_content_screen.dart';
-import 'package:cloud_chest/view_model/current_album_view_model.dart';
+import 'package:cloud_chest/view_model/content/current_album_content_view_model.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 
@@ -38,7 +38,7 @@ class AlbumItem extends StatelessWidget {
 
   // Initiates the view model with the chosen album and pushes the route
   Future<void> _openAlbumContent(BuildContext context) async {
-    Provider.of<CurrentAlbumViewModel>(context, listen: false)
+    Provider.of<CurrentAlbumContentViewModel>(context, listen: false)
         .fetchSingleAlbum(album.albumId);
 
     Navigator.of(context)

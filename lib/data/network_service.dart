@@ -5,6 +5,7 @@ import '../exceptions/cloud_chest_exceptions.dart';
 import 'package:cloud_chest/utils/network.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/io_client.dart' as http;
 
 // Handles all API call to return JSON formatted responsed or error
 class NetworkService {
@@ -30,9 +31,9 @@ class NetworkService {
           );
       return _parseResponse(response);
     } on SocketException {
-      throw FetchException('No internet connection');
+      throw FetchException('Server not responding');
     } on TimeoutException {
-      throw FetchException('Make sure the server is running.');
+      throw FetchException('Server not responding');
     }
   }
 
@@ -53,11 +54,12 @@ class NetworkService {
                   ),
                 ),
               );
+
       return _parseResponse(response);
     } on SocketException {
-      throw FetchException('No internet connection');
+      throw FetchException('Server not responding');
     } on TimeoutException {
-      throw FetchException('Make sure the server is running.');
+      throw FetchException('Server not responding');
     }
   }
 
@@ -94,10 +96,9 @@ class NetworkService {
 
       return _parseResponse(response);
     } on SocketException {
-      throw FetchException('No internet connection');
+      throw FetchException('Server not responding');
     } on TimeoutException {
-      throw FetchException(
-          'There seems to be a conection problem, make sure the server is on.');
+      throw FetchException('Server not responding');
     }
   }
 
@@ -120,9 +121,9 @@ class NetworkService {
               );
       return _parseResponse(response);
     } on SocketException {
-      throw FetchException('No internet connection');
+      throw FetchException('Server not responding');
     } on TimeoutException {
-      throw FetchException('Make sure the server is running.');
+      throw FetchException('Server not responding');
     }
   }
 
@@ -133,8 +134,6 @@ class NetworkService {
       Map<String, String>? params,
       dynamic body}) async {
     Uri url = NetworkUtils.createEndpoint(apiUrl, urlPart ?? '', params);
-
-    print('body to be sent ===> ' + body.toString());
 
     try {
       final dynamic response =
@@ -147,10 +146,9 @@ class NetworkService {
               );
       return _parseResponse(response);
     } on SocketException {
-      throw FetchException('No internet connection');
+      throw FetchException('Server not responding');
     } on TimeoutException {
-      throw FetchException(
-          'There seems to be a conection problem, make sure the server is on.');
+      throw FetchException('Server not responding');
     }
   }
 

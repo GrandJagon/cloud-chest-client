@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_chest/helpers/persistance/download_helper.dart';
 
 // Holds the state for the current album, the one actually on display
-class CurrentAlbumViewModel extends ChangeNotifier {
+class CurrentAlbumContentViewModel extends ChangeNotifier {
   SingleAlbumRepository _singleAlbumRepo = SingleAlbumRepository();
   String _accessToken = '';
   String _currentAlbumId = '';

@@ -2,10 +2,11 @@ import 'package:cloud_chest/data/api_response.dart';
 import 'package:cloud_chest/models/user.dart';
 import 'package:flutter/material.dart';
 
-import '../repositories/user_repository.dart';
+import '../../repositories/user_repository.dart';
 
 class AccountSettingsViewModel extends ChangeNotifier {
   Map<String, String> _userDetails = {'id': '', 'email': '', 'username': ''};
+  String? _newPassword;
   UserRepository _userRepo = UserRepository();
   ApiResponse _response = ApiResponse.loadingFull();
   String _accessToken = '';
@@ -13,6 +14,8 @@ class AccountSettingsViewModel extends ChangeNotifier {
   Map<String, String> get userDetails => _userDetails;
 
   ApiResponse get response => _response;
+
+  String? get newPassord => _newPassword;
 
   bool hasDetails() => !(_userDetails['email'] == '');
 
@@ -48,6 +51,7 @@ class AccountSettingsViewModel extends ChangeNotifier {
   }
 
   Future<void> updateUserDetails(Map<String, String> newDetails) async {
+    _setResponse(ApiResponse.loadingPartial());
     await _userRepo
         .updateUser(_accessToken, _userDetails['id']!, newDetails)
         .then(
@@ -55,6 +59,10 @@ class AccountSettingsViewModel extends ChangeNotifier {
         _userDetails['email'] = newDetails['email']!;
         _userDetails['username'] = newDetails['username']!;
       },
+    ).whenComplete(
+      () => _setResponse(
+        ApiResponse.done(),
+      ),
     );
   }
 }

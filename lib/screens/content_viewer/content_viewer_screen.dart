@@ -1,6 +1,6 @@
 import 'package:cloud_chest/data/api_response.dart';
-import 'package:cloud_chest/view_model/content_viewer_view_model.dart';
-import 'package:cloud_chest/view_model/current_album_view_model.dart';
+import 'package:cloud_chest/view_model/content/content_viewer_view_model.dart';
+import 'package:cloud_chest/view_model/content/current_album_content_view_model.dart';
 import 'package:cloud_chest/widgets/content_viewer/content_carousel.dart';
 import 'package:cloud_chest/widgets/content_viewer/content_viewer_bar.dart';
 import 'package:cloud_chest/widgets/content_viewer/metadata_pane.dart';
@@ -22,7 +22,7 @@ class _ContentViewerScreenState extends State<ContentViewerScreen> {
         context.read<ContentViewerViewModel>();
 
     final ApiResponse deleteResponse =
-        context.watch<CurrentAlbumViewModel>().response;
+        context.watch<CurrentAlbumContentViewModel>().response;
 
     return AnnotatedRegion(
       value: SystemUiOverlayStyle.light,
