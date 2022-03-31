@@ -37,8 +37,10 @@ class _TickBoxState extends State<TickBox> {
         width: 30,
         height: 30,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-            border: Border.all(width: 1)),
+          borderRadius: BorderRadius.circular(5),
+          color: Colors.white,
+          border: Border.all(width: 1),
+        ),
         child: _isTicked
             ? Icon(
                 Icons.check_rounded,

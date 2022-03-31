@@ -35,12 +35,11 @@ class AlbumListRepository {
   }
 
   // Request new album creation from the API and returns the newly created album
-  Future<dynamic> postNewAlbum(
-      String accessToken, String title, String? description) async {
+  Future<dynamic> postNewAlbum(String accessToken, String title) async {
     try {
       final response = await _albumService.post(
           headers: {_authTokenKey: accessToken},
-          data: {'title': title, 'description': description ?? ''},
+          data: {'title': title},
           urlPart: 'create');
 
       if (response is Exception) throw response;

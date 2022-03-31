@@ -41,13 +41,13 @@ class _FindUserFormState extends State<FindUserForm> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Find user by username or email',
+          'Username/email',
           textAlign: TextAlign.center,
           style: TextStyle(
               fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white70),
         ),
         SizedBox(
-          height: 20,
+          height: 10,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -57,7 +57,9 @@ class _FindUserFormState extends State<FindUserForm> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  Expanded(child: RoundedTextField(controller: _controller)),
+                  Expanded(
+                    child: RoundedTextField(controller: _controller),
+                  ),
                 ],
               ),
             ),

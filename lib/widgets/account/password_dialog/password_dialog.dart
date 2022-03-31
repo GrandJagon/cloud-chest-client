@@ -42,43 +42,51 @@ class _PasswordDialogState extends State<PasswordDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return BackdropFilter(
-      filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          Expanded(
-            child: Dialog(
-              backgroundColor: Colors.transparent,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    'Password :',
-                    style: TextStyle(fontSize: 20),
-                  ),
-                  RoundedTextField(
-                    controller: _passwordController,
-                    onFieldSubmitted: () => goNextField(context),
-                    obscure: true,
-                  ),
-                  SizedBox(height: 20),
-                  Text(
-                    'Confirm password',
-                    style: TextStyle(fontSize: 20),
-                  ),
-                  RoundedTextField(
-                    controller: _confirmController,
-                    focusNode: _confirmFocusNode,
-                    obscure: true,
-                  )
-                ],
+    return Material(
+      color: Colors.transparent,
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(15),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      'Password :',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                    RoundedTextField(
+                      controller: _passwordController,
+                      onFieldSubmitted: () => goNextField(context),
+                      obscure: true,
+                    ),
+                    SizedBox(height: 20),
+                    Text(
+                      'Confirm password :',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                    RoundedTextField(
+                      controller: _confirmController,
+                      focusNode: _confirmFocusNode,
+                      obscure: true,
+                    )
+                  ],
+                ),
               ),
             ),
-          ),
-          SavePasswordButton()
-        ],
+            SavePasswordButton()
+          ],
+        ),
       ),
     );
   }

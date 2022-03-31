@@ -59,10 +59,10 @@ class AlbumListViewModel extends ChangeNotifier {
   }
 
   // Creates a new album and adds it to the current album list
-  Future<void> createAlbum(String title, String? description) async {
+  Future<void> createAlbum(String title) async {
     _setResponse(ApiResponse.loadingPartial());
     await _albumListRepo
-        .postNewAlbum(_accessToken, title, description)
+        .postNewAlbum(_accessToken, title)
         .then((response) => _addToAlbumList(response))
         .catchError(
             // API call no mandatory for album list to be displayed here

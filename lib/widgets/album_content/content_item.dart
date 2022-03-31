@@ -23,7 +23,7 @@ class ContentItem extends StatefulWidget {
 class _ContentItemState extends State<ContentItem>
     with AutomaticKeepAliveClientMixin {
   bool _isSelected = false;
-  late CurrentAlbumContentViewModel viewModel;
+  late CurrentAlbumViewModel viewModel;
 
   @override
   bool get wantKeepAlive => false;

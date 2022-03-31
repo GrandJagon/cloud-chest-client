@@ -1,5 +1,6 @@
 import 'package:cloud_chest/data/api_response.dart';
 import 'package:cloud_chest/view_model/account/account_settings_view_model.dart';
+import 'package:cloud_chest/view_model/account/change_password_view_model.dart';
 import 'package:cloud_chest/widgets/account/password_dialog/password_dialog.dart';
 import 'package:cloud_chest/widgets/misc/loading_widget.dart';
 import 'package:cloud_chest/widgets/misc/network_error_widget.dart';
@@ -27,6 +28,9 @@ class _AccountSettingsFormState extends State<AccountSettingsForm> {
     showDialog(
       context: context,
       builder: (context) => PasswordDialog(),
+    ).then(
+      (value) =>
+          Provider.of<ChangePasswordViewModel>(context, listen: false).clear(),
     );
   }
 

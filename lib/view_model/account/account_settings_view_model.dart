@@ -6,7 +6,7 @@ import '../../repositories/user_repository.dart';
 
 class AccountSettingsViewModel extends ChangeNotifier {
   Map<String, String> _userDetails = {'id': '', 'email': '', 'username': ''};
-  String? _newPassword;
+  String? newPassword;
   UserRepository _userRepo = UserRepository();
   ApiResponse _response = ApiResponse.loadingFull();
   String _accessToken = '';
@@ -14,8 +14,6 @@ class AccountSettingsViewModel extends ChangeNotifier {
   Map<String, String> get userDetails => _userDetails;
 
   ApiResponse get response => _response;
-
-  String? get newPassord => _newPassword;
 
   bool hasDetails() => !(_userDetails['email'] == '');
 

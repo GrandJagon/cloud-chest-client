@@ -81,14 +81,14 @@ class _CloudChestState extends State<CloudChest> {
             return previous;
           },
         ),
-        ChangeNotifierProxyProvider<Auth, CurrentAlbumContentViewModel>(
-          create: (_) => CurrentAlbumContentViewModel(),
+        ChangeNotifierProxyProvider<Auth, CurrentAlbumViewModel>(
+          create: (_) => CurrentAlbumViewModel(),
           update: (_, auth, previous) {
             previous!.setToken(auth.accessToken!);
             return previous;
           },
         ),
-        ChangeNotifierProxyProvider<CurrentAlbumContentViewModel,
+        ChangeNotifierProxyProvider<CurrentAlbumViewModel,
             ContentViewerViewModel>(
           create: (_) => ContentViewerViewModel(),
           update: (_, currentAlbumViewModel, previous) {

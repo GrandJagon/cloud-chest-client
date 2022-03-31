@@ -41,7 +41,7 @@ class AlbumSettingsViewModel extends ChangeNotifier {
     _thumbnailTemp = null;
     _thumbnail = null;
     _id = null;
-    title = null;
+    title = '';
     _users = null;
   }
 
@@ -95,14 +95,20 @@ class AlbumSettingsViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  // Removes a user from the authorized user lists
+  void removeUser(int userIndex) {
+    final user = _users![userIndex];
+    if (!userExists(user)) return;
+    _users!.removeAt(userIndex);
+    notifyListeners();
+  }
+
   bool userExists(User user) {
     for (User u in _users!) {
       if (u.userId == user.userId) {
-        print('found');
         return true;
       }
     }
-    print('not found');
     return false;
   }
 

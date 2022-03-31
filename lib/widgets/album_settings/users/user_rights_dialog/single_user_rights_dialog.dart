@@ -20,23 +20,24 @@ class SingleUserRightsDialog extends StatelessWidget {
   void _fetchRights() {
     rights = user.getRightValues();
     _isInit = true;
-    print('fetching rights with => ' + rights.toString());
   }
 
   // Called from children each time the right selection button is ticked
   void toggleRight(String right) {
     if (rights.contains(right)) {
-      print('REMOVING ' + right);
       rights.remove(right);
     } else {
-      print('ADDING ' + right);
       rights.add(right);
     }
   }
 
   void _onValidate(BuildContext context) {
-    print('CALLING VALIDATION');
     vm.updateUserRights(userIndex, rights);
+    Navigator.of(context).pop();
+  }
+
+  void _removeUser(BuildContext context) {
+    vm.removeUser(userIndex);
     Navigator.of(context).pop();
   }
 
@@ -47,68 +48,106 @@ class SingleUserRightsDialog extends StatelessWidget {
     if (!_isInit) _fetchRights();
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
-      child: Dialog(
-        child: Container(
-          height: MediaQuery.of(context).size.height / 3,
-          padding: EdgeInsets.all(12),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                user.email,
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                overflow: TextOverflow.ellipsis,
+      child: Material(
+        color: Colors.transparent,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Align(
+              alignment: Alignment.centerLeft,
+              child: IconButton(
+                icon: Icon(Icons.arrow_back),
+                onPressed: () => Navigator.of(context).pop(),
               ),
-              SizedBox(
-                height: 20,
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height / 15,
+            ),
+            Expanded(
+              child: Container(
+                color: Colors.transparent,
+                padding: EdgeInsets.all(20),
+                margin: EdgeInsets.all(15),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      user.email,
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    ListView(
+                      shrinkWrap: true,
+                      children: user.hasRight(AdminRight)
+                          ? [
+                              RightSelectionRow('Admin', 'admin', toggleRight,
+                                  user.hasRight(AdminRight)),
+                              _validateButton(context, _onValidate)
+                            ]
+                          : [
+                              RightSelectionRow(
+                                'Can view content',
+                                'content:read',
+                                toggleRight,
+                                user.hasRight(ViewRight),
+                              ),
+                              RightSelectionRow(
+                                'Can post content',
+                                'content:add',
+                                toggleRight,
+                                user.hasRight(PostRight),
+                              ),
+                              RightSelectionRow(
+                                'Can delete content',
+                                'content:delete',
+                                toggleRight,
+                                user.hasRight(DeleteRight),
+                              ),
+                            ],
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    TextButton(
+                      child: Text(
+                        'Remove user',
+                        style: TextStyle(
+                            color: Colors.red,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      onPressed: () => _removeUser(context),
+                    )
+                  ],
+                ),
               ),
-              ListView(
-                shrinkWrap: true,
-                children: user.hasRight(AdminRight)
-                    ? [
-                        RightSelectionRow('Admin', 'admin', toggleRight,
-                            user.hasRight(AdminRight)),
-                        _validateButton(context, _onValidate)
-                      ]
-                    : [
-                        RightSelectionRow(
-                          'Can view content',
-                          'content:read',
-                          toggleRight,
-                          user.hasRight(ViewRight),
-                        ),
-                        RightSelectionRow(
-                          'Can post content',
-                          'content:add',
-                          toggleRight,
-                          user.hasRight(PostRight),
-                        ),
-                        RightSelectionRow(
-                          'Can delete content',
-                          'content:delete',
-                          toggleRight,
-                          user.hasRight(DeleteRight),
-                        ),
-                        _validateButton(context, _onValidate)
-                      ],
-              )
-            ],
-          ),
+            ),
+            _validateButton(context, _onValidate)
+          ],
         ),
       ),
     );
   }
-}
 
-Widget _validateButton(BuildContext context, Function onPress) {
-  return Align(
-    alignment: Alignment.bottomCenter,
-    child: TextButton(
-      onPressed: () => onPress(context),
-      child: Text(
-        'Validate',
-        textAlign: TextAlign.center,
+  Widget _validateButton(BuildContext context, Function onPress) {
+    return Container(
+      width: double.infinity,
+      height: 50,
+      color: Colors.green,
+      child: TextButton(
+        child: Center(
+          child: Text(
+            'Validate',
+            style: TextStyle(
+                fontWeight: FontWeight.bold, fontSize: 25, color: Colors.white),
+          ),
+        ),
+        onPressed: () => onPress(context),
       ),
-    ),
-  );
+    );
+  }
 }

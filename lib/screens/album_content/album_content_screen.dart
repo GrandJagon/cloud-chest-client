@@ -17,11 +17,11 @@ class AlbumContentScreen extends StatefulWidget {
 
 class _AlbumContentScreenState extends State<AlbumContentScreen> {
   late final Album album;
-  late CurrentAlbumContentViewModel vm;
+  late CurrentAlbumViewModel vm;
 
   @override
   Widget build(BuildContext context) {
-    vm = context.watch<CurrentAlbumContentViewModel>();
+    vm = context.watch<CurrentAlbumViewModel>();
 
     if (vm.response.status == ResponseStatus.LOADING_FULL)
       return SplashScreen();

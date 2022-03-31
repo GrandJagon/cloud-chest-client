@@ -58,7 +58,7 @@ class _ContentSelectionButtonState extends State<ContentSelectionButton> {
 
   Future<void> _deleteSelection(BuildContext context) async {
     // Requesting the view model to delete the user selection
-    await Provider.of<CurrentAlbumContentViewModel>(context, listen: false)
+    await Provider.of<CurrentAlbumViewModel>(context, listen: false)
         .deleteFromAlbum(userSelection.userSelection)
         .then(
       (value) {
@@ -79,7 +79,7 @@ class _ContentSelectionButtonState extends State<ContentSelectionButton> {
 
   Future<void> _downloadSelection(BuildContext context) async {
     // Requesting the view model to delete it
-    await Provider.of<CurrentAlbumContentViewModel>(context, listen: false)
+    await Provider.of<CurrentAlbumViewModel>(context, listen: false)
         .downloadFromAlbum(userSelection.userSelection)
         .then(
       (value) {

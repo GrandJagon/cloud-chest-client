@@ -31,14 +31,14 @@ class AlbumItem extends StatelessWidget {
       child: Text(
         title,
         textAlign: TextAlign.center,
-        style: Theme.of(context).textTheme.headline1,
+        style: Theme.of(context).textTheme.headline2,
       ),
     );
   }
 
   // Initiates the view model with the chosen album and pushes the route
   Future<void> _openAlbumContent(BuildContext context) async {
-    Provider.of<CurrentAlbumContentViewModel>(context, listen: false)
+    Provider.of<CurrentAlbumViewModel>(context, listen: false)
         .fetchSingleAlbum(album.albumId);
 
     Navigator.of(context)

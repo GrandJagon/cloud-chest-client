@@ -1,6 +1,6 @@
 import 'package:cloud_chest/screens/account/account_screen.dart';
+import 'package:cloud_chest/widgets/album_list/new_album_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_chest/widgets/album_list/create_album_dialog.dart';
 
 class HomeBar extends StatelessWidget with PreferredSizeWidget {
   @override
@@ -21,7 +21,7 @@ class HomeBar extends StatelessWidget with PreferredSizeWidget {
         IconButton(
           icon: Icon(Icons.add),
           onPressed: () => showDialog(
-              context: context, builder: (context) => CreateAlbumDialog()),
+              context: context, builder: (context) => NewAlbumDialog()),
         )
       ],
     );

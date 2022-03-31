@@ -17,7 +17,8 @@ class RightIcon extends StatelessWidget {
       child: Center(
         child: Text(
           this.text,
-          style: TextStyle(color: Colors.white, fontSize: 15),
+          style: TextStyle(
+              color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
         ),
       ),
     );

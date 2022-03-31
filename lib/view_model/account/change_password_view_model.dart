@@ -6,12 +6,12 @@ class ChangePasswordViewModel extends ChangeNotifier {
 
   bool get isButtonVBisible => _isButtonVisible;
 
+  // Setting value at each key stroke
+  // Notifying only when it is first stroke and stroke to remove
   void setValue(String key, String value) {
     if (!isData()) _toggleButton();
 
     data[key] = value;
-
-    print(key + ' set to ' + value);
 
     if (!isData()) _toggleButton();
   }
@@ -32,5 +32,6 @@ class ChangePasswordViewModel extends ChangeNotifier {
   void clear() {
     data['password'] = '';
     data['confirm'] = '';
+    _isButtonVisible = false;
   }
 }

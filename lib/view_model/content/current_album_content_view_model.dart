@@ -2,18 +2,20 @@ import 'package:cloud_chest/data/api_response.dart';
 import 'package:cloud_chest/helpers/content/content_path_helper.dart';
 import 'package:cloud_chest/models/album_settings.dart';
 import 'package:cloud_chest/models/content/content.dart';
+import 'package:cloud_chest/models/right.dart';
 import 'package:cloud_chest/repositories/single_album_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_chest/helpers/persistance/download_helper.dart';
 
 // Holds the state for the current album, the one actually on display
-class CurrentAlbumContentViewModel extends ChangeNotifier {
+class CurrentAlbumViewModel extends ChangeNotifier {
   SingleAlbumRepository _singleAlbumRepo = SingleAlbumRepository();
   String _accessToken = '';
   String _currentAlbumId = '';
   AlbumSettings? _currentAlbumSettings;
   ApiResponse _response = ApiResponse.loadingFull();
   List<dynamic> _contentList = [];
+  List<Right> _userRights = [];
 
   ApiResponse get response => _response;
 
@@ -51,21 +53,23 @@ class CurrentAlbumContentViewModel extends ChangeNotifier {
       _setResponse(ApiResponse.loadingFull());
     }
 
+    print(newSettings.users.toString());
+
     await _singleAlbumRepo
         .updateAlbumDetails(_accessToken, _currentAlbumId, newSettings)
         .then(
       (data) {
         _currentAlbumSettings = newSettings;
-
-        _setResponse(
-          ApiResponse.done(),
-        );
       },
     ).catchError(
       (error, stackTrace) {
         print(stackTrace);
         print(error);
       },
+    ).whenComplete(
+      () => _setResponse(
+        ApiResponse.done(),
+      ),
     );
   }
 
@@ -74,6 +78,14 @@ class CurrentAlbumContentViewModel extends ChangeNotifier {
     // Resets selection when fetching as it is likely different album or page reloading
     _contentList.clear();
     _currentAlbumId = albumId;
+
+    //
+    //
+    //
+    // NEEDS TO FETCH USER RIGHTS HERE IN ORDER TO DISPLAY OR NOT AUTHORIZED ACTIONS
+    //
+    //
+    //
 
     if (_response.status != ResponseStatus.LOADING_FULL)
       _setResponse(ApiResponse.loadingFull());
@@ -113,7 +125,6 @@ class CurrentAlbumContentViewModel extends ChangeNotifier {
   // Upload new content to the album given an ID
   Future<void> uploadToAlbum(List<String> newContent) async {
     _setResponse(ApiResponse.loadingPartial());
-    print('ADDING LIST ' + newContent.toString());
     await _singleAlbumRepo
         .postNewContent(newContent, _currentAlbumId, _accessToken)
         .then(

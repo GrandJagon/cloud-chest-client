@@ -18,7 +18,7 @@ class ThumbnailSelectionDialog extends StatefulWidget {
 }
 
 class _ThumbnailSelectionDialogState extends State<ThumbnailSelectionDialog> {
-  late CurrentAlbumContentViewModel viewModel;
+  late CurrentAlbumViewModel viewModel;
 
   // Function to be called whenver a selection is confirmed to be sent to parent
   // Pops the dialog once done
@@ -29,45 +29,52 @@ class _ThumbnailSelectionDialogState extends State<ThumbnailSelectionDialog> {
 
   @override
   Widget build(BuildContext context) {
-    viewModel = context.read<CurrentAlbumContentViewModel>();
+    viewModel = context.read<CurrentAlbumViewModel>();
 
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-      child: Dialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(10),
-          ),
-        ),
-        backgroundColor: Colors.transparent,
-        child: Container(
-          height: MediaQuery.of(context).size.height / 1.5,
-          child: viewModel.contentList.length < 1
-              ? Center(
-                  child: Text(
-                    'You have no content yet....',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                )
-              : Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    Expanded(
-                      child: GridView.builder(
-                        physics: ScrollPhysics(),
-                        shrinkWrap: true,
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3,
-                            crossAxisSpacing: 2,
-                            mainAxisSpacing: 2),
-                        itemCount: viewModel.contentList.length,
-                        itemBuilder: (ctx, i) =>
-                            ThumbnailSelectionItem(viewModel.contentList[i]),
+      child: Material(
+        color: Colors.transparent,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            Container(
+              height: MediaQuery.of(context).size.height / 1.5,
+              child: viewModel.contentList.length < 1
+                  ? Center(
+                      child: Text(
+                        'You have no content yet....',
+                        style: TextStyle(fontSize: 18),
                       ),
+                    )
+                  : Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        Expanded(
+                          child: GridView.builder(
+                            physics: ScrollPhysics(),
+                            shrinkWrap: true,
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 3,
+                                    crossAxisSpacing: 2,
+                                    mainAxisSpacing: 2),
+                            itemCount: viewModel.contentList.length,
+                            itemBuilder: (ctx, i) => ThumbnailSelectionItem(
+                                viewModel.contentList[i]),
+                          ),
+                        ),
+                      ],
                     ),
-                    ConfirmThumbnailButton(_confirmSelection)
-                  ],
-                ),
+            ),
+            Spacer(),
+            ConfirmThumbnailButton(_confirmSelection)
+          ],
         ),
       ),
     );

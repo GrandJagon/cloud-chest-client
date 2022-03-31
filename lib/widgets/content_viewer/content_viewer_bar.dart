@@ -20,7 +20,7 @@ class ContentViewerBar extends StatelessWidget {
         'Are you sure you want to delete this content ?',
         'Delete',
         'Go back',
-        () => Provider.of<CurrentAlbumContentViewModel>(context, listen: false)
+        () => Provider.of<CurrentAlbumViewModel>(context, listen: false)
             .deleteFromAlbum(
           [_currentContent],
         ).then(

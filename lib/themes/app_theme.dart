@@ -18,9 +18,13 @@ ThemeData DarkTheme() {
     textTheme: TextTheme(
       headline1: TextStyle(
           color: Color.fromARGB(206, 255, 255, 255),
-          fontSize: 22,
+          fontSize: 30,
           fontWeight: FontWeight.bold),
       headline2: TextStyle(
+          color: Color.fromARGB(206, 255, 255, 255),
+          fontSize: 22,
+          fontWeight: FontWeight.bold),
+      headline3: TextStyle(
           color: Color.fromARGB(206, 255, 255, 255),
           fontSize: 18,
           fontWeight: FontWeight.bold),

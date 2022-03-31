@@ -14,7 +14,7 @@ class EditSettingsForm extends StatefulWidget {
 }
 
 class _EditSettingsFormState extends State<EditSettingsForm> {
-  late CurrentAlbumContentViewModel albumViewModel;
+  late CurrentAlbumViewModel albumViewModel;
   late AlbumSettingsViewModel settingsViewModel;
   TextEditingController _titleController = TextEditingController();
   FocusNode _focusNode = FocusNode();
@@ -23,8 +23,7 @@ class _EditSettingsFormState extends State<EditSettingsForm> {
   void initState() {
     super.initState();
 
-    albumViewModel =
-        Provider.of<CurrentAlbumContentViewModel>(context, listen: false);
+    albumViewModel = Provider.of<CurrentAlbumViewModel>(context, listen: false);
     settingsViewModel =
         Provider.of<AlbumSettingsViewModel>(context, listen: false);
 
@@ -53,11 +52,13 @@ class _EditSettingsFormState extends State<EditSettingsForm> {
       context: context,
       builder: (c) =>
           ThumbnailSelectionDialog(settingsViewModel.id!, _setThumbnail),
-    ).then((value) {
-      // Clears the temp selection on exit
-      Provider.of<AlbumSettingsViewModel>(context, listen: false)
-          .clearThumbnailTemp();
-    });
+    ).then(
+      (value) {
+        // Clears the temp selection on exit
+        Provider.of<AlbumSettingsViewModel>(context, listen: false)
+            .clearThumbnailTemp();
+      },
+    );
   }
 
   // Called from thumbnail dialog selection to pass the chosen thumbnail up
@@ -75,10 +76,12 @@ class _EditSettingsFormState extends State<EditSettingsForm> {
 
   // Removes the current thumbnail selection
   void _removeThumbnail() {
-    setState(() {
-      Provider.of<AlbumSettingsViewModel>(context, listen: false)
-          .clearThumbnail();
-    });
+    setState(
+      () {
+        Provider.of<AlbumSettingsViewModel>(context, listen: false)
+            .clearThumbnail();
+      },
+    );
   }
 
   @override

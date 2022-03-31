@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 
 class AlbumContentBar extends StatelessWidget with PreferredSizeWidget {
   final ImagePicker _picker = ImagePicker();
-  late final CurrentAlbumContentViewModel vm;
+  late final CurrentAlbumViewModel vm;
 
   AlbumContentBar();
 
@@ -40,13 +40,13 @@ class AlbumContentBar extends StatelessWidget with PreferredSizeWidget {
 
   // Sends the files to the provider which makes an API call
   Future<void> _uploadFiles(List<String> files, BuildContext context) async {
-    await Provider.of<CurrentAlbumContentViewModel>(context, listen: false)
+    await Provider.of<CurrentAlbumViewModel>(context, listen: false)
         .uploadToAlbum(files);
   }
 
   @override
   Widget build(BuildContext context) {
-    vm = context.watch<CurrentAlbumContentViewModel>();
+    vm = context.watch<CurrentAlbumViewModel>();
     return AppBar(
       title: Text(vm.currentAlbumSettings.title),
       leading: IconButton(

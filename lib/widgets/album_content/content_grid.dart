@@ -14,7 +14,7 @@ class ContentGrid extends StatefulWidget {
 }
 
 class _ContentGridState extends State<ContentGrid> {
-  late CurrentAlbumContentViewModel vm;
+  late CurrentAlbumViewModel vm;
 
   // Clears previous user selection
   @override
@@ -26,7 +26,7 @@ class _ContentGridState extends State<ContentGrid> {
 
   @override
   Widget build(BuildContext context) {
-    vm = context.watch<CurrentAlbumContentViewModel>();
+    vm = context.watch<CurrentAlbumViewModel>();
     print('rebuilding grid');
 
     if (vm.response.status == ResponseStatus.LOADING_PARTIAL ||
@@ -41,7 +41,7 @@ class _ContentGridState extends State<ContentGrid> {
   }
 
   // Returns the grid if album is not empty
-  Widget _buildGrid(CurrentAlbumContentViewModel viewModel) {
+  Widget _buildGrid(CurrentAlbumViewModel viewModel) {
     return Container(
       child: viewModel.contentList.length <= 0
           ? Center(

@@ -1,3 +1,4 @@
+import 'package:cloud_chest/data/api_response.dart';
 import 'package:cloud_chest/models/album_settings.dart';
 import 'package:cloud_chest/view_model/album_list/album_list_view_model.dart';
 import 'package:cloud_chest/view_model/album_settings/album_settings_view_model.dart';
@@ -5,11 +6,19 @@ import 'package:cloud_chest/view_model/content/current_album_content_view_model.
 import 'package:cloud_chest/widgets/album_settings/confirm_delete_dialog.dart';
 import 'package:cloud_chest/widgets/album_settings/users/users_card.dart';
 import 'package:cloud_chest/widgets/album_settings/edit_settings_form.dart';
+import 'package:cloud_chest/widgets/misc/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class AlbumSettingScreen extends StatelessWidget {
+class AlbumSettingScreen extends StatefulWidget {
   static final String routeName = '/albumSettings';
+
+  @override
+  State<AlbumSettingScreen> createState() => _AlbumSettingScreenState();
+}
+
+class _AlbumSettingScreenState extends State<AlbumSettingScreen> {
+  late CurrentAlbumViewModel vm;
 
   // Saving user changes to album settings and making api call
   void _saveChanges(BuildContext context) async {
@@ -20,7 +29,7 @@ class AlbumSettingScreen extends StatelessWidget {
               .generateSetting();
 
       // Sends them to the new model
-      await Provider.of<CurrentAlbumContentViewModel>(context, listen: false)
+      await Provider.of<CurrentAlbumViewModel>(context, listen: false)
           .validateSettings(newSettings);
 
       // Propagates the new settings to the album list in order to update item in list
@@ -43,12 +52,11 @@ class AlbumSettingScreen extends StatelessWidget {
 
   void _deleteAlbum(BuildContext context) {
     final String title =
-        Provider.of<CurrentAlbumContentViewModel>(context, listen: false)
+        Provider.of<CurrentAlbumViewModel>(context, listen: false)
             .currentAlbumSettings
             .title;
-    final String id =
-        Provider.of<CurrentAlbumContentViewModel>(context, listen: false)
-            .currentAlbumId;
+    final String id = Provider.of<CurrentAlbumViewModel>(context, listen: false)
+        .currentAlbumId;
     showDialog(
       context: context,
       builder: (c) => ConfirmDeleteDialog(title, id),
@@ -63,6 +71,7 @@ class AlbumSettingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    vm = context.watch<CurrentAlbumViewModel>();
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -78,23 +87,25 @@ class AlbumSettingScreen extends StatelessWidget {
           )
         ],
       ),
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            child: Column(
+      body: vm.response.status == ResponseStatus.LOADING_FULL
+          ? LoadingWidget()
+          : Column(
               children: <Widget>[
-                EditSettingsForm(),
                 Expanded(
-                  child: UsersCard(),
+                  child: Column(
+                    children: <Widget>[
+                      EditSettingsForm(),
+                      Expanded(
+                        child: UsersCard(),
+                      ),
+                    ],
+                  ),
                 ),
+                _buildValidateButton(
+                  () => _saveChanges(context),
+                )
               ],
             ),
-          ),
-          _buildValidateButton(
-            () => _saveChanges(context),
-          )
-        ],
-      ),
     );
   }
 }

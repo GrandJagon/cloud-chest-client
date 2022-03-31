@@ -22,7 +22,7 @@ class _ContentViewerScreenState extends State<ContentViewerScreen> {
         context.read<ContentViewerViewModel>();
 
     final ApiResponse deleteResponse =
-        context.watch<CurrentAlbumContentViewModel>().response;
+        context.watch<CurrentAlbumViewModel>().response;
 
     return AnnotatedRegion(
       value: SystemUiOverlayStyle.light,

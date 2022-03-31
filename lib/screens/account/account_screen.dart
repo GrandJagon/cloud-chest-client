@@ -50,7 +50,7 @@ class _AccountScreenState extends State<AccountScreen> {
       'username': usernameController.text
     };
 
-    if (vm.newPassord != null) newDetails['password'] = vm.newPassord!;
+    if (vm.newPassword != null) newDetails['password'] = vm.newPassword!;
 
     await Provider.of<AccountSettingsViewModel>(context, listen: false)
         .updateUserDetails(newDetails)
@@ -78,6 +78,7 @@ class _AccountScreenState extends State<AccountScreen> {
   Widget build(BuildContext context) {
     vm = context.watch<AccountSettingsViewModel>();
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text('Account settings'),
       ),

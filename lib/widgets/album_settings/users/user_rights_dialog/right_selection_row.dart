@@ -13,7 +13,6 @@ class RightSelectionRow extends StatelessWidget {
 
   // Called by kids whenever the box is ticked
   void _toggleRight() {
-    print(rightValue + ' TOGGLED');
     passRightToParent(rightValue);
   }
 
@@ -31,7 +30,7 @@ class RightSelectionRow extends StatelessWidget {
               SizedBox(width: 10),
               Text(
                 text,
-                style: TextStyle(fontSize: 17),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ],
           ),
