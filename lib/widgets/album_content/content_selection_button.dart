@@ -1,3 +1,4 @@
+import 'package:cloud_chest/models/right.dart';
 import 'package:cloud_chest/view_model/content/content_selection_view_model.dart';
 import 'package:cloud_chest/view_model/content/current_album_content_view_model.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ class ContentSelectionButton extends StatefulWidget {
 
 class _ContentSelectionButtonState extends State<ContentSelectionButton> {
   late ContentSelectionViewModel userSelection;
+  late CurrentAlbumViewModel currentAlbum;
   bool _hidden = false;
 
   // Main function that will be called when any of the two buttons are pressed
@@ -98,26 +100,37 @@ class _ContentSelectionButtonState extends State<ContentSelectionButton> {
     );
   }
 
+  // Chek if user has deleting right in order to display the proper buttons
+  bool _canDelete() {
+    return (currentAlbum.hasRight(AdminRight) ||
+        currentAlbum.hasRight(DeleteRight));
+  }
+
   @override
   Widget build(BuildContext context) {
     // Fetching user current selection
     userSelection = context.watch<ContentSelectionViewModel>();
+    currentAlbum = context.read<CurrentAlbumViewModel>();
 
     return Container(
       height: userSelection.length > 0 && !_hidden ? 50 : 0,
       width: double.infinity,
       color: Colors.black38,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: _canDelete()
+            ? MainAxisAlignment.spaceBetween
+            : MainAxisAlignment.center,
         children: <Widget>[
           IconButton(
             icon: Icon(Icons.download),
             onPressed: () => _onPress(context, ACTION_TYPE.DOWNLOAD),
           ),
-          IconButton(
-            icon: Icon(Icons.delete_forever),
-            onPressed: () => _onPress(context, ACTION_TYPE.DELETE),
-          ),
+          _canDelete()
+              ? IconButton(
+                  icon: Icon(Icons.delete_forever),
+                  onPressed: () => _onPress(context, ACTION_TYPE.DELETE),
+                )
+              : Container()
         ],
       ),
     );

@@ -39,6 +39,9 @@ class AlbumItem extends StatelessWidget {
   // Initiates the view model with the chosen album and pushes the route
   Future<void> _openAlbumContent(BuildContext context) async {
     Provider.of<CurrentAlbumViewModel>(context, listen: false)
+        .setCurrentAlbumRights(album.rights);
+
+    Provider.of<CurrentAlbumViewModel>(context, listen: false)
         .fetchSingleAlbum(album.albumId);
 
     Navigator.of(context)

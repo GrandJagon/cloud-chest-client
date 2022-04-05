@@ -1,6 +1,7 @@
 import 'package:cloud_chest/data/api_response.dart';
 import 'package:cloud_chest/view_model/account/account_settings_view_model.dart';
 import 'package:cloud_chest/view_model/account/change_password_view_model.dart';
+import 'package:cloud_chest/widgets/account/new_password_field.dart';
 import 'package:cloud_chest/widgets/account/password_dialog/password_dialog.dart';
 import 'package:cloud_chest/widgets/misc/loading_widget.dart';
 import 'package:cloud_chest/widgets/misc/network_error_widget.dart';
@@ -33,6 +34,8 @@ class _AccountSettingsFormState extends State<AccountSettingsForm> {
           Provider.of<ChangePasswordViewModel>(context, listen: false).clear(),
     );
   }
+
+  void _showNewPassword() {}
 
   @override
   Widget build(BuildContext context) {
@@ -70,6 +73,9 @@ class _AccountSettingsFormState extends State<AccountSettingsForm> {
                       height: 10,
                     ),
                     _buildTextField(widget.usernameController),
+                    vm.newPassword != null
+                        ? NewPasswordField(vm.newPassword!)
+                        : Container(),
                     SizedBox(
                       height: 50,
                     ),

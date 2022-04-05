@@ -12,6 +12,7 @@ class PasswordDialog extends StatefulWidget {
 }
 
 class _PasswordDialogState extends State<PasswordDialog> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmController = TextEditingController();
   final FocusNode _confirmFocusNode = FocusNode();
@@ -25,7 +26,7 @@ class _PasswordDialogState extends State<PasswordDialog> {
       () => _textFieldListener(context, 'password', _passwordController),
     );
     _confirmController.addListener(
-      () => _textFieldListener(context, 'confirlm', _confirmController),
+      () => _textFieldListener(context, 'confirm', _confirmController),
     );
   }
 
@@ -38,6 +39,12 @@ class _PasswordDialogState extends State<PasswordDialog> {
   // Function to be called when first text field loses focus
   void goNextField(BuildContext context) {
     FocusScope.of(context).requestFocus(_confirmFocusNode);
+  }
+
+  String? _validate() {
+    if (!vm.isData()) return 'Password cannot be null';
+    if (!vm.areSame()) return 'Passwords must be the same';
+    return null;
   }
 
   @override
@@ -57,34 +64,39 @@ class _PasswordDialogState extends State<PasswordDialog> {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(15),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      'Password :',
-                      style: TextStyle(fontSize: 20),
-                    ),
-                    RoundedTextField(
-                      controller: _passwordController,
-                      onFieldSubmitted: () => goNextField(context),
-                      obscure: true,
-                    ),
-                    SizedBox(height: 20),
-                    Text(
-                      'Confirm password :',
-                      style: TextStyle(fontSize: 20),
-                    ),
-                    RoundedTextField(
-                      controller: _confirmController,
-                      focusNode: _confirmFocusNode,
-                      obscure: true,
-                    )
-                  ],
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        'Password :',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      RoundedTextField(
+                        controller: _passwordController,
+                        onValidation: () => _validate(),
+                        onFieldSubmitted: () => goNextField(context),
+                        obscure: true,
+                      ),
+                      SizedBox(height: 20),
+                      Text(
+                        'Confirm password :',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      RoundedTextField(
+                        controller: _confirmController,
+                        onValidation: () => _validate(),
+                        focusNode: _confirmFocusNode,
+                        obscure: true,
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
-            SavePasswordButton()
+            SavePasswordButton(_formKey)
           ],
         ),
       ),

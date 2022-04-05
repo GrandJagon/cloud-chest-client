@@ -1,12 +1,11 @@
 import 'package:cloud_chest/data/api_response.dart';
-import 'package:cloud_chest/models/user.dart';
 import 'package:flutter/material.dart';
-
 import '../../repositories/user_repository.dart';
 
 class AccountSettingsViewModel extends ChangeNotifier {
   Map<String, String> _userDetails = {'id': '', 'email': '', 'username': ''};
   String? newPassword;
+  bool isNewPassword = false;
   UserRepository _userRepo = UserRepository();
   ApiResponse _response = ApiResponse.loadingFull();
   String _accessToken = '';
@@ -30,7 +29,14 @@ class AccountSettingsViewModel extends ChangeNotifier {
     _userDetails[key] = value;
   }
 
+  void setNewPassword(String newValue) {
+    newPassword = newValue;
+    isNewPassword = true;
+    notifyListeners();
+  }
+
   Future<void> fetchUserDetails() async {
+    clear();
     _setResponse(ApiResponse.loadingFull());
 
     await _userRepo.findUserById(_accessToken, _userDetails['id']!).then(
@@ -56,11 +62,18 @@ class AccountSettingsViewModel extends ChangeNotifier {
       (value) {
         _userDetails['email'] = newDetails['email']!;
         _userDetails['username'] = newDetails['username']!;
+        clear();
       },
     ).whenComplete(
       () => _setResponse(
         ApiResponse.done(),
       ),
     );
+  }
+
+  // Clear temp data when leaving screen
+  void clear() {
+    newPassword = null;
+    isNewPassword = false;
   }
 }

@@ -34,6 +34,8 @@ class NetworkService {
       throw FetchException('Server not responding');
     } on TimeoutException {
       throw FetchException('Server not responding');
+    } on HttpException {
+      throw FetchException('Server not responding');
     }
   }
 
@@ -59,6 +61,8 @@ class NetworkService {
     } on SocketException {
       throw FetchException('Server not responding');
     } on TimeoutException {
+      throw FetchException('Server not responding');
+    } on HttpException {
       throw FetchException('Server not responding');
     }
   }
@@ -99,6 +103,8 @@ class NetworkService {
       throw FetchException('Server not responding');
     } on TimeoutException {
       throw FetchException('Server not responding');
+    } on HttpException {
+      throw FetchException('Server not responding');
     }
   }
 
@@ -124,6 +130,8 @@ class NetworkService {
       throw FetchException('Server not responding');
     } on TimeoutException {
       throw FetchException('Server not responding');
+    } on HttpException {
+      throw FetchException('Server not responding');
     }
   }
 
@@ -148,6 +156,8 @@ class NetworkService {
     } on SocketException {
       throw FetchException('Server not responding');
     } on TimeoutException {
+      throw FetchException('Server not responding');
+    } on HttpException {
       throw FetchException('Server not responding');
     }
   }

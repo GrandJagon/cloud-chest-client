@@ -1,40 +1,28 @@
 import 'package:cloud_chest/models/content/content.dart';
+import 'package:cloud_chest/models/right.dart';
 import 'package:cloud_chest/view_model/content/content_viewer_view_model.dart';
-import 'package:cloud_chest/screens/album_content/album_content_screen.dart';
-import 'package:cloud_chest/utils/alert_dialog_factory.dart';
 import 'package:cloud_chest/view_model/content/current_album_content_view_model.dart';
+import 'package:cloud_chest/widgets/content_viewer/confirm_delete_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ContentViewerBar extends StatelessWidget {
-  void _deleteButton(BuildContext context) {
+  late CurrentAlbumViewModel vm;
+
+  void _deleteContent(BuildContext context) {
     // Fecthes currently displayed content
     final Content _currentContent =
         Provider.of<ContentViewerViewModel>(context, listen: false).currentItem;
 
     showDialog(
       context: context,
-      builder: (ctx) => AlertDialogFactory.twoButtonsDialog(
-        ctx,
-        'Delete content',
-        'Are you sure you want to delete this content ?',
-        'Delete',
-        'Go back',
-        () => Provider.of<CurrentAlbumViewModel>(context, listen: false)
-            .deleteFromAlbum(
-          [_currentContent],
-        ).then(
-          (value) => Navigator.popUntil(
-            context,
-            ModalRoute.withName(AlbumContentScreen.routeName),
-          ),
-        ),
-      ),
+      builder: (ctx) => ConfirmDeleteDialog(_currentContent),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    vm = context.read<CurrentAlbumViewModel>();
     return Container(
       width: double.infinity,
       height: 50,
@@ -51,16 +39,22 @@ class ContentViewerBar extends StatelessWidget {
               Navigator.of(context).pop();
             },
           ),
-          IconButton(
+          _deleteButton(context)
+        ],
+      ),
+    );
+  }
+
+  Widget _deleteButton(BuildContext context) {
+    return (vm.hasRight(AdminRight) || vm.hasRight(DeleteRight))
+        ? IconButton(
             alignment: Alignment.bottomRight,
             icon: Icon(
               Icons.delete_rounded,
               color: Colors.white,
             ),
-            onPressed: () => _deleteButton(context),
-          ),
-        ],
-      ),
-    );
+            onPressed: () => _deleteContent(context),
+          )
+        : Container();
   }
 }

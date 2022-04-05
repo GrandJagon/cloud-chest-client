@@ -4,6 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class SavePasswordButton extends StatefulWidget {
+  final GlobalKey<FormState> formKey;
+
+  SavePasswordButton(this.formKey);
+
   @override
   State createState() => _SavePasswordButtonState();
 }
@@ -15,41 +19,12 @@ class _SavePasswordButtonState extends State<SavePasswordButton> {
   void _savePasswords() {
     FocusScope.of(context).unfocus();
 
-    if (!vm.isData()) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          behavior: SnackBarBehavior.floating,
-          margin: EdgeInsets.only(
-            bottom: MediaQuery.of(context).size.height - 100,
-          ),
-          content: Text(
-            'A value must be provider',
-          ),
-          backgroundColor: Colors.red,
-        ),
-      );
-      return;
-    }
+    final FormState form = widget.formKey.currentState!;
 
-    if (!vm.areSame()) {
-      print('snackba');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          behavior: SnackBarBehavior.floating,
-          margin: EdgeInsets.only(
-            bottom: MediaQuery.of(context).size.height - 100,
-          ),
-          content: Text(
-            'Passwords are not the same',
-          ),
-          backgroundColor: Colors.red,
-        ),
-      );
-      return;
-    }
+    if (!form.validate()) return;
 
-    Provider.of<AccountSettingsViewModel>(context, listen: false).newPassword =
-        vm.data['password'];
+    Provider.of<AccountSettingsViewModel>(context, listen: false)
+        .setNewPassword(vm.data['password']!);
 
     Navigator.of(context).pop();
   }

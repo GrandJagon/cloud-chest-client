@@ -2,6 +2,7 @@ import 'package:cloud_chest/data/api_response.dart';
 import 'package:cloud_chest/helpers/content/content_path_helper.dart';
 import 'package:cloud_chest/models/album_settings.dart';
 import 'package:cloud_chest/models/content/content.dart';
+import 'package:cloud_chest/models/factories/right_factory.dart';
 import 'package:cloud_chest/models/right.dart';
 import 'package:cloud_chest/repositories/single_album_repository.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,8 @@ class CurrentAlbumViewModel extends ChangeNotifier {
   ApiResponse get response => _response;
 
   List<Content> get contentList => [..._contentList];
+
+  List<Right> get userRights => [..._userRights];
 
   AlbumSettings get currentAlbumSettings => _currentAlbumSettings!;
 
@@ -73,19 +76,25 @@ class CurrentAlbumViewModel extends ChangeNotifier {
     );
   }
 
+  // Creating list of rights from server response
+  // Some buttons will be displayed according to the user rights
+  void setCurrentAlbumRights(List<dynamic> rights) {
+    _userRights = RightFactory.fromArray(rights);
+  }
+
+  // Cheks if user has a specific right
+  bool hasRight(Type right) {
+    for (Right r in _userRights) {
+      if (r.runtimeType == right) return true;
+    }
+    return false;
+  }
+
   // Fetches a single album content and detail and sets it as current album
   Future<void> fetchSingleAlbum(String albumId) async {
     // Resets selection when fetching as it is likely different album or page reloading
     _contentList.clear();
     _currentAlbumId = albumId;
-
-    //
-    //
-    //
-    // NEEDS TO FETCH USER RIGHTS HERE IN ORDER TO DISPLAY OR NOT AUTHORIZED ACTIONS
-    //
-    //
-    //
 
     if (_response.status != ResponseStatus.LOADING_FULL)
       _setResponse(ApiResponse.loadingFull());

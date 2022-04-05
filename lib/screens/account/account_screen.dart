@@ -1,8 +1,6 @@
 import 'package:cloud_chest/data/api_response.dart';
 import 'package:cloud_chest/view_model/account/account_settings_view_model.dart';
 import 'package:cloud_chest/widgets/account/account_settings_form.dart';
-import 'package:cloud_chest/widgets/misc/loading_widget.dart';
-import 'package:cloud_chest/widgets/misc/network_error_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -54,14 +52,7 @@ class _AccountScreenState extends State<AccountScreen> {
 
     await Provider.of<AccountSettingsViewModel>(context, listen: false)
         .updateUserDetails(newDetails)
-        .then(
-          (value) => ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Update successfull'),
-              backgroundColor: Colors.green,
-            ),
-          ),
-        )
+        .then((value) => Navigator.of(context).pop())
         .catchError(
           (err) => ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(

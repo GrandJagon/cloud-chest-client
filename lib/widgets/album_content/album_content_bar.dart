@@ -1,3 +1,4 @@
+import 'package:cloud_chest/models/right.dart';
 import 'package:cloud_chest/screens/album_settings/album_settings_screen.dart';
 import 'package:cloud_chest/view_model/content/current_album_content_view_model.dart';
 import 'package:image_picker/image_picker.dart';
@@ -53,18 +54,27 @@ class AlbumContentBar extends StatelessWidget with PreferredSizeWidget {
         icon: Icon(Icons.arrow_back_rounded),
         onPressed: () => Navigator.of(context).pop(),
       ),
-      actions: <Widget>[
-        IconButton(
-          icon: Icon(Icons.settings),
-          onPressed: () => Navigator.of(context).pushNamed(
-              AlbumSettingScreen.routeName,
-              arguments: vm.currentAlbumSettings.albumId),
-        ),
-        IconButton(
-          icon: Icon(Icons.add),
-          onPressed: () => _uploadFromGallery(context),
-        )
-      ],
+      actions: <Widget>[_settingsButton(context), _addButton(context)],
     );
+  }
+
+  Widget _settingsButton(BuildContext context) {
+    return vm.hasRight(AdminRight)
+        ? IconButton(
+            icon: Icon(Icons.settings),
+            onPressed: () => Navigator.of(context).pushNamed(
+                AlbumSettingScreen.routeName,
+                arguments: vm.currentAlbumSettings.albumId),
+          )
+        : Container();
+  }
+
+  Widget _addButton(BuildContext context) {
+    return (vm.hasRight(AdminRight) || vm.hasRight(PostRight))
+        ? IconButton(
+            icon: Icon(Icons.add),
+            onPressed: () => _uploadFromGallery(context),
+          )
+        : Container();
   }
 }
