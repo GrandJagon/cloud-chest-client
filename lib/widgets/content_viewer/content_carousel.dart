@@ -1,7 +1,9 @@
 import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_chest/models/content/content.dart';
+import 'package:cloud_chest/models/content/picture.dart';
+import 'package:cloud_chest/widgets/content_viewer/picture_view.dart';
+import 'package:cloud_chest/widgets/content_viewer/video_view.dart';
 import 'package:cloud_chest/widgets/misc/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -53,26 +55,17 @@ class _ContentCarouselState extends State<ContentCarousel> {
       controller: _pageController,
       onPageChanged: _onPageChanged,
       itemCount: vm.contentListSize,
-      itemBuilder: (context, index) => _buildImage(index),
+      itemBuilder: (context, index) => _buildContent(index),
     );
   }
 
   // Given if the content is stored locally or on server builds the image
-  Widget _buildImage(int index) {
+  Widget _buildContent(int index) {
     Content content = vm.contentList[index];
-    return content.isLocal()
-        ? Image.file(
-            File(content.localPath!),
-            fit: BoxFit.contain,
-          )
-        : CachedNetworkImage(
-            fit: BoxFit.contain,
-            placeholder: (ctx, url) => LoadingWidget(),
-            imageUrl: content.path,
-            errorWidget: (context, url, error) => Icon(
-              Icons.error,
-              color: Colors.red,
-            ),
-          );
+    if (content is Picture)
+      return PictureView(content);
+    else {
+      return Video(content);
+    }
   }
 }

@@ -2,6 +2,7 @@ import 'package:cloud_chest/models/right.dart';
 import 'package:cloud_chest/screens/album_settings/album_settings_screen.dart';
 import 'package:cloud_chest/view_model/content/current_album_content_view_model.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -23,7 +24,28 @@ class AlbumContentBar extends StatelessWidget with PreferredSizeWidget {
 
       final paths = pictures.map((e) => e.path).toList();
 
-      print('PATHS ABOUT TO BE UPLOADED ' + paths.toString());
+      await _uploadFiles(paths, context);
+    } catch (err, stack) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Upload unsuccessfull',
+            textAlign: TextAlign.center,
+          ),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
+  Future<void> _pickFile(BuildContext context) async {
+    try {
+      FilePickerResult? result = await FilePicker.platform
+          .pickFiles(type: FileType.media, allowMultiple: true);
+
+      if (result == null) return;
+
+      final List<String> paths = List.from(result.paths);
 
       await _uploadFiles(paths, context);
     } catch (err, stack) {
@@ -54,7 +76,10 @@ class AlbumContentBar extends StatelessWidget with PreferredSizeWidget {
         icon: Icon(Icons.arrow_back_rounded),
         onPressed: () => Navigator.of(context).pop(),
       ),
-      actions: <Widget>[_settingsButton(context), _addButton(context)],
+      actions: <Widget>[
+        _settingsButton(context),
+        _addButton(context),
+      ],
     );
   }
 
@@ -73,7 +98,7 @@ class AlbumContentBar extends StatelessWidget with PreferredSizeWidget {
     return (vm.hasRight(AdminRight) || vm.hasRight(PostRight))
         ? IconButton(
             icon: Icon(Icons.add),
-            onPressed: () => _uploadFromGallery(context),
+            onPressed: () => _pickFile(context),
           )
         : Container();
   }

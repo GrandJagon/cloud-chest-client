@@ -69,7 +69,7 @@ class Auth extends ChangeNotifier {
         AuthConnectionError('Server not responding'),
       );
     } catch (err, stack) {
-      return Future.error('There seems to be a problem, please retry later...');
+      return Future.error(err);
     }
   }
 

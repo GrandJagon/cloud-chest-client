@@ -1,5 +1,9 @@
+import 'dart:io';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_chest/models/content/album.dart';
 import 'package:cloud_chest/screens/album_content/album_content_screen.dart';
+import 'package:cloud_chest/view_model/auth/auth_view_model.dart';
 import 'package:cloud_chest/view_model/content/current_album_content_view_model.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
@@ -67,8 +71,10 @@ class AlbumItem extends StatelessWidget {
               album.thumbnail != ''
                   ? AspectRatio(
                       aspectRatio: 3,
-                      child: Image.network(
-                        album.thumbnail,
+                      child: CachedNetworkImage(
+                        httpHeaders: {'auth-token': Auth().accessToken!},
+                        placeholder: (context, url) => Container(),
+                        imageUrl: album.thumbnail,
                         fit: BoxFit.fitWidth,
                       ),
                     )

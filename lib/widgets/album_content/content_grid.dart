@@ -1,7 +1,7 @@
 import 'package:cloud_chest/data/api_response.dart';
 import 'package:cloud_chest/view_model/content/content_selection_view_model.dart';
 import 'package:cloud_chest/view_model/content/current_album_content_view_model.dart';
-import 'package:cloud_chest/widgets/album_content/content_item.dart';
+import 'package:cloud_chest/widgets/album_content/content_item/content_item.dart';
 import 'package:cloud_chest/widgets/misc/loading_widget.dart';
 import 'package:cloud_chest/widgets/misc/network_error_widget.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +27,6 @@ class _ContentGridState extends State<ContentGrid> {
   @override
   Widget build(BuildContext context) {
     vm = context.watch<CurrentAlbumViewModel>();
-    print('rebuilding grid');
 
     if (vm.response.status == ResponseStatus.LOADING_PARTIAL ||
         vm.response.status == ResponseStatus.LOADING_FULL)

@@ -3,11 +3,17 @@ import 'package:cloud_chest/view_model/content/content_viewer_view_model.dart';
 import 'package:cloud_chest/view_model/content/content_selection_view_model.dart';
 import 'package:cloud_chest/screens/content_viewer/content_viewer_screen.dart';
 import 'package:cloud_chest/view_model/content/current_album_content_view_model.dart';
+import 'package:cloud_chest/widgets/album_content/content_item/picture_thumbnail.dart';
+import 'package:cloud_chest/widgets/album_content/content_item/video_thumbnail.dart';
 import 'package:cloud_chest/widgets/misc/loading_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_chest/models/content/content.dart';
 import 'package:provider/provider.dart';
+import 'package:video_player/video_player.dart';
+
+import '../../../models/content/picture.dart';
+import '../../../models/content/video.dart';
 
 class ContentItem extends StatefulWidget {
   final Content item;
@@ -47,8 +53,6 @@ class _ContentItemState extends State<ContentItem>
   // To be called when item is long pressed in order to select it
   // Can later take action on the selection
   void _selectItem() {
-    print('SELECTED ' + widget.item.path);
-    print('SELECTED ' + (widget.item.localPath ?? 'null'));
     widget.item.toggleSelected();
     Provider.of<ContentSelectionViewModel>(context, listen: false)
         .addOrRemove(widget.item);
@@ -93,28 +97,16 @@ class _ContentItemState extends State<ContentItem>
         child: Hero(
           tag: widget.item.id,
           child: Opacity(
-              opacity: widget.item.isDownloading() ? 0.5 : 1,
-              child: _buildImage(context)),
+            opacity: widget.item.isDownloading() ? 0.5 : 1,
+            child: _buildThumbnail(context),
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildImage(BuildContext context) {
-    print('BUILDING ' + (widget.item.localPath ?? widget.item.path));
-    return widget.item.isLocal()
-        ? Image.file(
-            File(widget.item.localPath!),
-            fit: BoxFit.cover,
-          )
-        : CachedNetworkImage(
-            fit: BoxFit.cover,
-            placeholder: (ctx, url) => LoadingWidget(),
-            imageUrl: widget.item.path,
-            errorWidget: (context, url, error) => Icon(
-              Icons.error,
-              color: Colors.red,
-            ),
-          );
+  Widget _buildThumbnail(BuildContext context) {
+    if (widget.item is Picture) return PictureThumbnail(widget.item);
+    return Container();
   }
 }
