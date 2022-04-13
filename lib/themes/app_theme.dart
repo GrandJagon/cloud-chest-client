@@ -28,6 +28,10 @@ ThemeData DarkTheme() {
           color: Color.fromARGB(206, 255, 255, 255),
           fontSize: 18,
           fontWeight: FontWeight.bold),
+      headline4: TextStyle(
+          color: Color.fromARGB(206, 255, 255, 255),
+          fontSize: 16,
+          fontWeight: FontWeight.bold),
     ),
   );
 }

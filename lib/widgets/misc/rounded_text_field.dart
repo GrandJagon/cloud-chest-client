@@ -7,6 +7,7 @@ class RoundedTextField extends StatelessWidget {
   final Function? onValidation;
   final TextInputType keyboardType;
   final bool obscure;
+  final String? hintText;
 
   RoundedTextField(
       {this.controller,
@@ -14,7 +15,8 @@ class RoundedTextField extends StatelessWidget {
       this.onFieldSubmitted,
       this.onValidation,
       this.keyboardType = TextInputType.text,
-      this.obscure = false});
+      this.obscure = false,
+      this.hintText});
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +32,8 @@ class RoundedTextField extends StatelessWidget {
           focusNode: focusNode,
           style: TextStyle(color: Colors.black),
           decoration: InputDecoration(
+            hintText: hintText ?? '',
+            hintStyle: TextStyle(color: Colors.black38),
             border: InputBorder.none,
             isCollapsed: true,
             errorStyle: TextStyle(fontSize: 15),

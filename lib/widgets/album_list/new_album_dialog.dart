@@ -21,7 +21,6 @@ class _NewAlbumDialogState extends State<NewAlbumDialog> {
             (value) => Navigator.of(context).pop(),
           );
     } catch (err) {
-      Navigator.of(context).pop();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: Colors.red,

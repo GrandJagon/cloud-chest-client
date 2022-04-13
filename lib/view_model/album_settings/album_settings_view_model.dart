@@ -9,15 +9,24 @@ import '../../models/album_settings.dart';
 // Notifies listener when needed
 // Thumbnail has 2 values thumbnailSelection and thumbnailTempSelection in order to change display of chosen one in selection dialog
 class AlbumSettingsViewModel extends ChangeNotifier {
+  static final AlbumSettingsViewModel _instance =
+      AlbumSettingsViewModel._internal();
+
+  factory AlbumSettingsViewModel() {
+    return _instance;
+  }
+
+  AlbumSettingsViewModel._internal();
+
   String? _id;
   String? title;
-  List<User>? _users;
+  List<User> _users = [];
   String? _thumbnail;
   String? _thumbnailTemp;
 
   String? get id => _id;
 
-  List<User>? get users => [..._users!];
+  List<User>? get users => [..._users];
 
   String? get thumbnail => _thumbnail;
 
@@ -42,7 +51,7 @@ class AlbumSettingsViewModel extends ChangeNotifier {
     _thumbnail = null;
     _id = null;
     title = '';
-    _users = null;
+    _users = [];
   }
 
   // Called when choosing a thumbnail from thumbnail dialog
@@ -77,11 +86,11 @@ class AlbumSettingsViewModel extends ChangeNotifier {
   // Called to update one particular user right
   // Makes a deep copy of original user in order for the change to be discarded if exit without saving
   void updateUserRights(int userIndex, List<String> newRights) {
-    final User user = _users![userIndex];
+    final User user = _users[userIndex];
     final User uptodateUser = User.clone(user);
 
     uptodateUser.updateRights(newRights);
-    _users![userIndex] = uptodateUser;
+    _users[userIndex] = uptodateUser;
 
     notifyListeners();
   }
@@ -91,20 +100,20 @@ class AlbumSettingsViewModel extends ChangeNotifier {
     if (userExists(user))
       throw InvalidException('User has already access to this album');
     user.rights.add(RightFactory.createRight('content:read'));
-    _users!.add(user);
+    _users.add(user);
     notifyListeners();
   }
 
   // Removes a user from the authorized user lists
   void removeUser(int userIndex) {
-    final user = _users![userIndex];
+    final user = _users[userIndex];
     if (!userExists(user)) return;
-    _users!.removeAt(userIndex);
+    _users.removeAt(userIndex);
     notifyListeners();
   }
 
   bool userExists(User user) {
-    for (User u in _users!) {
+    for (User u in _users) {
       if (u.userId == user.userId) {
         return true;
       }
@@ -118,7 +127,7 @@ class AlbumSettingsViewModel extends ChangeNotifier {
     return AlbumSettings(
         albumId: _id!,
         title: title!,
-        users: _users!,
+        users: _users,
         thumbnail: _thumbnail ?? '');
   }
 }

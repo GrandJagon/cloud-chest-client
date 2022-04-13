@@ -133,61 +133,68 @@ class _AuthCardState extends State<AuthCard>
         : Card(
             elevation: 8,
             child: Form(
-                key: _formKey,
-                child: Container(
-                  height: _heightAnimation.value.height,
-                  padding: EdgeInsets.all(12),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        ServerInfo(),
+              key: _formKey,
+              child: Container(
+                height: _heightAnimation.value.height,
+                padding: EdgeInsets.all(12),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      ServerInfo(),
+                      TextFormField(
+                        decoration:
+                            const InputDecoration(labelText: 'Email address'),
+                        keyboardType: TextInputType.emailAddress,
+                        onSaved: (value) => _saveField('email', value),
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            _validationError = 'Email required';
+                            return null;
+                          }
+                        },
+                      ),
+                      TextFormField(
+                        decoration:
+                            const InputDecoration(labelText: 'Password'),
+                        obscureText: true,
+                        onSaved: (value) => _saveField('password', value),
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            _validationError = 'Password required';
+                            return null;
+                          }
+                        },
+                      ),
+                      if (_authMode == AuthMode.Signup)
                         TextFormField(
-                          decoration:
-                              const InputDecoration(labelText: 'Email address'),
-                          keyboardType: TextInputType.emailAddress,
-                          onSaved: (value) => _saveField('email', value),
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              _validationError = 'Email required';
-                              return null;
-                            }
-                          },
-                        ),
-                        TextFormField(
-                          decoration:
-                              const InputDecoration(labelText: 'Password'),
+                          decoration: const InputDecoration(
+                              labelText: "Confirm the password"),
                           obscureText: true,
-                          onSaved: (value) => _saveField('password', value),
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              _validationError = 'Password required';
-                              return null;
-                            }
-                          },
+                          // validator: (value) {
+                          //   if (value != _credentials['password'])
+                          //     _validationError = 'Passwords must be the same';
+                          // },
                         ),
-                        if (_authMode == AuthMode.Signup)
-                          TextFormField(
-                            decoration: const InputDecoration(
-                                labelText: "Confirm the password"),
-                            obscureText: true,
-                            // validator: (value) {
-                            //   if (value != _credentials['password'])
-                            //     _validationError = 'Passwords must be the same';
-                            // },
-                          ),
-                        TextButton(
-                          child: Text(
-                              _authMode == AuthMode.Login ? 'SIGNUP' : 'LOGIN'),
-                          onPressed: () => _toggleAuthMode(),
+                      TextButton(
+                        child: Text(
+                          _authMode == AuthMode.Login ? 'SIGNUP' : 'LOGIN',
+                          style: Theme.of(context).textTheme.headline4,
                         ),
-                        TextButton(
-                          child: Text('OK'),
-                          onPressed: () => _submitForm(context),
-                        )
-                      ],
-                    ),
+                        onPressed: () => _toggleAuthMode(),
+                      ),
+                      TextButton(
+                        child: Text(
+                          'OK',
+                          style: Theme.of(context).textTheme.headline4,
+                        ),
+                        onPressed: () => _submitForm(context),
+                      )
+                    ],
                   ),
-                )));
+                ),
+              ),
+            ),
+          );
   }
 }

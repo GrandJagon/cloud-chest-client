@@ -75,4 +75,21 @@ class UserRepository {
       return Future.error(e);
     }
   }
+
+  Future<dynamic> resetPassword(
+      String accessToken, Map<String, String> data) async {
+    try {
+      final headers = {_authTokenKey: accessToken};
+
+      final response = await _userService.post(
+          headers: headers, data: data, urlPart: 'resetPassword');
+
+      if (response is Exception) throw response;
+
+      return response;
+    } catch (e) {
+      print(e);
+      return Future.error(e);
+    }
+  }
 }

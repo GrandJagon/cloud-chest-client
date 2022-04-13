@@ -8,6 +8,14 @@ import '../../exceptions/auth_exceptions.dart';
 // Only keeps most essential variable to provider (access token and user ID)
 // All the auth data logic is handled by _authRepo
 class Auth extends ChangeNotifier {
+  static final Auth _instance = Auth._internal();
+
+  factory Auth() {
+    return _instance;
+  }
+
+  Auth._internal();
+
   final _authRepo = AuthRepository();
   bool _isConnected = false;
   String? accessToken = '';
@@ -22,18 +30,15 @@ class Auth extends ChangeNotifier {
   // If expired refresh the token and fetch the new ones
   Future<bool> tryAutoConnect() async {
     try {
-      print('autoconnecting');
       await _authRepo.retrieveAuthData();
 
       if (!_authRepo.isAuthData) {
-        print('no auth data, redirection to auth screen');
         return false;
       }
 
       _userId = _authRepo.userId!;
 
       if (!_authRepo.isAuthDataValid) {
-        print('auth data invalid, redirection to auth screen');
         return false;
       }
 
@@ -60,6 +65,8 @@ class Auth extends ChangeNotifier {
       // Authentication successful
       accessToken = response;
 
+      print('Authentication successfull with ' + accessToken!);
+
       _userId = _authRepo.userId!;
 
       _isConnected = true;
@@ -81,7 +88,7 @@ class Auth extends ChangeNotifier {
     return await _authenticate(email, password, 'register');
   }
 
-  Future<void> _logout() async {
+  Future<void> logout() async {
     await _authRepo.clearAuthData();
     accessToken = '';
   }
@@ -101,7 +108,7 @@ class Auth extends ChangeNotifier {
       print('Error while requesting new token, _isConnected now set to false');
 
       print('Now logging out for security reason.');
-      _logout();
+      logout();
       return _isConnected = false;
     }
   }

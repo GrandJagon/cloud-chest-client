@@ -71,6 +71,18 @@ class AccountSettingsViewModel extends ChangeNotifier {
     );
   }
 
+  Future<void> resetPassword(String email) async {
+    _setResponse(ApiResponse.loadingPartial());
+    await _userRepo.resetPassword(
+      _accessToken,
+      {'email': email},
+    ).whenComplete(
+      () => _setResponse(
+        ApiResponse.done(),
+      ),
+    );
+  }
+
   // Clear temp data when leaving screen
   void clear() {
     newPassword = null;

@@ -1,4 +1,5 @@
 import 'package:cloud_chest/data/api_response.dart';
+import 'package:cloud_chest/screens/auth/auth_screen.dart';
 import 'package:cloud_chest/view_model/account/account_settings_view_model.dart';
 import 'package:cloud_chest/view_model/account/change_password_view_model.dart';
 import 'package:cloud_chest/widgets/account/new_password_field.dart';
@@ -7,6 +8,8 @@ import 'package:cloud_chest/widgets/misc/loading_widget.dart';
 import 'package:cloud_chest/widgets/misc/network_error_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../view_model/auth/auth_view_model.dart';
 
 class AccountSettingsForm extends StatefulWidget {
   final TextEditingController mailController;
@@ -35,7 +38,14 @@ class _AccountSettingsFormState extends State<AccountSettingsForm> {
     );
   }
 
-  void _showNewPassword() {}
+  Future<void> _logout(BuildContext context) async {
+    await Provider.of<Auth>(context, listen: false).logout().then(
+          (value) => Navigator.of(context).pushNamedAndRemoveUntil(
+            AuthScreen.routeName,
+            (Route<dynamic> route) => false,
+          ),
+        );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,11 +104,11 @@ class _AccountSettingsFormState extends State<AccountSettingsForm> {
                     TextButton(
                       child: Center(
                         child: Text(
-                          'Disconnect',
+                          'Log out',
                           style: Theme.of(context).textTheme.headline2,
                         ),
                       ),
-                      onPressed: () => _deleteAccount(),
+                      onPressed: () => _logout(context),
                     ),
                     Spacer(),
                     TextButton(

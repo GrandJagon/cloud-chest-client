@@ -56,8 +56,6 @@ class CurrentAlbumViewModel extends ChangeNotifier {
       _setResponse(ApiResponse.loadingFull());
     }
 
-    print(newSettings.users.toString());
-
     await _singleAlbumRepo
         .updateAlbumDetails(_accessToken, _currentAlbumId, newSettings)
         .then(
