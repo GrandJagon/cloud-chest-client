@@ -5,7 +5,7 @@ class CloudChestException implements Exception {
 
   @override
   String toString() {
-    return "$_title : $_message";
+    return "$_message";
   }
 }
 

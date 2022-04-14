@@ -1,7 +1,5 @@
-import 'dart:convert';
 import 'package:cloud_chest/data/network_service.dart';
 import 'package:cloud_chest/exceptions/cloud_chest_exceptions.dart';
-import 'package:cloud_chest/models/user.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 // Allows to fetch data concerning user and edit it
@@ -31,7 +29,9 @@ class UserRepository {
 
       final params = {'search': data};
 
-      final response = await _userService.get(headers: headers, params: params);
+      final response = await _userService
+          .get(headers: headers, params: params)
+          .catchError((e) => throw e);
 
       return response;
     } catch (err, stack) {
@@ -47,8 +47,9 @@ class UserRepository {
 
       final params = {'id': id};
 
-      final response = await _userService.get(
-          headers: headers, params: params, urlPart: 'byId');
+      final response = await _userService
+          .get(headers: headers, params: params, urlPart: 'byId')
+          .catchError((e) => throw e);
 
       return {
         'email': response[0]['email'],
@@ -65,7 +66,9 @@ class UserRepository {
     try {
       final headers = {_authTokenKey: accessToken};
 
-      final response = await _userService.patch(headers: headers, data: data);
+      final response = await _userService
+          .patch(headers: headers, data: data)
+          .catchError((e) => throw e);
 
       if (response is Exception) throw response;
 
@@ -81,8 +84,26 @@ class UserRepository {
     try {
       final headers = {_authTokenKey: accessToken};
 
-      final response = await _userService.post(
-          headers: headers, data: data, urlPart: 'resetPassword');
+      final response = await _userService
+          .post(headers: headers, data: data, urlPart: 'resetPassword')
+          .catchError((e) => throw e);
+
+      if (response is Exception) throw response;
+
+      return response;
+    } catch (e) {
+      print(e);
+      return Future.error(e);
+    }
+  }
+
+  Future<dynamic> deleteAccount(String accessToken, String userId) async {
+    try {
+      final headers = {_authTokenKey: accessToken};
+
+      final response = await _userService
+          .delete(headers: headers)
+          .catchError((e) => throw e);
 
       if (response is Exception) throw response;
 

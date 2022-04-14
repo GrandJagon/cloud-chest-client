@@ -2,6 +2,7 @@ import 'package:cloud_chest/data/api_response.dart';
 import 'package:cloud_chest/screens/auth/auth_screen.dart';
 import 'package:cloud_chest/view_model/account/account_settings_view_model.dart';
 import 'package:cloud_chest/view_model/account/change_password_view_model.dart';
+import 'package:cloud_chest/widgets/account/delete_account_dialog.dart';
 import 'package:cloud_chest/widgets/account/new_password_field.dart';
 import 'package:cloud_chest/widgets/account/password_dialog/password_dialog.dart';
 import 'package:cloud_chest/widgets/misc/loading_widget.dart';
@@ -25,7 +26,10 @@ class _AccountSettingsFormState extends State<AccountSettingsForm> {
   late AccountSettingsViewModel vm;
 
   void _deleteAccount() {
-    print('deleting');
+    showDialog(
+      context: context,
+      builder: (context) => DeleteAccountDialog(),
+    );
   }
 
   void _showPasswordDialog() {

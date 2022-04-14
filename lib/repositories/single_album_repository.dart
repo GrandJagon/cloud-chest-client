@@ -30,8 +30,11 @@ class SingleAlbumRepository {
     try {
       final headers = {_authTokenKey: accessToken};
       final params = {_albumIdKey: albumId};
-      final response =
-          await _singleAlbumService.get(headers: headers, params: params);
+      final response = await _singleAlbumService
+          .get(headers: headers, params: params)
+          .catchError(
+            (e) => throw e,
+          );
 
       List<Content> albumContent = (response['files'] as List<dynamic>)
           .map((json) => ContentFactory.createFromJson(json))
@@ -52,8 +55,15 @@ class SingleAlbumRepository {
     try {
       final headers = {_authTokenKey: accessToken};
       final params = {_albumIdKey: albumId};
-      final response = await _singleAlbumService.multipart(
-          headers: headers, data: newContent, method: 'POST', params: params);
+      final response = await _singleAlbumService
+          .multipart(
+              headers: headers,
+              data: newContent,
+              method: 'POST',
+              params: params)
+          .catchError(
+            (e) => throw e,
+          );
 
       List<Content> addedContent = response
           .map<Content>((json) => ContentFactory.createFromJson(json))
@@ -82,8 +92,11 @@ class SingleAlbumRepository {
 
       final body = json.encode(jsonContent);
 
-      await _singleAlbumService.delete(
-          headers: headers, body: body, params: params);
+      await _singleAlbumService
+          .delete(headers: headers, body: body, params: params)
+          .catchError(
+            (e) => throw e,
+          );
 
       return true;
     } catch (err, stack) {
@@ -103,6 +116,8 @@ class SingleAlbumRepository {
         headers: {_authTokenKey: accessToken},
         params: {'albumId': albumId},
         data: data,
+      ).catchError(
+        (e) => throw e,
       );
     } catch (err) {
       return Future.error(err);

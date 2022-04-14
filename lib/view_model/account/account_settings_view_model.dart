@@ -83,6 +83,20 @@ class AccountSettingsViewModel extends ChangeNotifier {
     );
   }
 
+  Future<void> deleteAccount() async {
+    _setResponse(ApiResponse.loadingFull());
+    await _userRepo
+        .deleteAccount(
+          _accessToken,
+          _userDetails['id']!,
+        )
+        .whenComplete(
+          () => _setResponse(
+            ApiResponse.done(),
+          ),
+        );
+  }
+
   // Clear temp data when leaving screen
   void clear() {
     newPassword = null;

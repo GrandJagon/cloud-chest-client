@@ -38,8 +38,12 @@ class AuthRepository {
   Future<String> authenticate(
       String email, String password, String urlPart) async {
     try {
-      final response = await _authService
-          .post(data: {'email': email, 'password': password}, urlPart: urlPart);
+      final response = await _authService.post(
+        data: {'email': email, 'password': password},
+        urlPart: urlPart,
+      ).catchError(
+        (e) => throw e,
+      );
 
       if (response is Exception) throw response;
 
@@ -61,11 +65,10 @@ class AuthRepository {
   Future<String> requestNewToken() async {
     print('DataService requesting new token');
     try {
-      final response = await _authService.post(data: {
-        _accessTokenKey: _accessToken,
-        _refreshTokenKey: _refreshToken
-      }, urlPart: 'refreshToken').catchError(
-          (e) => 'Error while fetching token');
+      final response = await _authService.post(
+        data: {_accessTokenKey: _accessToken, _refreshTokenKey: _refreshToken},
+        urlPart: 'refreshToken',
+      ).catchError((e) => throw e);
 
       if (response is Exception) throw response;
 

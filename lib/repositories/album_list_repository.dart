@@ -19,17 +19,20 @@ class AlbumListRepository {
   Future<List<Album>> getAlbumList(String accessToken) async {
     try {
       print('getting album list');
-      final List response = await _albumService
-          .get(headers: {_authTokenKey: accessToken}).catchError(
-        (e) => print('error while fetching album list' + e),
+      final List response = await _albumService.get(
+        headers: {_authTokenKey: accessToken},
+      ).catchError(
+        (e) => throw e,
       );
-      if (response is Exception) throw response;
+
+      if (response is Exception) throw Exception;
 
       List<Album> albums =
           response.map((album) => Album.fromJson(album)).toList();
 
       return albums;
-    } catch (err) {
+    } catch (err, stack) {
+      print(stack);
       return Future.error(err);
     }
   }
@@ -40,7 +43,9 @@ class AlbumListRepository {
       final response = await _albumService.post(
           headers: {_authTokenKey: accessToken},
           data: {'title': title},
-          urlPart: 'create');
+          urlPart: 'create').catchError(
+        (e) => throw e,
+      );
 
       if (response is Exception) throw response;
 
@@ -56,7 +61,11 @@ class AlbumListRepository {
   Future<void> deleteAlbum(String accessToken, String albumId) async {
     try {
       await _albumService.delete(
-          headers: {_authTokenKey: accessToken}, params: {'albumId': albumId});
+        headers: {_authTokenKey: accessToken},
+        params: {'albumId': albumId},
+      ).catchError(
+        (e) => throw e,
+      );
     } catch (err) {
       throw err;
     }
