@@ -5,6 +5,14 @@ import 'package:flutter/material.dart';
 import '../../repositories/user_repository.dart';
 
 class UserSearchViewModel extends ChangeNotifier {
+  static final UserSearchViewModel _instance = UserSearchViewModel._internal();
+
+  factory UserSearchViewModel() {
+    return _instance;
+  }
+
+  UserSearchViewModel._internal();
+
   User? _user;
   List<User> _searchUserResult = [];
   Map<String, String> _userDetails = {'id': '', 'email': '', 'username': ''};
@@ -61,6 +69,8 @@ class UserSearchViewModel extends ChangeNotifier {
   Future<void> findUser(String? data) async {
     clear();
 
+    print('token' + _accessToken);
+
     _setResponse(ApiResponse.loadingFull());
     await _userRepo.getUser(data, _accessToken).then(
       (json) {
@@ -68,6 +78,8 @@ class UserSearchViewModel extends ChangeNotifier {
           _setResponse(ApiResponse.noResult('No result'));
           return;
         }
+
+        print(json);
 
         _searchUserResult.addAll(User.fromArray(json).toList());
         _setResponse(ApiResponse.done());
@@ -78,5 +90,10 @@ class UserSearchViewModel extends ChangeNotifier {
         print(stackTrace);
       },
     );
+  }
+
+  void reset() {
+    _accessToken = '';
+    _userDetails = {'id': '', 'email': '', 'username': ''};
   }
 }

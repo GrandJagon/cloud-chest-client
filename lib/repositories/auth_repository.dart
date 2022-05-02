@@ -128,6 +128,9 @@ class AuthRepository {
 
   Future<void> clearAuthData() async {
     await SecureStorage().clear(_authDataKey);
+    _accessToken = null;
+    _refreshToken = null;
+    _userId = null;
   }
 
   // Check the expiry date validity

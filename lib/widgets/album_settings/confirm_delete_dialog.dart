@@ -1,31 +1,14 @@
 import 'dart:ui';
-import 'package:cloud_chest/screens/albums_list/albums_list_screen.dart';
-import 'package:cloud_chest/view_model/album_list/album_list_view_model.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class ConfirmDeleteDialog extends StatelessWidget {
   final String title;
-  final String id;
 
-  ConfirmDeleteDialog(this.title, this.id);
+  ConfirmDeleteDialog(this.title);
 
-  Future<void> _confirmDeletion(BuildContext context) async {
-    try {
-      await Provider.of<AlbumListViewModel>(context, listen: false)
-          .deleteAlbum(id)
-          .then((value) {
-        Navigator.pushNamedAndRemoveUntil(
-            context, AlbumsListScreen.routeName, (route) => false);
-      });
-    } on Exception catch (err) {
-      Navigator.of(context).pop();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(err.toString()),
-        ),
-      );
-    }
+  // Pops the dialogs and passes true to parent in order to delete album
+  void _confirmDeletion(BuildContext context) {
+    Navigator.pop(context, true);
   }
 
   @override

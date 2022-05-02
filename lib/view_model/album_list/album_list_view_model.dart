@@ -1,11 +1,20 @@
 // Handles data passing between the model and the view
 // Holds the state of the user album list
 import 'package:cloud_chest/data/api_response.dart';
+import 'package:cloud_chest/exceptions/cloud_chest_exceptions.dart';
 import 'package:cloud_chest/models/content/album.dart';
 import 'package:cloud_chest/repositories/album_list_repository.dart';
 import 'package:flutter/material.dart';
 
 class AlbumListViewModel extends ChangeNotifier {
+  static final AlbumListViewModel _instance = AlbumListViewModel._internal();
+
+  factory AlbumListViewModel() {
+    return _instance;
+  }
+
+  AlbumListViewModel._internal();
+
   String _accessToken = '';
   ApiResponse _response = ApiResponse.loadingFull();
   final AlbumListRepository _albumListRepo = AlbumListRepository();
@@ -35,6 +44,12 @@ class AlbumListViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  // Resets response to loading, to be called when redirecting to login page
+  // in case of non authorized fetching request
+  void resetResponse() {
+    _response = ApiResponse.loadingFull();
+  }
+
   // Adds an album to the current album list
   void _addToAlbumList(Album album) {
     _albumList.add(album);
@@ -49,13 +64,23 @@ class AlbumListViewModel extends ChangeNotifier {
         .getAlbumList(_accessToken)
         .then((response) => _setAlbumList(response))
         .onError(
-          (error, stackTrace) => _setResponse(
+      (error, stackTrace) {
+        print(error.runtimeType);
+        // In case access is not authorized response needs to be special in order to redirect
+        // to login screen
+        if (error is UnauthorizedException)
+          _setResponse(
+            ApiResponse.unauthorized(),
+          );
+        else
+          _setResponse(
             ApiResponse.error(
               error.toString(),
             ),
-          ),
-        );
-    notifyListeners();
+          );
+        notifyListeners();
+      },
+    );
   }
 
   // Creates a new album and adds it to the current album list
@@ -75,14 +100,16 @@ class AlbumListViewModel extends ChangeNotifier {
 
   // Deletes new album and deletes it from the current list
   Future<void> deleteAlbum(String albumId) async {
-    _setResponse(ApiResponse.loadingPartial());
+    _setResponse(ApiResponse.loadingFull());
     await _albumListRepo
         .deleteAlbum(_accessToken, albumId)
         .catchError((error, stackTrace) => throw error!)
-        .then((value) {
-      _albumList.removeWhere((album) => album.albumId == albumId);
-      notifyListeners();
-    }).whenComplete(
+        .then(
+      (value) {
+        _albumList.removeWhere((album) => album.albumId == albumId);
+        notifyListeners();
+      },
+    ).whenComplete(
       () => _setResponse(
         ApiResponse.done(),
       ),
@@ -98,5 +125,11 @@ class AlbumListViewModel extends ChangeNotifier {
     targetAlbum.thumbnail = thumbnail;
 
     notifyListeners();
+  }
+
+  // Resets the data when loging out
+  void reset() {
+    _albumList = [];
+    _accessToken = '';
   }
 }

@@ -5,11 +5,21 @@ import 'package:cloud_chest/models/content/content.dart';
 import 'package:cloud_chest/models/factories/right_factory.dart';
 import 'package:cloud_chest/models/right.dart';
 import 'package:cloud_chest/repositories/single_album_repository.dart';
+import 'package:cloud_chest/view_model/content/content_viewer_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_chest/helpers/persistance/download_helper.dart';
 
 // Holds the state for the current album, the one actually on display
 class CurrentAlbumViewModel extends ChangeNotifier {
+  static final CurrentAlbumViewModel _instance =
+      CurrentAlbumViewModel._internal();
+
+  factory CurrentAlbumViewModel() {
+    return _instance;
+  }
+
+  CurrentAlbumViewModel._internal();
+
   SingleAlbumRepository _singleAlbumRepo = SingleAlbumRepository();
   String _accessToken = '';
   String _currentAlbumId = '';
@@ -119,14 +129,16 @@ class CurrentAlbumViewModel extends ChangeNotifier {
   Future<void> _setCurrentState(Map<dynamic, dynamic> data) async {
     _currentAlbumSettings = data['settings'];
 
-    await ContentPathHelper.updateList(data['content']).then(
-      (contentList) => {
-        _addToContentList(contentList),
-        _setResponse(
-          ApiResponse.done(),
-        ),
-      },
-    );
+    await ContentPathHelper.updateList(data['content'])
+        .then(
+          (content) => {
+            _addToContentList(content),
+            _setResponse(
+              ApiResponse.done(),
+            ),
+          },
+        )
+        .then((value) => ContentViewerViewModel().setAlbumToView(contentList));
   }
 
   // Upload new content to the album given an ID
@@ -142,6 +154,9 @@ class CurrentAlbumViewModel extends ChangeNotifier {
         )
         .then(
           (addedContent) => ContentPathHelper.addList(addedContent),
+        )
+        .then(
+          (value) => ContentViewerViewModel().setAlbumToView(contentList),
         )
         .whenComplete(
           () => _setResponse(
@@ -183,5 +198,12 @@ class CurrentAlbumViewModel extends ChangeNotifier {
       print(error);
       throw error!;
     });
+  }
+
+  // Resets all data
+  void reset() {
+    _accessToken = '';
+    _currentAlbumId = '';
+    _contentList.clear();
   }
 }

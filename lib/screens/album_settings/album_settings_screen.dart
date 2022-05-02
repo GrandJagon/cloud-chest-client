@@ -10,6 +10,8 @@ import 'package:cloud_chest/widgets/misc/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../albums_list/albums_list_screen.dart';
+
 class AlbumSettingScreen extends StatefulWidget {
   static final String routeName = '/albumSettings';
 
@@ -18,7 +20,7 @@ class AlbumSettingScreen extends StatefulWidget {
 }
 
 class _AlbumSettingScreenState extends State<AlbumSettingScreen> {
-  late CurrentAlbumViewModel vm;
+  late AlbumListViewModel vm;
 
   // Saving user changes to album settings and making api call
   void _saveChanges(BuildContext context) async {
@@ -50,7 +52,24 @@ class _AlbumSettingScreenState extends State<AlbumSettingScreen> {
     }
   }
 
-  void _deleteAlbum(BuildContext context) {
+  Future<void> _deleteAlbum(BuildContext context, String id) async {
+    try {
+      await Provider.of<AlbumListViewModel>(context, listen: false)
+          .deleteAlbum(id)
+          .then(
+            (value) => Navigator.pushNamedAndRemoveUntil(
+                context, AlbumsListScreen.routeName, (route) => false),
+          );
+    } catch (err) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(err.toString()),
+        ),
+      );
+    }
+  }
+
+  void _showDeleteDialog(BuildContext context) {
     final String title =
         Provider.of<CurrentAlbumViewModel>(context, listen: false)
             .currentAlbumSettings
@@ -59,7 +78,13 @@ class _AlbumSettingScreenState extends State<AlbumSettingScreen> {
         .currentAlbumId;
     showDialog(
       context: context,
-      builder: (c) => ConfirmDeleteDialog(title, id),
+      builder: (c) => ConfirmDeleteDialog(title),
+    ).then(
+      (value) {
+        if (value == true) {
+          _deleteAlbum(context, id);
+        }
+      },
     );
   }
 
@@ -71,7 +96,8 @@ class _AlbumSettingScreenState extends State<AlbumSettingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    vm = context.watch<CurrentAlbumViewModel>();
+    vm = context.watch<AlbumListViewModel>();
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -83,7 +109,7 @@ class _AlbumSettingScreenState extends State<AlbumSettingScreen> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.delete),
-            onPressed: () => _deleteAlbum(context),
+            onPressed: () => _showDeleteDialog(context),
           )
         ],
       ),

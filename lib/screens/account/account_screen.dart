@@ -1,4 +1,3 @@
-import 'package:cloud_chest/data/api_response.dart';
 import 'package:cloud_chest/view_model/account/account_settings_view_model.dart';
 import 'package:cloud_chest/widgets/account/account_settings_form.dart';
 import 'package:flutter/material.dart';
@@ -19,15 +18,21 @@ class _AccountScreenState extends State<AccountScreen> {
   @override
   void initState() {
     vm = context.read<AccountSettingsViewModel>();
-    Future.delayed(
-      Duration.zero,
-      () => vm.fetchUserDetails().then(
-        (value) {
-          mailController.text = vm.userDetails['email']!;
-          usernameController.text = vm.userDetails['username']!;
-        },
-      ),
-    );
+    if (vm.fetched == false) {
+      Future.delayed(
+        Duration.zero,
+        () => vm.fetchUserDetails().then(
+          (value) {
+            mailController.text = vm.userDetails['email']!;
+            usernameController.text = vm.userDetails['username']!;
+          },
+        ),
+      );
+    } else {
+      mailController.text = vm.userDetails['email']!;
+      usernameController.text = vm.userDetails['username']!;
+    }
+
     super.initState();
   }
 

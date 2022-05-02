@@ -1,9 +1,6 @@
 import 'dart:ui';
-
-import 'package:cloud_chest/view_model/album_list/album_list_view_model.dart';
 import 'package:cloud_chest/widgets/misc/rounded_text_field.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class NewAlbumDialog extends StatefulWidget {
   @override
@@ -13,23 +10,8 @@ class NewAlbumDialog extends StatefulWidget {
 class _NewAlbumDialogState extends State<NewAlbumDialog> {
   TextEditingController _controller = TextEditingController(text: 'My album');
 
-  Future<void> _createAlbum() async {
-    try {
-      await Provider.of<AlbumListViewModel>(context, listen: false)
-          .createAlbum(_controller.text)
-          .then(
-            (value) => Navigator.of(context).pop(),
-          );
-    } catch (err) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: Colors.red,
-          content: Text(
-            err.toString(),
-          ),
-        ),
-      );
-    }
+  void _createAlbum() {
+    Navigator.pop(context, _controller.text);
   }
 
   @override

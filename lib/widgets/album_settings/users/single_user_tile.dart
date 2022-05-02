@@ -33,17 +33,21 @@ class _SingleUserTileState extends State<SingleUserTile> {
   Widget build(BuildContext context) {
     vm = context.read<AlbumSettingsViewModel>();
     user = vm.users![widget.userIndex];
+    print(user.username);
     return GestureDetector(
       onTap: () => _onTap(context),
       child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
         elevation: 5,
         child: Container(
           width: 100,
           padding: const EdgeInsets.all(8.0),
           decoration: BoxDecoration(
-              border: Border.all(width: 1),
-              borderRadius: BorderRadius.circular(10)),
+            border: Border.all(width: 1),
+            borderRadius: BorderRadius.circular(10),
+          ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[

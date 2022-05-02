@@ -18,7 +18,10 @@ class User {
       email: json['email'],
       rights:
           json['rights'] != null ? RightFactory.fromArray(json['rights']) : [],
-      username: json['username'] ?? null);
+      username: json['username'] != ''
+                ? json['username']
+                : null
+                );
 
   // Takes a list of user in json format and returns a list of user objects
   static List<User> fromArray(List<dynamic> jsonArray) {

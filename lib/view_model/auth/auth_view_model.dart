@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:cloud_chest/exceptions/cloud_chest_exceptions.dart';
 import 'package:cloud_chest/repositories/auth_repository.dart';
+import 'package:cloud_chest/view_model/vm_controller.dart';
 import 'package:flutter/material.dart';
 import '../../exceptions/auth_exceptions.dart';
 
@@ -47,6 +48,8 @@ class Auth extends ChangeNotifier {
       // Autoconnect successfull
       accessToken = _authRepo.accessToken;
 
+      VmController.init(accessToken!, userId);
+
       _startTimer();
       return _isConnected = true;
     } on TimeoutException catch (e) {
@@ -68,6 +71,8 @@ class Auth extends ChangeNotifier {
       print('Authentication successfull with ' + accessToken!);
 
       _userId = _authRepo.userId!;
+
+      VmController.init(accessToken!, userId);
 
       _isConnected = true;
       _startTimer();
@@ -91,6 +96,7 @@ class Auth extends ChangeNotifier {
   Future<void> logout() async {
     await _authRepo.clearAuthData();
     accessToken = '';
+    VmController.reset();
   }
 
   // Sends a new access token request to the API
@@ -99,6 +105,8 @@ class Auth extends ChangeNotifier {
       final newToken = await _authRepo.requestNewToken();
 
       accessToken = newToken;
+
+      VmController.refreshToken(accessToken!);
 
       _startTimer();
       notifyListeners();

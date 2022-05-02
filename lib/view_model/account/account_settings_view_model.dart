@@ -3,16 +3,28 @@ import 'package:flutter/material.dart';
 import '../../repositories/user_repository.dart';
 
 class AccountSettingsViewModel extends ChangeNotifier {
+  static final AccountSettingsViewModel _instance =
+      AccountSettingsViewModel._internal();
+
+  factory AccountSettingsViewModel() {
+    return _instance;
+  }
+
+  AccountSettingsViewModel._internal();
+
   Map<String, String> _userDetails = {'id': '', 'email': '', 'username': ''};
   String? newPassword;
   bool isNewPassword = false;
   UserRepository _userRepo = UserRepository();
   ApiResponse _response = ApiResponse.loadingFull();
   String _accessToken = '';
+  bool _fetched = false;
 
   Map<String, String> get userDetails => _userDetails;
 
   ApiResponse get response => _response;
+
+  bool get fetched => _fetched;
 
   bool hasDetails() => !(_userDetails['email'] == '');
 
@@ -42,11 +54,14 @@ class AccountSettingsViewModel extends ChangeNotifier {
     await _userRepo.findUserById(_accessToken, _userDetails['id']!).then(
       (response) {
         _userDetails['email'] = response['email'];
-        _userDetails['username'] = response['username'];
+        _userDetails['username'] = response['username'] ?? '';
+        _fetched = true;
         _setResponse(ApiResponse.done());
       },
     ).catchError(
-      (err) {
+      (err, stack) {
+        print(stack);
+        print(err);
         _setResponse(
           ApiResponse.error(err.toString()),
         );
@@ -101,5 +116,12 @@ class AccountSettingsViewModel extends ChangeNotifier {
   void clear() {
     newPassword = null;
     isNewPassword = false;
+  }
+
+  // Wipes all data
+  void reset() {
+    clear();
+    _accessToken = '';
+    _userDetails = {'id': '', 'email': '', 'username': ''};
   }
 }

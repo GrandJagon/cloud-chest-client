@@ -1,4 +1,5 @@
 import 'package:cloud_chest/data/network_service.dart';
+import 'package:cloud_chest/exceptions/cloud_chest_exceptions.dart';
 import 'package:cloud_chest/models/content/album.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -18,17 +19,16 @@ class AlbumListRepository {
   // Returns user's all albums from the API
   Future<List<Album>> getAlbumList(String accessToken) async {
     try {
-      print('getting album list');
-      final List response = await _albumService.get(
+      final dynamic response = await _albumService.get(
         headers: {_authTokenKey: accessToken},
       ).catchError(
         (e) => throw e,
       );
 
-      if (response is Exception) throw Exception;
+      if (response is Exception) throw response;
 
       List<Album> albums =
-          response.map((album) => Album.fromJson(album)).toList();
+          response.map<Album>((album) => Album.fromJson(album)).toList();
 
       return albums;
     } catch (err, stack) {

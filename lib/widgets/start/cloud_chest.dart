@@ -74,42 +74,23 @@ class _CloudChestState extends State<CloudChest> {
         ChangeNotifierProvider(
           create: (context) => ChangePasswordViewModel(),
         ),
-        ChangeNotifierProxyProvider<Auth, AlbumListViewModel>(
-          create: (_) => AlbumListViewModel(),
-          update: (_, auth, previous) {
-            previous!.setToken(auth.accessToken!);
-            return previous;
-          },
+        ChangeNotifierProvider(
+          create: (context) => AlbumListViewModel(),
         ),
-        ChangeNotifierProxyProvider<Auth, CurrentAlbumViewModel>(
-          create: (_) => CurrentAlbumViewModel(),
-          update: (_, auth, previous) {
-            previous!.setToken(auth.accessToken!);
-            return previous;
-          },
+        ChangeNotifierProvider(
+          create: (context) => CurrentAlbumViewModel(),
         ),
-        ChangeNotifierProxyProvider<CurrentAlbumViewModel,
-            ContentViewerViewModel>(
-          create: (_) => ContentViewerViewModel(),
-          update: (_, currentAlbumViewModel, previous) {
-            previous!.setAlbumToView(currentAlbumViewModel.contentList);
-            return previous;
-          },
+        ChangeNotifierProvider(
+          create: (context) => CurrentAlbumViewModel(),
         ),
-        ChangeNotifierProxyProvider<Auth, UserSearchViewModel>(
-          create: (_) => UserSearchViewModel(),
-          update: (_, auth, previous) {
-            previous!.setToken(auth.accessToken!);
-            return previous;
-          },
+        ChangeNotifierProvider(
+          create: (context) => UserSearchViewModel(),
         ),
-        ChangeNotifierProxyProvider<Auth, AccountSettingsViewModel>(
-          create: (_) => AccountSettingsViewModel(),
-          update: (_, auth, previous) {
-            previous!.setToken(auth.accessToken!);
-            previous.setUserDetail('id', auth.userId);
-            return previous;
-          },
+        ChangeNotifierProvider(
+          create: (context) => AccountSettingsViewModel(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ContentViewerViewModel(),
         )
       ],
       child: MaterialApp(

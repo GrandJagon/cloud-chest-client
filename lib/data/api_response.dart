@@ -1,4 +1,11 @@
-enum ResponseStatus { LOADING_FULL, LOADING_PARTIAL, DONE, ERROR, NO_RESULT }
+enum ResponseStatus {
+  LOADING_FULL,
+  LOADING_PARTIAL,
+  DONE,
+  ERROR,
+  NO_RESULT,
+  UNAUTHORIZED
+}
 
 class ApiResponse {
   ResponseStatus? status;
@@ -16,6 +23,8 @@ class ApiResponse {
   ApiResponse.error(this.message) : status = ResponseStatus.ERROR;
 
   ApiResponse.noResult(this.message) : status = ResponseStatus.NO_RESULT;
+
+  ApiResponse.unauthorized() : status = ResponseStatus.UNAUTHORIZED;
 
   @override
   String toString() {

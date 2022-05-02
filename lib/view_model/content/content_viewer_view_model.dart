@@ -3,6 +3,15 @@ import 'package:flutter/material.dart';
 
 // Holds the content viewer state
 class ContentViewerViewModel extends ChangeNotifier {
+  static final ContentViewerViewModel _instance =
+      ContentViewerViewModel._internal();
+
+  factory ContentViewerViewModel() {
+    return _instance;
+  }
+
+  ContentViewerViewModel._internal();
+
   List<Content> _content = [];
   int _currentItemIndex = 0;
   Content? _currentItem;
@@ -17,12 +26,14 @@ class ContentViewerViewModel extends ChangeNotifier {
 
   // Sets the data that will be displayed
   void setAlbumToView(List<Content> albumToView) {
+    print('Setting to view ' + albumToView.toString());
     _content = albumToView;
   }
 
   //Sets the starting index and thus item
   void setStartingPoint(int startIndex) {
     _currentItemIndex = startIndex;
+    print(_content);
     _currentItem = _content[_currentItemIndex];
     print(_currentItem!.storageDate);
     notifyListeners();
