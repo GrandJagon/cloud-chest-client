@@ -4,6 +4,7 @@ import 'package:cloud_chest/repositories/auth_repository.dart';
 import 'package:cloud_chest/view_model/vm_controller.dart';
 import 'package:flutter/material.dart';
 import '../../exceptions/auth_exceptions.dart';
+import '../../helpers/network/config_helper.dart';
 
 // Holds the auth state
 // Only keeps most essential variable to provider (access token and user ID)
@@ -73,6 +74,10 @@ class Auth extends ChangeNotifier {
       _userId = _authRepo.userId!;
 
       VmController.init(accessToken!, userId);
+
+      Config().update('email', email);
+
+      await Config().savePreferences();
 
       _isConnected = true;
       _startTimer();

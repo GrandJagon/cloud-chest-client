@@ -1,5 +1,4 @@
 import 'package:cloud_chest/data/network_service.dart';
-import 'package:cloud_chest/exceptions/cloud_chest_exceptions.dart';
 import 'package:cloud_chest/models/content/album.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 

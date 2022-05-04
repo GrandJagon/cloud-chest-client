@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:cloud_chest/helpers/network/config_helper.dart';
 import 'package:cloud_chest/view_model/auth/auth_view_model.dart';
 import 'package:cloud_chest/screens/albums_list/albums_list_screen.dart';
 import 'package:cloud_chest/utils/alert_dialog_factory.dart';
@@ -39,6 +40,9 @@ class _AuthCardState extends State<AuthCard>
       end: Size(double.infinity, 350),
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.ease));
     _heightAnimation.addListener(() => setState(() {}));
+
+    if (Config().get('email') != null)
+      _credentials['email'] = Config().get('email');
   }
 
   // Dispose of the animation controller
@@ -143,6 +147,7 @@ class _AuthCardState extends State<AuthCard>
                     children: <Widget>[
                       ServerInfo(),
                       TextFormField(
+                        initialValue: _credentials['email'],
                         decoration:
                             const InputDecoration(labelText: 'Email address'),
                         keyboardType: TextInputType.emailAddress,

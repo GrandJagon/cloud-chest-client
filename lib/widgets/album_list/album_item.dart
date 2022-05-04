@@ -69,8 +69,8 @@ class AlbumItem extends StatelessWidget {
           child: Stack(
             children: <Widget>[
               album.thumbnail != ''
-                  ? AspectRatio(
-                      aspectRatio: 3,
+                  ? Container(
+                      width: double.infinity,
                       child: CachedNetworkImage(
                         httpHeaders: {'auth-token': Auth().accessToken!},
                         placeholder: (context, url) => Container(),

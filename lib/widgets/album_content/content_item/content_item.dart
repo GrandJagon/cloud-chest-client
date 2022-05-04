@@ -1,19 +1,12 @@
-import 'dart:io';
 import 'package:cloud_chest/view_model/content/content_viewer_view_model.dart';
 import 'package:cloud_chest/view_model/content/content_selection_view_model.dart';
 import 'package:cloud_chest/screens/content_viewer/content_viewer_screen.dart';
 import 'package:cloud_chest/view_model/content/current_album_content_view_model.dart';
 import 'package:cloud_chest/widgets/album_content/content_item/picture_thumbnail.dart';
-import 'package:cloud_chest/widgets/album_content/content_item/video_thumbnail.dart';
-import 'package:cloud_chest/widgets/misc/loading_widget.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_chest/models/content/content.dart';
 import 'package:provider/provider.dart';
-import 'package:video_player/video_player.dart';
-
 import '../../../models/content/picture.dart';
-import '../../../models/content/video.dart';
 
 class ContentItem extends StatefulWidget {
   final Content item;
@@ -106,7 +99,6 @@ class _ContentItemState extends State<ContentItem>
   }
 
   Widget _buildThumbnail(BuildContext context) {
-    if (widget.item is Picture) return PictureThumbnail(widget.item);
-    return Container();
+    return PictureThumbnail(widget.item);
   }
 }

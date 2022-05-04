@@ -5,6 +5,8 @@ import 'package:cloud_chest/helpers/persistance/storage_helper.dart';
 import 'package:cloud_chest/helpers/network/token_helper.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
+import '../helpers/network/config_helper.dart';
+
 // Handles all authentication data retrieval and logic
 class AuthRepository {
   NetworkService _authService = NetworkService(apiUrl: 'auth');
@@ -49,6 +51,8 @@ class AuthRepository {
 
       _accessToken = response['accessToken'];
       _refreshToken = response['refreshToken'];
+
+      Config().update('email', email);
 
       _extractTokenData(_accessToken!);
       _storeAuthData();

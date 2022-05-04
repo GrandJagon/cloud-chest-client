@@ -53,7 +53,9 @@ class _ConnectScreenState extends State<ConnectScreen> {
                     Container(
                       child: Center(
                         child: Text(
-                            'Welcome to cloud chest, you seem not to have any server configuration in memory. Please type in your server host and port number to start.'),
+                          'Welcome to cloud chest, you seem not to have any server configuration in memory. Please type in your server host and port number to start.',
+                          style: Theme.of(context).textTheme.headline3,
+                        ),
                       ),
                     ),
                     TextFormField(
@@ -78,7 +80,10 @@ class _ConnectScreenState extends State<ConnectScreen> {
                             return 'Port number must not be null';
                         }),
                     TextButton(
-                      child: Text('Save configuration'),
+                      child: Text(
+                        'Save configuration',
+                        style: Theme.of(context).textTheme.headline2,
+                      ),
                       onPressed: () => _submitForm(),
                     )
                   ],

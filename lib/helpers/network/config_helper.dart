@@ -18,16 +18,16 @@ class Config {
     String? configInfo = await SecureStorage().read('cloudchest_config');
 
     if (configInfo != null) {
-      print('config found with ' + configInfo.toString());
       _config['host'] = json.decode(configInfo)['host'];
       _config['port'] = json.decode(configInfo)['port'];
+      _config['email'] = json.decode(configInfo)['email'];
       isSetup = true;
       return;
     }
   }
 
   // Getter for config values
-  String get(String key) => _config[key];
+  dynamic get(String key) => _config[key];
 
   // Updates the config map
   void update(String key, String value) => _config[key] = value;

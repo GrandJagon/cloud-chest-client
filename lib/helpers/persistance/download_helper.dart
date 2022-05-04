@@ -3,6 +3,8 @@ import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart' as pathProvider;
 import 'package:http/http.dart' as http;
 import '../../models/content/content.dart';
+import '../../view_model/auth/auth_view_model.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
 
 // Provides methods to download files and store them locally
 class DownloadHelper {
@@ -39,17 +41,24 @@ class DownloadHelper {
         content.toggleDownloading();
 
         final String url = content.path;
-        final response = await http.get(Uri.parse(url));
+        final response = await http
+            .get(Uri.parse(url), headers: {'auth-token': Auth().accessToken!});
+
+        if (response.statusCode != 200) continue;
+
         final name = path.basename(url);
-        final tempPath = path.join(documentsPath, name);
+        //final tempPath = path.join(documentsPath, name);
 
-        final file = File(tempPath);
-        await file.writeAsBytes(response.bodyBytes);
+        //final file = File(tempPath);
+        //await file.writeAsBytes(response.bodyBytes);
 
-        print('FILE DOWNLOADED WITH PATH ' + tempPath);
+        final result =
+            await ImageGallerySaver.saveImage(response.bodyBytes, name: name);
+        print('result ====> ' + result.toString());
 
-        content.localPath = tempPath;
-        content.setLocal(true);
+        //content.localPath = tempPath;
+        //content.localPath = result['filePath'];
+        //content.setLocal(true);
 
         // Reset state to false before path changing so image does not reload
         content.clearState();
